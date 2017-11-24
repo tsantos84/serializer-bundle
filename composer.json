@@ -8,12 +8,12 @@
         "tsantos/serializer": "^1.1"
     },
     "license": "MIT",
-    "autoloader": {
+    "autoload": {
         "psr-4": {
             "TSantos\\SerializerBundle\\" : "."
         }
     },
-    "autoloader-dev": {
+    "autoload-dev": {
         "psr-4": {
             "TSantos\\SerializerBundle\\Tests\\": "Tests/"
         }
