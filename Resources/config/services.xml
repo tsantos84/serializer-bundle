@@ -20,6 +20,8 @@
         <parameter key="tsantos_serializer.metadata_yaml_driver.class">TSantos\Serializer\Metadata\Driver\YamlDriver</parameter>
         <parameter key="tsantos_serializer.metadata_php_driver.class">TSantos\Serializer\Metadata\Driver\PhpDriver</parameter>
         <parameter key="tsantos_serializer.metadata_file_cache.class">Metadata\Cache\FileCache</parameter>
+        <parameter key="tsantos_serializer.metadata_doctrine_cache.class">Metadata\Cache\DoctrineCacheAdapter</parameter>
+        <parameter key="tsantos_serializer.metadata_psr_cache.class">Metadata\Cache\PsrCacheAdapter</parameter>
         <parameter key="tsantos_serializer.class_loader.class">TSantos\Serializer\SerializerClassLoader</parameter>
         <parameter key="tsantos_serializer.class_code_generator.class">TSantos\Serializer\SerializerClassCodeGenerator</parameter>
         <parameter key="tsantos_serializer.class_writer.class">TSantos\Serializer\SerializerClassWriter</parameter>
@@ -68,6 +70,12 @@
             <argument>%tsantos_serializer.debug%</argument>
         </service>
         <service id="tsantos_serializer.metadata_file_cache" class="%tsantos_serializer.metadata_file_cache.class%">
+            <argument />
+        </service>
+        <service id="tsantos_serializer.metadata_doctrine_cache" class="%tsantos_serializer.metadata_doctrine_cache.class%">
+            <argument />
+        </service>
+        <service id="tsantos_serializer.metadata_psr_cache" class="%tsantos_serializer.metadata_psr_cache.class%">
             <argument />
         </service>
 

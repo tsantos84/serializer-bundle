@@ -32,16 +32,6 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
         $container->setParameter('tsantos_serializer.class_generate_strategy', $mergedConfig['generate_strategy']);
 
-        if ('file' === $mergedConfig['mapping']['cache']['type']) {
-            $container
-                ->getDefinition('tsantos_serializer.metadata_file_cache')
-                ->replaceArgument(0, $mergedConfig['mapping']['cache']['path']);
-
-            $container
-                ->getDefinition('tsantos_serializer.metadata_factory')
-                ->addMethodCall('setCache', [new Reference('tsantos_serializer.metadata_file_cache')]);
-        }
-
         $normalizedPaths = [];
 
         foreach ($mergedConfig['mapping']['paths'] as $path) {
@@ -49,6 +39,36 @@ class TSantosSerializerExtension extends ConfigurableExtension
         }
 
         $container->setParameter('tsantos_serializer.metadata_paths', $normalizedPaths);
+
+        $this->configCache($container, $mergedConfig);
+    }
+
+    private function configCache(ContainerBuilder $container, array $config)
+    {
+        $cacheConfig = $config['mapping']['cache'];
+
+        if ('file' === $cacheConfig['type']) {
+            $container
+                ->getDefinition('tsantos_serializer.metadata_file_cache')
+                ->replaceArgument(0, $config['mapping']['cache']['path']);
+            $container
+                ->getDefinition('tsantos_serializer.metadata_factory')
+                ->addMethodCall('setCache', [new Reference('tsantos_serializer.metadata_file_cache')]);
+            return;
+        }
+
+        $cacheDefinitionId = sprintf('tsantos_serializer.metadata_%s_cache', $cacheConfig['type']);
+
+        if (!$container->hasDefinition($cacheDefinitionId)) {
+            return;
+        }
+
+        $definition = $container->getDefinition($cacheDefinitionId);
+        $definition->replaceArgument(0, new Reference($cacheConfig['id']));
+
+        $container
+            ->getDefinition('tsantos_serializer.metadata_factory')
+            ->addMethodCall('setCache', [new Reference($cacheDefinitionId)]);
     }
 
     public function getAlias()
