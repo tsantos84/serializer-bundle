@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\Bundle\Command;
+namespace TSantos\SerializerBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

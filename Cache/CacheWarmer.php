@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\Bundle\Cache;
+namespace TSantos\SerializerBundle\Cache;
 
 use Metadata\AdvancedMetadataFactoryInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;

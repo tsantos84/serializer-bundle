@@ -13,6 +13,11 @@
             "TSantos\\Bundle\\" : "."
         }
     },
+    "autoloader-dev": {
+        "psr-4": {
+            "TSantos\\Bundle\\Tests\\": "Tests/"
+        }
+    },
     "authors": [
         {
             "name": "Tales Santos",

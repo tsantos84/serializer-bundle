@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\Bundle;
+namespace TSantos\SerializerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use TSantos\Bundle\DependencyInjection\Compiler\EncoderPass;
-use TSantos\Bundle\DependencyInjection\Compiler\MetadataDriverPass;
-use TSantos\Bundle\DependencyInjection\TSantosSerializerExtension;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\EncoderPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\MetadataDriverPass;
+use TSantos\SerializerBundle\DependencyInjection\TSantosSerializerExtension;
 
 /**
  * Class TSantosSerializerBundle
