@@ -43,17 +43,22 @@ class GenerateClassCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $env = $this->getApplication()->getKernel()->getEnvironment();
         $allClasses = $this->metadataFactory->getAllClassNames();
         $style = new SymfonyStyle($input, $output);
-        $style->comment('Generating ' . count($allClasses) . ' serializer classes');
+
+        $style->comment(sprintf('Generating <info>%d</info> serializer classes for <info>%s</info> environment',
+            count($allClasses),
+            $env
+        ));
 
         foreach ($allClasses as $class) {
             $metadata = $this->metadataFactory->getMetadataForClass($class);
             $code = $this->codeGenerator->generate($metadata);
             $this->writer->write($metadata, $code);
-            $style->writeln(sprintf('<comment>%s</comment>: Ok', $class));
+            $style->writeln(sprintf('<comment>%s</comment>: Ok', $class), OutputInterface::VERBOSITY_VERBOSE);
         }
 
-        $style->success('Classes generated successfully');
+        $style->success('Classes for "'.$env.'" environment were successfully generated.');
     }
 }
