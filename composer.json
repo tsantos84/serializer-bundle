@@ -10,12 +10,12 @@
     "license": "MIT",
     "autoloader": {
         "psr-4": {
-            "TSantos\\Bundle\\" : "."
+            "TSantos\\SerializerBundle\\" : "."
         }
     },
     "autoloader-dev": {
         "psr-4": {
-            "TSantos\\Bundle\\Tests\\": "Tests/"
+            "TSantos\\SerializerBundle\\Tests\\": "Tests/"
         }
     },
     "authors": [
