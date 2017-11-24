@@ -1,0 +1,22 @@
+{
+    "name": "tsantos/serializer-bundle",
+    "description": "Integrates TSantos Serializer in Symfony applications",
+    "type": "symfony-bundle",
+    "require": {
+        "php":"^7.1",
+        "symfony/framework-bundle": "^3.3",
+        "tsantos/serializer": "^1.1"
+    },
+    "license": "MIT",
+    "autoloader": {
+        "psr-4": {
+            "TSantos\\Bundle\\" : "."
+        }
+    },
+    "authors": [
+        {
+            "name": "Tales Santos",
+            "email": "tales.augusto.santos@gmail.com"
+        }
+    ]
+}
