@@ -1,2 +1,4 @@
-# serializer-bundle
-Bundle to integrate TSantos Serializer into Symfony applications
+# TSantos Serializer Bundle
+
+This bundle integrates the TSantos Serializer into Symfony applications
+
