@@ -22,6 +22,7 @@
         <parameter key="tsantos_serializer.metadata_file_cache.class">Metadata\Cache\FileCache</parameter>
         <parameter key="tsantos_serializer.metadata_doctrine_cache.class">Metadata\Cache\DoctrineCacheAdapter</parameter>
         <parameter key="tsantos_serializer.metadata_psr_cache.class">Metadata\Cache\PsrCacheAdapter</parameter>
+        <parameter key="tsantos_serializer.metadata_cache_prefix"/>
         <parameter key="tsantos_serializer.metadata_cache_warmer.class">TSantos\SerializerBundle\Cache\CacheWarmer</parameter>
         <parameter key="tsantos_serializer.class_loader.class">TSantos\Serializer\SerializerClassLoader</parameter>
         <parameter key="tsantos_serializer.class_code_generator.class">TSantos\Serializer\SerializerClassCodeGenerator</parameter>
@@ -75,9 +76,11 @@
             <argument />
         </service>
         <service id="tsantos_serializer.metadata_doctrine_cache" class="%tsantos_serializer.metadata_doctrine_cache.class%">
+            <argument>%tsantos_serializer.metadata_cache_prefix%</argument>
             <argument />
         </service>
         <service id="tsantos_serializer.metadata_psr_cache" class="%tsantos_serializer.metadata_psr_cache.class%">
+            <argument>%tsantos_serializer.metadata_cache_prefix%</argument>
             <argument />
         </service>
         <service id="tsantos_serializer.metadata_cache_warmer" class="%tsantos_serializer.metadata_cache_warmer.class%">

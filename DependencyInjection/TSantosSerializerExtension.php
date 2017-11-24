@@ -63,7 +63,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
         } else {
             $container
                 ->getDefinition($cacheDefinitionId)
-                ->replaceArgument(0, new Reference($cacheConfig['id']));
+                ->replaceArgument(1, new Reference($cacheConfig['id']));
         }
 
         $container
