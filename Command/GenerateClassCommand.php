@@ -10,10 +10,13 @@
 
 namespace TSantos\SerializerBundle\Command;
 
+use Metadata\AdvancedMetadataFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TSantos\Serializer\SerializerClassCodeGenerator;
+use TSantos\Serializer\SerializerClassWriter;
 
 /**
  * Class GenerateClassCommand
@@ -22,23 +25,40 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class GenerateClassCommand extends ContainerAwareCommand
 {
+    /**
+     * @var AdvancedMetadataFactoryInterface
+     */
     private $metadataFactory;
+
+    /**
+     * @var SerializerClassCodeGenerator
+     */
     private $codeGenerator;
+
+    /**
+     * @var SerializerClassWriter
+     */
     private $writer;
+
+    /**
+     * GenerateClassCommand constructor.
+     * @param AdvancedMetadataFactoryInterface $metadataFactory
+     * @param SerializerClassCodeGenerator $codeGenerator
+     * @param SerializerClassWriter $writer
+     */
+    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, SerializerClassCodeGenerator $codeGenerator, SerializerClassWriter $writer)
+    {
+        $this->metadataFactory = $metadataFactory;
+        $this->codeGenerator = $codeGenerator;
+        $this->writer = $writer;
+        parent::__construct();
+    }
 
     public function configure()
     {
         $this
             ->setName('serializer:generate-classes')
             ->setDescription('Generates the serializer classes');
-    }
-
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        $container = $this->getContainer();
-        $this->metadataFactory = $container->get('tsantos_serializer.metadata_factory');
-        $this->codeGenerator = $container->get('tsantos_serializer.class_code_generator');
-        $this->writer = $container->get('tsantos_serializer.class_writer');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

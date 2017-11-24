@@ -29,6 +29,7 @@
         <parameter key="tsantos_serializer.class_path" type="collection" />
         <parameter key="tsantos_serializer.class_generate_strategy" type="constant">TSantos\Serializer\SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS</parameter>
         <parameter key="tsantos_serializer.serializer.class">TSantos\Serializer\Serializer</parameter>
+        <parameter key="tsantos_serializer.generate_classes_command.class">TSantos\SerializerBundle\Command\GenerateClassCommand</parameter>
     </parameters>
 
     <services>
@@ -104,5 +105,12 @@
             <argument type="service" id="tsantos_serializer.normalizer_registry"/>
         </service>
         <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" />
+
+        <service id="tsantos_serializer.generate_classes_command" class="%tsantos_serializer.generate_classes_command.class%">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="service" id="tsantos_serializer.class_code_generator" />
+            <argument type="service" id="tsantos_serializer.class_writer" />
+            <tag name="console.command" />
+        </service>
     </services>
 </container>
