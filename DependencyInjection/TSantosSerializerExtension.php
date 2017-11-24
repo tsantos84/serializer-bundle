@@ -32,6 +32,8 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
         $container->setParameter('tsantos_serializer.class_generate_strategy', $mergedConfig['generate_strategy']);
 
+        $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['class_path']));
+
         $normalizedPaths = [];
 
         foreach ($mergedConfig['mapping']['paths'] as $path) {
@@ -56,7 +58,8 @@ class TSantosSerializerExtension extends ConfigurableExtension
         if ('file' === $cacheConfig['type']) {
             $container
                 ->getDefinition($cacheDefinitionId)
-                ->replaceArgument(0, $config['mapping']['cache']['path']);
+                ->replaceArgument(0, $cacheConfig['path']);
+            $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
         } else {
             $container
                 ->getDefinition($cacheDefinitionId)
@@ -76,5 +79,12 @@ class TSantosSerializerExtension extends ConfigurableExtension
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
         return new Configuration();
+    }
+
+    private function createDir(string $dir)
+    {
+        if (!is_dir($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Could not create directory "%s".', $dir));
+        }
     }
 }
