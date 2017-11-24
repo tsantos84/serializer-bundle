@@ -8,17 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\Bundle\CacheWarmer;
+namespace TSantos\Bundle\Cache;
 
 use Metadata\AdvancedMetadataFactoryInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use TSantos\Serializer\SerializerClassCodeGenerator;
+use TSantos\Serializer\SerializerClassWriter;
 
 /**
- * Class CacheWarmup
+ * Class CacheWarmer
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class MetadataWarmer implements CacheWarmerInterface
+class CacheWarmer implements CacheWarmerInterface
 {
     /**
      * @var AdvancedMetadataFactoryInterface
@@ -26,12 +28,26 @@ class MetadataWarmer implements CacheWarmerInterface
     private $metadataFactory;
 
     /**
+     * @var SerializerClassCodeGenerator
+     */
+    private $codeGenerator;
+
+    /**
+     * @var SerializerClassWriter
+     */
+    private $writer;
+
+    /**
      * CacheWarmer constructor.
      * @param AdvancedMetadataFactoryInterface $metadataFactory
+     * @param SerializerClassCodeGenerator $codeGenerator
+     * @param SerializerClassWriter $writer
      */
-    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory)
+    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, SerializerClassCodeGenerator $codeGenerator, SerializerClassWriter $writer)
     {
         $this->metadataFactory = $metadataFactory;
+        $this->codeGenerator = $codeGenerator;
+        $this->writer = $writer;
     }
 
     public function isOptional()
@@ -44,7 +60,9 @@ class MetadataWarmer implements CacheWarmerInterface
         $allClasses = $this->metadataFactory->getAllClassNames();
 
         foreach ($allClasses as $class) {
-            $this->metadataFactory->getMetadataForClass($class);
+            $metadata = $this->metadataFactory->getMetadataForClass($class);
+            $code = $this->codeGenerator->generate($metadata);
+            $this->writer->write($metadata, $code);
         }
     }
 }
