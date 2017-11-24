@@ -47,24 +47,21 @@ class TSantosSerializerExtension extends ConfigurableExtension
     {
         $cacheConfig = $config['mapping']['cache'];
 
-        if ('file' === $cacheConfig['type']) {
-            $container
-                ->getDefinition('tsantos_serializer.metadata_file_cache')
-                ->replaceArgument(0, $config['mapping']['cache']['path']);
-            $container
-                ->getDefinition('tsantos_serializer.metadata_factory')
-                ->addMethodCall('setCache', [new Reference('tsantos_serializer.metadata_file_cache')]);
-            return;
-        }
-
         $cacheDefinitionId = sprintf('tsantos_serializer.metadata_%s_cache', $cacheConfig['type']);
 
         if (!$container->hasDefinition($cacheDefinitionId)) {
             return;
         }
 
-        $definition = $container->getDefinition($cacheDefinitionId);
-        $definition->replaceArgument(0, new Reference($cacheConfig['id']));
+        if ('file' === $cacheConfig['type']) {
+            $container
+                ->getDefinition($cacheDefinitionId)
+                ->replaceArgument(0, $config['mapping']['cache']['path']);
+        } else {
+            $container
+                ->getDefinition($cacheDefinitionId)
+                ->replaceArgument(0, new Reference($cacheConfig['id']));
+        }
 
         $container
             ->getDefinition('tsantos_serializer.metadata_factory')
