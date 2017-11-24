@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('cache')
                         ->children()
                             ->enumNode('type')
-                                ->values(['file', 'doctrine', 'psr', 'symfony'])
+                                ->values(['file', 'doctrine', 'psr'])
                                 ->defaultValue('file')
                             ->end()
                             ->scalarNode('id')->end()
