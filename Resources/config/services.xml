@@ -31,6 +31,8 @@
         <parameter key="tsantos_serializer.class_generate_strategy" type="constant">TSantos\Serializer\SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS</parameter>
         <parameter key="tsantos_serializer.serializer.class">TSantos\Serializer\Serializer</parameter>
         <parameter key="tsantos_serializer.generate_classes_command.class">TSantos\SerializerBundle\Command\GenerateClassCommand</parameter>
+        <parameter key="tsantos_serializer.object_instantiator.doctrine.class">TSantos\Serializer\ObjectInstantiator\DoctrineInstantiator</parameter>
+        <parameter key="tsantos_serializer.doctrine_instantiator.class">Doctrine\Instantiator\Instantiator</parameter>
     </parameters>
 
     <services>
@@ -104,8 +106,9 @@
 
         <service id="tsantos_serializer" class="%tsantos_serializer.serializer.class%">
             <argument type="service" id="tsantos_serializer.class_loader"/>
-            <argument type="service" id="tsantos_serializer.encoder_registry"/>
+            <argument type="service" id="tsantos_serializer.json_encoder" /> <!-- Encoder -->
             <argument type="service" id="tsantos_serializer.normalizer_registry"/>
+            <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
         </service>
         <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" />
 
@@ -114,6 +117,12 @@
             <argument type="service" id="tsantos_serializer.class_code_generator" />
             <argument type="service" id="tsantos_serializer.class_writer" />
             <tag name="console.command" />
+        </service>
+
+        <service id="tsantos_serializer.object_instantiator.doctrine" class="%tsantos_serializer.object_instantiator.doctrine.class%">
+            <argument type="service">
+                <service id="tsantos_serializer.doctrine_instantiator" class="%tsantos_serializer.doctrine_instantiator.class%" />
+            </argument>
         </service>
     </services>
 </container>

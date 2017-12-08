@@ -5,7 +5,7 @@
     "require": {
         "php":"^7.1",
         "symfony/framework-bundle": "^3.3",
-        "tsantos/serializer": "^1.1"
+        "tsantos/serializer": "2.0.x-dev"
     },
     "license": "MIT",
     "autoload": {
