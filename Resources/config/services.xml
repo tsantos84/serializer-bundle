@@ -128,7 +128,7 @@
         </service>
 
         <service id="tsantos_serializer.event_dispatcher" class="%tsantos_serializer.event_dispatcher.class%">
-            <argument type="service" id="kernel.event_dispatcher" />
+            <argument type="service" id="event_dispatcher" />
         </service>
     </services>
 </container>
