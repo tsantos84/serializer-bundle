@@ -33,6 +33,7 @@
         <parameter key="tsantos_serializer.generate_classes_command.class">TSantos\SerializerBundle\Command\GenerateClassCommand</parameter>
         <parameter key="tsantos_serializer.object_instantiator.doctrine.class">TSantos\Serializer\ObjectInstantiator\DoctrineInstantiator</parameter>
         <parameter key="tsantos_serializer.doctrine_instantiator.class">Doctrine\Instantiator\Instantiator</parameter>
+        <parameter key="tsantos_serializer.event_dispatcher.class">TSantos\Serializer\EventDispatcher\EventDispatcher</parameter>
     </parameters>
 
     <services>
@@ -102,6 +103,7 @@
             <argument type="service" id="tsantos_serializer.class_code_generator" />
             <argument type="service" id="tsantos_serializer.class_writer" />
             <argument>%tsantos_serializer.class_generate_strategy%</argument>
+            <argument type="service" id="tsantos_serializer.event_dispatcher" />
         </service>
 
         <service id="tsantos_serializer" class="%tsantos_serializer.serializer.class%">
@@ -123,6 +125,10 @@
             <argument type="service">
                 <service id="tsantos_serializer.doctrine_instantiator" class="%tsantos_serializer.doctrine_instantiator.class%" />
             </argument>
+        </service>
+
+        <service id="tsantos_serializer.event_dispatcher" class="%tsantos_serializer.event_dispatcher.class%">
+            <argument type="service" id="kernel.event_dispatcher" />
         </service>
     </services>
 </container>
