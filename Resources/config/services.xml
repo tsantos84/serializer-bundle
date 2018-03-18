@@ -94,7 +94,9 @@
         </service>
 
         <!-- serializer class manager -->
-        <service id="tsantos_serializer.class_code_generator" class="%tsantos_serializer.class_code_generator.class%" />
+        <service id="tsantos_serializer.class_code_generator" class="%tsantos_serializer.class_code_generator.class%">
+            <argument>true</argument>
+        </service>
         <service id="tsantos_serializer.class_writer" class="%tsantos_serializer.class_writer.class%">
             <argument>%tsantos_serializer.class_path%</argument>
         </service>
