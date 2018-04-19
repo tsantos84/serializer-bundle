@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="tsantos_serializer.debug" />
+        <parameter key="tsantos_serializer.class_path" type="string" />
+        <parameter key="tsantos_serializer.class_generate_strategy" type="constant">TSantos\Serializer\SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS</parameter>
+        <parameter key="tsantos_serializer.metadata_paths" type="collection" />
+        <parameter key="tsantos_serializer.metadata_cache_prefix"/>
+    </parameters>
+
+    <services>
+        <!-- encoders -->
+        <service id="tsantos_serializer.encoder_registry" class="TSantos\Serializer\EncoderRegistry" />
+        <service id="tsantos_serializer.json_encoder" class="TSantos\Serializer\Encoder\JsonEncoder">
+            <tag name="tsantos_serializer.encoder" />
+        </service>
+
+        <!-- normalizers -->
+        <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
+        <service id="tsantos_serializer.datetime_encoder" class="TSantos\Serializer\Encoder\DateTimeNormalizer">
+            <tag name="tsantos_serializer.encoder" />
+        </service>
+
+        <!-- metadata -->
+        <service id="tsantos_serializer.metadata_file_locator" class="Metadata\Driver\FileLocator">
+            <argument>%tsantos_serializer.metadata_paths%</argument>
+        </service>
+        <service id="tsantos_serializer.metadata_type_guesser" class="TSantos\Serializer\TypeGuesser" />
+        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" />
+        <service id="tsantos_serializer.metadata_yaml_driver" class="TSantos\Serializer\Metadata\Driver\YamlDriver">
+            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
+            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+        <service id="tsantos_serializer.metadata_xml_driver" class="TSantos\Serializer\Metadata\Driver\XmlDriver">
+            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
+            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+        <service id="tsantos_serializer.metadata_php_driver" class="TSantos\Serializer\Metadata\Driver\PhpDriver">
+            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
+            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+        <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
+            <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
+            <argument type="string">Metadata\ClassHierarchyMetadata</argument>
+            <argument>%tsantos_serializer.debug%</argument>
+        </service>
+        <service id="tsantos_serializer.metadata_file_cache" class="Metadata\Cache\FileCache">
+            <argument />
+        </service>
+        <service id="tsantos_serializer.metadata_doctrine_cache" class="Metadata\Cache\DoctrineCacheAdapter">
+            <argument>%tsantos_serializer.metadata_cache_prefix%</argument>
+            <argument />
+        </service>
+        <service id="tsantos_serializer.metadata_psr_cache" class="Metadata\Cache\PsrCacheAdapter">
+            <argument>%tsantos_serializer.metadata_cache_prefix%</argument>
+            <argument />
+        </service>
+        <service id="tsantos_serializer.metadata_cache_warmer" class="TSantos\SerializerBundle\Cache\CacheWarmer">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="service" id="tsantos_serializer.class_code_generator" />
+            <argument type="service" id="tsantos_serializer.class_writer" />
+            <tag name="kernel.cache_warmer" />
+        </service>
+
+        <!-- serializer class manager -->
+        <service id="tsantos_serializer.class_code_generator" class="TSantos\Serializer\SerializerClassCodeGenerator">
+            <argument>true</argument>
+        </service>
+        <service id="tsantos_serializer.class_writer" class="TSantos\Serializer\SerializerClassWriter">
+            <argument>%tsantos_serializer.class_path%</argument>
+        </service>
+        <service id="tsantos_serializer.class_loader" class="TSantos\Serializer\SerializerClassLoader">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="service" id="tsantos_serializer.class_code_generator" />
+            <argument type="service" id="tsantos_serializer.class_writer" />
+            <argument>%tsantos_serializer.class_generate_strategy%</argument>
+            <argument type="service" id="tsantos_serializer.event_dispatcher" />
+        </service>
+
+        <service id="tsantos_serializer" class="TSantos\Serializer\Serializer" public="true">
+            <argument type="service" id="tsantos_serializer.class_loader"/>
+            <argument type="service" id="tsantos_serializer.json_encoder" /> <!-- Encoder -->
+            <argument type="service" id="tsantos_serializer.normalizer_registry"/>
+            <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
+        </service>
+        <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" public="false" />
+
+        <service id="tsantos_serializer.generate_classes_command" class="TSantos\SerializerBundle\Command\GenerateClassCommand">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="service" id="tsantos_serializer.class_code_generator" />
+            <argument type="service" id="tsantos_serializer.class_writer" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="tsantos_serializer.object_instantiator.doctrine" class="TSantos\Serializer\ObjectInstantiator\DoctrineInstantiator">
+            <argument type="service">
+                <service id="tsantos_serializer.doctrine_instantiator" class="Doctrine\Instantiator\Instantiator" />
+            </argument>
+        </service>
+
+        <service id="tsantos_serializer.event_dispatcher" class="TSantos\Serializer\EventDispatcher\EventDispatcher">
+            <argument type="service" id="event_dispatcher" />
+        </service>
+    </services>
+</container>

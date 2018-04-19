@@ -31,18 +31,18 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->setParameter('tsantos_serializer.debug', $mergedConfig['debug']);
         $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
         $container->setParameter('tsantos_serializer.class_generate_strategy', $mergedConfig['generate_strategy']);
-
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['class_path']));
+        $this->configMetadataPath($mergedConfig['mapping']['paths'], $container);
+        $this->configCache($container, $mergedConfig);
+    }
 
+    private function configMetadataPath(array $paths, ContainerBuilder $container)
+    {
         $normalizedPaths = [];
-
-        foreach ($mergedConfig['mapping']['paths'] as $path) {
+        foreach ($paths as $path) {
             $normalizedPaths[$path['namespace']] = $path['path'];
         }
-
         $container->setParameter('tsantos_serializer.metadata_paths', $normalizedPaths);
-
-        $this->configCache($container, $mergedConfig);
     }
 
     private function configCache(ContainerBuilder $container, array $config)

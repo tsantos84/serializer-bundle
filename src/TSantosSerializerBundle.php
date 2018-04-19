@@ -31,6 +31,10 @@ class TSantosSerializerBundle extends Bundle
 
     public function getContainerExtension()
     {
-        return new TSantosSerializerExtension();
+        if (null === $this->extension) {
+            $this->extension = new TSantosSerializerExtension();
+        }
+
+        return $this->extension;
     }
 }
