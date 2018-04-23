@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
+use TSantos\Serializer\SerializerClassLoader;
 
 /**
  * Class TSantosSerializerExtension
@@ -30,7 +31,14 @@ class TSantosSerializerExtension extends ConfigurableExtension
 
         $container->setParameter('tsantos_serializer.debug', $mergedConfig['debug']);
         $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
-        $container->setParameter('tsantos_serializer.class_generate_strategy', $mergedConfig['generate_strategy']);
+
+        $strategyDictionary = [
+            'never' => SerializerClassLoader::AUTOGENERATE_NEVER,
+            'always' => SerializerClassLoader::AUTOGENERATE_ALWAYS,
+            'file_not_exists' => SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS,
+        ];
+        $container->setParameter('tsantos_serializer.class_generate_strategy', $strategyDictionary[$mergedConfig['generate_strategy']]);
+
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['class_path']));
         $this->configMetadataPath($mergedConfig['mapping']['paths'], $container);
         $this->configCache($container, $mergedConfig);

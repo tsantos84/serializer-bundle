@@ -20,7 +20,7 @@ class ConfigurationTest extends KernelTestCase
         $kernel = $this->createKernel([
             'debug' => false,
             'class_path' => '%kernel.cache_dir%/tsantos_serializer/classes',
-            'generate_strategy' => SerializerClassLoader::AUTOGENERATE_ALWAYS,
+            'generate_strategy' => 'always',
             'mapping' => [
                 'paths' => [
                     ['path' => __DIR__, 'namespace' => 'My\Namespace']
@@ -42,7 +42,7 @@ class ConfigurationTest extends KernelTestCase
         $kernel = $this->createKernel([
             'debug' => false,
             'class_path' => '%kernel.cache_dir%/tsantos_serializer/classes',
-            'generate_strategy' => SerializerClassLoader::AUTOGENERATE_ALWAYS,
+            'generate_strategy' => 'always',
             'mapping' => [
                 'paths' => [
                     ['path' => __DIR__, 'namespace' => 'My\Namespace']
