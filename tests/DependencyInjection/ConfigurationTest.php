@@ -22,6 +22,9 @@ class ConfigurationTest extends KernelTestCase
             'class_path' => '%kernel.cache_dir%/tsantos_serializer/classes',
             'generate_strategy' => 'always',
             'mapping' => [
+                'cache' => [
+                    'prefix' => 'cache_prefix'
+                ],
                 'paths' => [
                     ['path' => __DIR__, 'namespace' => 'My\Namespace']
                 ]
@@ -34,6 +37,7 @@ class ConfigurationTest extends KernelTestCase
         $this->assertEquals($kernel->getCacheDir() . '/tsantos_serializer/classes', $container->getParameter('tsantos_serializer.class_path'));
         $this->assertEquals(SerializerClassLoader::AUTOGENERATE_ALWAYS, $container->getParameter('tsantos_serializer.class_generate_strategy'));
         $this->assertEquals(['My\Namespace' => __DIR__], $container->getParameter('tsantos_serializer.metadata_paths'));
+        $this->assertEquals('cache_prefix', $container->getParameter('tsantos_serializer.metadata_cache_prefix'));
     }
 
     /** @test */

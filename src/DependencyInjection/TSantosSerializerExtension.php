@@ -63,15 +63,18 @@ class TSantosSerializerExtension extends ConfigurableExtension
             return;
         }
 
+        $container->setParameter('tsantos_serializer.metadata_cache_prefix', $cacheConfig['prefix']);
         if ('file' === $cacheConfig['type']) {
             $container
                 ->getDefinition($cacheDefinitionId)
                 ->replaceArgument(0, $cacheConfig['path']);
             $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
-        } else {
+        } elseif (isset($cacheConfig['id'])) {
             $container
                 ->getDefinition($cacheDefinitionId)
                 ->replaceArgument(1, new Reference($cacheConfig['id']));
+        } else {
+            throw new \InvalidArgumentException('You need to configure the node "mapping.cache.id"');
         }
 
         $container
