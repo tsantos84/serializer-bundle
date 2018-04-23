@@ -10,10 +10,8 @@
 
 namespace TSantos\SerializerBundle\Cache;
 
-use Metadata\AdvancedMetadataFactoryInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
-use TSantos\Serializer\SerializerClassCodeGenerator;
-use TSantos\Serializer\SerializerClassWriter;
+use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
  * Class CacheWarmer
@@ -23,31 +21,17 @@ use TSantos\Serializer\SerializerClassWriter;
 class CacheWarmer implements CacheWarmerInterface
 {
     /**
-     * @var AdvancedMetadataFactoryInterface
+     * @var ClassGenerator
      */
-    private $metadataFactory;
-
-    /**
-     * @var SerializerClassCodeGenerator
-     */
-    private $codeGenerator;
-
-    /**
-     * @var SerializerClassWriter
-     */
-    private $writer;
+    private $generator;
 
     /**
      * CacheWarmer constructor.
-     * @param AdvancedMetadataFactoryInterface $metadataFactory
-     * @param SerializerClassCodeGenerator $codeGenerator
-     * @param SerializerClassWriter $writer
+     * @param ClassGenerator $classGenerator
      */
-    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, SerializerClassCodeGenerator $codeGenerator, SerializerClassWriter $writer)
+    public function __construct(ClassGenerator $classGenerator)
     {
-        $this->metadataFactory = $metadataFactory;
-        $this->codeGenerator = $codeGenerator;
-        $this->writer = $writer;
+        $this->generator = $classGenerator;
     }
 
     public function isOptional()
@@ -57,12 +41,6 @@ class CacheWarmer implements CacheWarmerInterface
 
     public function warmUp($cacheDir)
     {
-        $allClasses = $this->metadataFactory->getAllClassNames();
-
-        foreach ($allClasses as $class) {
-            $metadata = $this->metadataFactory->getMetadataForClass($class);
-            $code = $this->codeGenerator->generate($metadata);
-            $this->writer->write($metadata, $code);
-        }
+        $this->generator->generate();
     }
 }

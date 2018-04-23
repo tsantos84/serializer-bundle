@@ -10,47 +10,33 @@
 
 namespace TSantos\SerializerBundle\Command;
 
-use Metadata\AdvancedMetadataFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TSantos\Serializer\SerializerClassCodeGenerator;
-use TSantos\Serializer\SerializerClassWriter;
+use TSantos\Serializer\Metadata\ClassMetadata;
+use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
  * Class GenerateClassCommand
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class GenerateClassCommand extends ContainerAwareCommand
+class GenerateClassCommand extends Command
 {
     /**
-     * @var AdvancedMetadataFactoryInterface
+     * @var ClassGenerator
      */
-    private $metadataFactory;
-
-    /**
-     * @var SerializerClassCodeGenerator
-     */
-    private $codeGenerator;
-
-    /**
-     * @var SerializerClassWriter
-     */
-    private $writer;
+    private $classGenerator;
 
     /**
      * GenerateClassCommand constructor.
-     * @param AdvancedMetadataFactoryInterface $metadataFactory
-     * @param SerializerClassCodeGenerator $codeGenerator
-     * @param SerializerClassWriter $writer
+     * @param ClassGenerator $classGenerator
      */
-    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, SerializerClassCodeGenerator $codeGenerator, SerializerClassWriter $writer)
+    public function __construct(ClassGenerator $classGenerator)
     {
-        $this->metadataFactory = $metadataFactory;
-        $this->codeGenerator = $codeGenerator;
-        $this->writer = $writer;
+        $this->classGenerator = $classGenerator;
         parent::__construct();
     }
 
@@ -64,20 +50,16 @@ class GenerateClassCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $env = $this->getApplication()->getKernel()->getEnvironment();
-        $allClasses = $this->metadataFactory->getAllClassNames();
         $style = new SymfonyStyle($input, $output);
 
         $style->comment(sprintf('Generating <info>%d</info> serializer classes for <info>%s</info> environment',
-            count($allClasses),
+            count($this->classGenerator),
             $env
         ));
 
-        foreach ($allClasses as $class) {
-            $metadata = $this->metadataFactory->getMetadataForClass($class);
-            $code = $this->codeGenerator->generate($metadata);
-            $this->writer->write($metadata, $code);
-            $style->writeln(sprintf('<comment>%s</comment>: Ok', $class), OutputInterface::VERBOSITY_VERBOSE);
-        }
+        $this->classGenerator->generate(function (ClassMetadata $metadata) use ($style) {
+            $style->writeln(sprintf('<comment>%s</comment>: Ok', $metadata->name), OutputInterface::VERBOSITY_VERBOSE);
+        });
 
         $style->success('Classes for "'.$env.'" environment were successfully generated.');
     }

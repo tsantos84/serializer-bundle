@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\Serializer\SerializerClassCodeGenerator;
 use TSantos\Serializer\SerializerClassWriter;
+use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
  * Class CacheWarmerTest
@@ -16,43 +17,21 @@ use TSantos\Serializer\SerializerClassWriter;
  */
 class CacheWarmerTest extends TestCase
 {
-    private $metadataFactory;
-    private $codeGenerator;
-    private $classWriter;
+    private $classGenerator;
     private $warmer;
 
     public function setUp()
     {
-        $this->metadataFactory = $this->createMock(AdvancedMetadataFactoryInterface::class);
-        $this->codeGenerator = $this->createMock(SerializerClassCodeGenerator::class);
-        $this->classWriter = $this->createMock(SerializerClassWriter::class);
-        $this->warmer = new CacheWarmer($this->metadataFactory, $this->codeGenerator, $this->classWriter);
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
+        $this->warmer = new CacheWarmer($this->classGenerator);
     }
 
     /** @test */
-    public function it_can_warmup_the_cache()
+    public function it_can_warm_up_the_cache()
     {
-        $this->metadataFactory
+        $this->classGenerator
             ->expects($this->once())
-            ->method('getAllClassNames')
-            ->willReturn([\stdClass::class]);
-
-        $this->metadataFactory
-            ->expects($this->once())
-            ->method('getMetadataForClass')
-            ->with(\stdClass::class)
-            ->willReturn($metadata = $this->createMock(ClassMetadata::class));
-
-        $this->codeGenerator
-            ->expects($this->once())
-            ->method('generate')
-            ->with($metadata)
-            ->willReturn($code = 'some/php/code');
-
-        $this->classWriter
-            ->expects($this->once())
-            ->method('write')
-            ->with($metadata, $code);
+            ->method('generate');
 
         $this->warmer->warmUp('/some/path');
     }

@@ -14,7 +14,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Test suite">
+        <testsuite name="TSantos Serializer Bundle Test Suite">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
