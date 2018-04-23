@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->enumNode('generate_strategy')
                 ->values(['never', 'always', 'file_not_exists'])
-                ->defaultValue('always')
+                ->defaultValue('file_not_exists')
             ->end()
             ->arrayNode('mapping')
                 ->isRequired()
