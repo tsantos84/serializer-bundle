@@ -31,6 +31,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
 
         $container->setParameter('tsantos_serializer.debug', $mergedConfig['debug']);
         $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
+        $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
 
         $strategyDictionary = [
             'never' => SerializerClassLoader::AUTOGENERATE_NEVER,

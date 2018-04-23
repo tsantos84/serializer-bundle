@@ -23,14 +23,29 @@ class EncoderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('tsantos_serializer.encoder_registry')) {
-            return;
+        if (!$container->hasParameter('tsantos_serializer.format')) {
+            throw new \InvalidArgumentException('The parameter "tsantos_serializer.format" was not registered');
         }
 
-        $definition = $container->getDefinition('tsantos_serializer.encoder_registry');
+        $ids = [];
 
-        foreach ($container->findTaggedServiceIds('tsantos_serializer.encoder') as $id => $serviceId) {
-            $definition->addMethodCall('add', [new Reference($id)]);
+        foreach ($container->findTaggedServiceIds('tsantos_serializer.encoder') as $id => $tags) {
+            foreach ($tags as $tag) {
+                if (!isset($tag['format'])) {
+                    throw new \InvalidArgumentException('The tag "tsantos_serializer.encoder" should have the attribute "format"');
+                }
+                $ids[$tag['format']] = $id;
+            }
         }
+
+        $format = $container->getParameter('tsantos_serializer.format');
+
+        if (!isset($ids[$format])) {
+            throw new \InvalidArgumentException('There is no encoder able to handle "' . $format . '" format');
+        }
+
+        $container
+            ->getDefinition('tsantos_serializer')
+            ->replaceArgument(1, new Reference($ids[$format]));
     }
 }

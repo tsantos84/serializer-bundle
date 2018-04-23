@@ -14,15 +14,14 @@
 
     <services>
         <!-- encoders -->
-        <service id="tsantos_serializer.encoder_registry" class="TSantos\Serializer\EncoderRegistry" />
         <service id="tsantos_serializer.json_encoder" class="TSantos\Serializer\Encoder\JsonEncoder">
-            <tag name="tsantos_serializer.encoder" />
+            <tag name="tsantos_serializer.encoder" format="json" />
         </service>
 
         <!-- normalizers -->
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
         <service id="tsantos_serializer.datetime_encoder" class="TSantos\Serializer\Encoder\DateTimeNormalizer">
-            <tag name="tsantos_serializer.encoder" />
+            <tag name="tsantos_serializer.normalizer" />
         </service>
 
         <!-- metadata -->
@@ -86,7 +85,7 @@
 
         <service id="tsantos_serializer" class="TSantos\Serializer\Serializer" public="true">
             <argument type="service" id="tsantos_serializer.class_loader"/>
-            <argument type="service" id="tsantos_serializer.json_encoder" /> <!-- Encoder -->
+            <argument /> <!-- Encoder -->
             <argument type="service" id="tsantos_serializer.normalizer_registry"/>
             <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
         </service>

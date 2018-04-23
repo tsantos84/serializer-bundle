@@ -15,19 +15,23 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\EncoderPass;
 class EncoderPassTest extends TestCase
 {
     /** @test */
-    public function it_should_add_method_calls_to_encoder_registry_definition()
+    public function it_should_rewrite_the_definition_of_encoders()
     {
         $container = new ContainerBuilder();
-        $container->register('tsantos_serializer.encoder_registry');
+
+        $container->setParameter('tsantos_serializer.format', 'json');
+        $container->register('tsantos_serializer')->setArguments([null, null]);
 
         $container
             ->register('some_encoder')
-            ->addTag('tsantos_serializer.encoder');
+            ->setClass('SomeClass')
+            ->addTag('tsantos_serializer.encoder', ['format' => 'json']);
 
         $compiler = new EncoderPass();
         $compiler->process($container);
 
-        $definition = $container->getDefinition('tsantos_serializer.encoder_registry');
-        $this->assertCount(1, $definition->getMethodCalls());
+        $definition = $container->getDefinition('tsantos_serializer');
+        $encoderReference = $definition->getArgument(1);
+        $this->assertEquals('some_encoder', $encoderReference);
     }
 }
