@@ -1,11 +1,10 @@
 <?php
 
-namespace TSantos\SerializerBundle\Tests;
+namespace TSantos\SerializerBundle\Tests\Fixture;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
 
 /**

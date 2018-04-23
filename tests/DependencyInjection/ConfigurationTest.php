@@ -1,25 +1,21 @@
 <?php
 
-namespace TSantos\SerializerBundle\Tests;
+namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
 use TSantos\Serializer\SerializerClassLoader;
 use TSantos\Serializer\SerializerInterface;
+use TSantos\SerializerBundle\Tests\KernelTestCase;
 
 /**
  * Class FunctionalTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
+ * @group functional
  */
-class FunctionalTest extends TestCase
+class ConfigurationTest extends KernelTestCase
 {
-    public function tearDown()
-    {
-        $command = 'rm -rf ' . __DIR__ . '/var';
-        exec($command);
-    }
-
-    public function testParametersWiring()
+    /** @test */
+    public function it_should_save_the_parameters_in_the_container_properly()
     {
         $kernel = $this->createKernel([
             'debug' => false,
@@ -40,7 +36,8 @@ class FunctionalTest extends TestCase
         $this->assertEquals(['My\Namespace' => __DIR__], $container->getParameter('tsantos_serializer.metadata_paths'));
     }
 
-    public function testServicesWiring()
+    /** @test */
+    public function it_should_register_the_services_in_the_container_properly()
     {
         $kernel = $this->createKernel([
             'debug' => false,
@@ -58,7 +55,8 @@ class FunctionalTest extends TestCase
         $this->assertInstanceOf(SerializerInterface::class, $container->get('tsantos_serializer'));
     }
 
-    public function testClassPathDirectoryCreation()
+    /** @test */
+    public function it_should_create_the_directory_to_store_the_generated_classes()
     {
         $kernel = $this->createKernel([
             'class_path' => '%kernel.cache_dir%/tsantos_serializer/classes',
@@ -73,9 +71,10 @@ class FunctionalTest extends TestCase
     }
 
     /**
+     * @test
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
-    public function testRequiringOneMetadataPathAtLeast()
+    public function it_should_require_at_least_one_path_mapping()
     {
         $this->createKernel([
             'mapping' => ['paths' => []]
@@ -83,10 +82,11 @@ class FunctionalTest extends TestCase
     }
 
     /**
+     * @test
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "tsantos_serializer.mapping.paths.0.path": The path ""\/some\/invalid\/path"" does not exit
      */
-    public function testProperMetadataPath()
+    public function it_should_not_allow_a_non_existing_directory_for_metadata()
     {
         $this->createKernel([
             'mapping' => [
@@ -97,7 +97,8 @@ class FunctionalTest extends TestCase
         ]);
     }
 
-    public function testFileCacheConfiguration()
+    /** @test */
+    public function it_should_create_the_directory_to_store_the_metadata_cache()
     {
         $kernel = $this->createKernel([
             'mapping' => [
@@ -109,12 +110,5 @@ class FunctionalTest extends TestCase
         ]);
 
         $this->assertDirectoryExists($kernel->getCacheDir() . '/tsantos_serializer/metadata');
-    }
-
-    private function createKernel(array $config = [])
-    {
-        $kernel = new TestKernel($config);
-        $kernel->boot();
-        return $kernel;
     }
 }

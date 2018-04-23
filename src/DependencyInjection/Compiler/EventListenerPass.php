@@ -1,6 +1,6 @@
 <?php
 
-namespace TSantos\Bundle\DependencyInjection\Compiler;
+namespace TSantos\SerializerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
