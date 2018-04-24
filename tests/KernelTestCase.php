@@ -18,10 +18,13 @@ abstract class KernelTestCase extends TestCase
         exec($command);
     }
 
-    protected function createKernel(array $config = [])
+    protected function createKernel(array $config = [], bool $booted = true)
     {
         $kernel = new TestKernel($config);
-        $kernel->boot();
+
+        if ($booted) {
+            $kernel->boot();
+        }
         return $kernel;
     }
 }

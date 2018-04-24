@@ -23,6 +23,7 @@ class ConfigurationTest extends KernelTestCase
             'generate_strategy' => 'always',
             'format' => 'json',
             'mapping' => [
+                'auto_configure' => false,
                 'cache' => [
                     'prefix' => 'cache_prefix'
                 ],
@@ -50,6 +51,7 @@ class ConfigurationTest extends KernelTestCase
             'class_path' => '%kernel.cache_dir%/tsantos_serializer/classes',
             'generate_strategy' => 'always',
             'mapping' => [
+                'auto_configure' => false,
                 'paths' => [
                     ['path' => __DIR__, 'namespace' => 'My\Namespace']
                 ]
@@ -67,6 +69,7 @@ class ConfigurationTest extends KernelTestCase
         $kernel = $this->createKernel([
             'class_path' => '%kernel.cache_dir%/tsantos_serializer/classes',
             'mapping' => [
+                'auto_configure' => false,
                 'paths' => [
                     ['path' => __DIR__]
                 ]
@@ -79,23 +82,13 @@ class ConfigurationTest extends KernelTestCase
     /**
      * @test
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
-    public function it_should_require_at_least_one_path_mapping()
-    {
-        $this->createKernel([
-            'mapping' => ['paths' => []]
-        ]);
-    }
-
-    /**
-     * @test
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid configuration for path "tsantos_serializer.mapping.paths.0.path": The path ""\/some\/invalid\/path"" does not exit
      */
     public function it_should_not_allow_a_non_existing_directory_for_metadata()
     {
         $this->createKernel([
             'mapping' => [
+                'auto_configure' => false,
                 'paths' => [
                     ['path' => '/some/invalid/path']
                 ]
@@ -108,6 +101,7 @@ class ConfigurationTest extends KernelTestCase
     {
         $kernel = $this->createKernel([
             'mapping' => [
+                'auto_configure' => false,
                 'cache' => ['path' => '%kernel.cache_dir%/tsantos_serializer/metadata'],
                 'paths' => [
                     ['path' => __DIR__]

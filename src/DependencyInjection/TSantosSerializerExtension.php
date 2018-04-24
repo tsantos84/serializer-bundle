@@ -41,16 +41,37 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->setParameter('tsantos_serializer.class_generate_strategy', $strategyDictionary[$mergedConfig['generate_strategy']]);
 
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['class_path']));
-        $this->configMetadataPath($mergedConfig['mapping']['paths'], $container);
+        $this->configMetadataPath($mergedConfig, $container);
         $this->configCache($container, $mergedConfig);
     }
 
-    private function configMetadataPath(array $paths, ContainerBuilder $container)
+    private function configMetadataPath(array &$config, ContainerBuilder $container)
     {
         $normalizedPaths = [];
-        foreach ($paths as $path) {
+
+        if ($config['mapping']['auto_configure']) {
+            $projectDir = $container->getParameter('kernel.project_dir');
+            if (is_dir($configPath = $projectDir . '/config/serializer')) {
+                $normalizedPaths['App\\'] = $configPath;
+            }
+            if (is_dir($configPath = $projectDir . '/src/Document')) {
+                $normalizedPaths['App\\Document\\'] = $configPath;
+            }
+            if (is_dir($configPath = $projectDir . '/src/Entity')) {
+                $normalizedPaths['App\\Entity\\'] = $configPath;
+            }
+            if (is_dir($configPath = $projectDir . '/src/Model')) {
+                $normalizedPaths['App\\Model\\'] = $configPath;
+            }
+        }
+
+        if (!isset($config['mapping']['paths'])) {
+            $config['mapping']['paths'] = [];
+        }
+        foreach ($config['mapping']['paths'] as $path) {
             $normalizedPaths[$path['namespace']] = $path['path'];
         }
+
         $container->setParameter('tsantos_serializer.metadata_paths', $normalizedPaths);
     }
 
