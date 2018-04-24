@@ -46,6 +46,10 @@
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
+        <service id="tsantos_serializer.metadata_reflection_driver" class="TSantos\Serializer\Metadata\Driver\ReflectionDriver">
+            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
             <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
             <argument type="string">Metadata\ClassHierarchyMetadata</argument>
@@ -62,16 +66,19 @@
             <argument>%tsantos_serializer.metadata_cache_prefix%</argument>
             <argument />
         </service>
-        <service id="tsantos_serializer.metadata_cache_warmer" class="TSantos\SerializerBundle\Cache\CacheWarmer">
+        <service id="tsantos_serializer.class_generator" class="TSantos\SerializerBundle\Service\ClassGenerator">
             <argument type="service" id="tsantos_serializer.metadata_factory" />
             <argument type="service" id="tsantos_serializer.class_code_generator" />
             <argument type="service" id="tsantos_serializer.class_writer" />
+        </service>
+        <service id="tsantos_serializer.metadata_cache_warmer" class="TSantos\SerializerBundle\Cache\CacheWarmer">
+            <argument type="service" id="tsantos_serializer.class_generator" />
             <tag name="kernel.cache_warmer" />
         </service>
 
         <!-- serializer class manager -->
         <service id="tsantos_serializer.class_code_generator" class="TSantos\Serializer\SerializerClassCodeGenerator">
-            <argument>true</argument>
+            <argument>false</argument>
         </service>
         <service id="tsantos_serializer.class_writer" class="TSantos\Serializer\SerializerClassWriter">
             <argument>%tsantos_serializer.class_path%</argument>
@@ -93,9 +100,7 @@
         <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" public="false" />
 
         <service id="tsantos_serializer.generate_classes_command" class="TSantos\SerializerBundle\Command\GenerateClassCommand">
-            <argument type="service" id="tsantos_serializer.metadata_factory" />
-            <argument type="service" id="tsantos_serializer.class_code_generator" />
-            <argument type="service" id="tsantos_serializer.class_writer" />
+            <argument type="service" id="tsantos_serializer.class_generator" />
             <tag name="console.command" />
         </service>
 
