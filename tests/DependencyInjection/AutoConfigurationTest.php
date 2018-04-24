@@ -6,7 +6,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use TSantos\SerializerBundle\Tests\Fixture\TestKernel;
 use TSantos\SerializerBundle\Tests\KernelTestCase;
 
-
 /**
  * Class AutoConfigurationTest
  *
@@ -37,20 +36,8 @@ class AutoConfigurationTest extends KernelTestCase
                 'auto_configure' => true
             ]
         ], false);
-        $projectDir = $this->kernel->getProjectDir();
-
-        $this->dirs = [
-            sprintf('%s/config', $projectDir),
-            sprintf('%s/config/serializer', $projectDir),
-            sprintf('%s/src/Document', $projectDir),
-            sprintf('%s/src/Entity', $projectDir),
-            sprintf('%s/src/Model', $projectDir),
-        ];
 
         $this->fs = new Filesystem();
-        $this->fs->mkdir($this->dirs);
-
-        $this->kernel->boot();
     }
 
     public function tearDown()
@@ -59,16 +46,59 @@ class AutoConfigurationTest extends KernelTestCase
         $this->fs->remove($this->dirs);
     }
 
-    /** @test */
-    public function it_should_auto_configure_the_metadata_path()
+    /**
+     * @test
+     * @dataProvider getPaths
+     */
+    public function it_should_auto_configure_metadata_path_when_the_package_directory_exists(?string $classPath, string $namespace)
     {
+        $projectDir = $this->kernel->getProjectDir();
+
+        $this->dirs = [
+            sprintf('%s/config', $projectDir),
+            sprintf('%s/config/serializer', $projectDir),
+        ];
+
+        if (is_string($classPath)) {
+            $this->dirs[] = $projectDir . DIRECTORY_SEPARATOR . $classPath;
+        }
+
+        $this->fs->mkdir($this->dirs);
+        $this->kernel->boot();
         $container = $this->kernel->getContainer();
+        $this->assertArrayHasKey($namespace, $container->getParameter('tsantos_serializer.metadata_paths'));
+    }
 
-        $metadataPaths = $container->getParameter('tsantos_serializer.metadata_paths');
+    /**
+     * @test
+     * @dataProvider getSrcPaths
+     */
+    public function it_should_auto_configure_metadata_path_with_src_directory_only(string $classPath, string $namespace)
+    {
+        $projectDir = $this->kernel->getProjectDir();
+        $this->dirs[] = $projectDir . DIRECTORY_SEPARATOR . $classPath;
+        $this->fs->mkdir($this->dirs);
+        $this->kernel->boot();
+        $container = $this->kernel->getContainer();
+        $this->assertArrayHasKey($namespace, $container->getParameter('tsantos_serializer.metadata_paths'));
+    }
 
-        $this->assertArrayHasKey('App\\', $metadataPaths);
-        $this->assertArrayHasKey('App\\Document\\', $metadataPaths);
-        $this->assertArrayHasKey('App\\Model\\', $metadataPaths);
-        $this->assertArrayHasKey('App\\Entity\\', $metadataPaths);
+    public function getPaths()
+    {
+        return [
+            [null, ''],
+            ['/src/Document', 'App\Document'],
+            ['/src/Model', 'App\Model'],
+            ['/src/Entity', 'App\Entity'],
+        ];
+    }
+
+    public function getSrcPaths()
+    {
+        return [
+            ['/src/Document', 'App\Document'],
+            ['/src/Model', 'App\Model'],
+            ['/src/Entity', 'App\Entity'],
+        ];
     }
 }

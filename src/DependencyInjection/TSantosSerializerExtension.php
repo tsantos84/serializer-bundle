@@ -50,29 +50,36 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $normalizedPaths = [];
 
         if ($config['mapping']['auto_configure']) {
-            $projectDir = $container->getParameter('kernel.project_dir');
-            if (is_dir($configPath = $projectDir . '/config/serializer')) {
-                $normalizedPaths['App\\'] = $configPath;
-            }
-            if (is_dir($configPath = $projectDir . '/src/Document')) {
-                $normalizedPaths['App\\Document\\'] = $configPath;
-            }
-            if (is_dir($configPath = $projectDir . '/src/Entity')) {
-                $normalizedPaths['App\\Entity\\'] = $configPath;
-            }
-            if (is_dir($configPath = $projectDir . '/src/Model')) {
-                $normalizedPaths['App\\Model\\'] = $configPath;
-            }
+            $this->configAutoConfiguration($container, $normalizedPaths);
         }
 
-        if (!isset($config['mapping']['paths'])) {
-            $config['mapping']['paths'] = [];
-        }
         foreach ($config['mapping']['paths'] as $path) {
             $normalizedPaths[$path['namespace']] = $path['path'];
         }
 
         $container->setParameter('tsantos_serializer.metadata_paths', $normalizedPaths);
+    }
+
+    private function configAutoConfiguration(ContainerBuilder $container, &$paths)
+    {
+        $projectDir = $container->getParameter('kernel.project_dir');
+        if (is_dir($configPath = $projectDir . '/config/serializer')) {
+            if (is_dir($projectDir . '/src/Document')) {
+                $paths['App\\Document'] = $configPath;
+            } elseif (is_dir($projectDir . '/src/Entity')) {
+                $paths['App\\Entity'] = $configPath;
+            } elseif (is_dir($projectDir . '/src/Model')) {
+                $paths['App\\Model'] = $configPath;
+            } else {
+                $paths[''] = $configPath;
+            }
+        } elseif (is_dir($configPath = $projectDir . '/src/Document')) {
+            $paths['App\\Document'] = $configPath;
+        } elseif (is_dir($configPath = $projectDir . '/src/Entity')) {
+            $paths['App\\Entity'] = $configPath;
+        } elseif (is_dir($configPath = $projectDir . '/src/Model')) {
+            $paths['App\\Model'] = $configPath;
+        }
     }
 
     private function configCache(ContainerBuilder $container, array $config)

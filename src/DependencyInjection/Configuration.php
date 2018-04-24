@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue('file_not_exists')
             ->end()
             ->arrayNode('mapping')
-                ->isRequired()
+                ->addDefaultsIfNotSet()
                 ->children()
                     ->arrayNode('cache')
                         ->addDefaultsIfNotSet()
