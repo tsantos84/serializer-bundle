@@ -82,7 +82,6 @@
             <argument type="service" id="tsantos_serializer.class_code_generator" />
             <argument type="service" id="tsantos_serializer.class_writer" />
             <argument>%tsantos_serializer.class_generate_strategy%</argument>
-            <argument type="service" id="tsantos_serializer.event_dispatcher" />
         </service>
 
         <service id="tsantos_serializer" class="TSantos\Serializer\Serializer" public="true">
