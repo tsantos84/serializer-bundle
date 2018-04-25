@@ -3,6 +3,7 @@
 namespace TSantos\SerializerBundle\Service;
 
 use Metadata\AdvancedMetadataFactoryInterface;
+use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\Serializer\SerializerClassCodeGenerator;
 use TSantos\Serializer\SerializerClassWriter;
 
@@ -46,6 +47,7 @@ class ClassGenerator implements \Countable
         $allClasses = $this->metadataFactory->getAllClassNames();
 
         foreach ($allClasses as $class) {
+            /** @var ClassMetadata $metadata */
             $metadata = $this->metadataFactory->getMetadataForClass($class);
             $code = $this->codeGenerator->generate($metadata);
             $this->writer->write($metadata, $code);
