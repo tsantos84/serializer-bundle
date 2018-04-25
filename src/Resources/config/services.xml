@@ -73,9 +73,7 @@
         </service>
 
         <!-- serializer class manager -->
-        <service id="tsantos_serializer.class_code_generator" class="TSantos\Serializer\SerializerClassCodeGenerator">
-            <argument>false</argument>
-        </service>
+        <service id="tsantos_serializer.class_code_generator" class="TSantos\Serializer\SerializerClassCodeGenerator" />
         <service id="tsantos_serializer.class_writer" class="TSantos\Serializer\SerializerClassWriter">
             <argument>%tsantos_serializer.class_path%</argument>
         </service>
