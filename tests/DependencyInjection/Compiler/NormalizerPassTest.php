@@ -29,6 +29,6 @@ class NormalizerPassTest extends TestCase
         $compiler->process($container);
 
         $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');
-        $this->assertCount(2, $definition->getMethodCalls());
+        $this->assertCount(1, $definition->getMethodCalls());
     }
 }

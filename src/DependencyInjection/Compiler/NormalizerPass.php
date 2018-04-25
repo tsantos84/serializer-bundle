@@ -29,10 +29,10 @@ class NormalizerPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');
-        $this->addMethodCall($definition, $container->findTaggedServiceIds('tsantos_serializer.normalizer'), $container->findTaggedServiceIds('tsantos_serializer.denormalizer'));
+        $this->addMethodCall($definition, array_merge($container->findTaggedServiceIds('tsantos_serializer.normalizer'), $container->findTaggedServiceIds('tsantos_serializer.denormalizer')));
     }
 
-    private function addMethodCall(Definition $definition, array ...$services): void
+    private function addMethodCall(Definition $definition, array $services): void
     {
         foreach ($services as $id => $tags) {
             array_map(function () use ($id, $definition) {

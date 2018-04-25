@@ -20,7 +20,7 @@
 
         <!-- normalizers -->
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
-        <service id="tsantos_serializer.datetime_encoder" class="TSantos\Serializer\Encoder\DateTimeNormalizer">
+        <service id="tsantos_serializer.datetime_encoder" class="TSantos\Serializer\Normalizer\DateTimeNormalizer">
             <tag name="tsantos_serializer.normalizer" />
             <tag name="tsantos_serializer.denormalizer" />
         </service>
