@@ -12,7 +12,6 @@ namespace TSantos\SerializerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use TSantos\Serializer\SerializerClassLoader;
 
 /**
  * Class Configuration

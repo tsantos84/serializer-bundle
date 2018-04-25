@@ -24,6 +24,11 @@ use TSantos\Serializer\SerializerClassLoader;
  */
 class TSantosSerializerExtension extends ConfigurableExtension
 {
+    /**
+     * @param array $mergedConfig
+     * @param ContainerBuilder $container
+     * @throws \Exception
+     */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator([__DIR__ . '/../Resources/config/']));

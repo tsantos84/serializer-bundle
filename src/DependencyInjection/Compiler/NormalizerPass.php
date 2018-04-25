@@ -12,6 +12,7 @@ namespace TSantos\SerializerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -28,17 +29,15 @@ class NormalizerPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');
+        $this->addMethodCall($definition, $container->findTaggedServiceIds('tsantos_serializer.normalizer'), $container->findTaggedServiceIds('tsantos_serializer.denormalizer'));
+    }
 
-        foreach ($container->findTaggedServiceIds('tsantos_serializer.normalizer') as $id => $tags) {
-            foreach ($tags as $tag) {
+    private function addMethodCall(Definition $definition, array ...$services): void
+    {
+        foreach ($services as $id => $tags) {
+            array_map(function () use ($id, $definition) {
                 $definition->addMethodCall('add', [new Reference($id)]);
-            }
-        }
-
-        foreach ($container->findTaggedServiceIds('tsantos_serializer.denormalizer') as $id => $tags) {
-            foreach ($tags as $tag) {
-                $definition->addMethodCall('add', [new Reference($id)]);
-            }
+            }, $tags);
         }
     }
 }
