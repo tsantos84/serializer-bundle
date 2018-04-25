@@ -46,10 +46,6 @@
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
-        <service id="tsantos_serializer.metadata_reflection_driver" class="TSantos\Serializer\Metadata\Driver\ReflectionDriver">
-            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
-            <tag name="tsantos_serializer.metadata_driver" />
-        </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
             <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
             <argument type="string">Metadata\ClassHierarchyMetadata</argument>
@@ -101,6 +97,7 @@
 
         <service id="tsantos_serializer.generate_classes_command" class="TSantos\SerializerBundle\Command\GenerateClassCommand">
             <argument type="service" id="tsantos_serializer.class_generator" />
+            <argument>%kernel.environment%</argument>
             <tag name="console.command" />
         </service>
 

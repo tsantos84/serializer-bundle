@@ -10,7 +10,6 @@
 
 namespace TSantos\SerializerBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,13 +30,20 @@ class GenerateClassCommand extends Command
     private $classGenerator;
 
     /**
+     * @var string
+     */
+    private $environment;
+
+    /**
      * GenerateClassCommand constructor.
      * @param ClassGenerator $classGenerator
+     * @param string $environment
      */
-    public function __construct(ClassGenerator $classGenerator)
+    public function __construct(ClassGenerator $classGenerator, string $environment)
     {
-        $this->classGenerator = $classGenerator;
         parent::__construct();
+        $this->classGenerator = $classGenerator;
+        $this->environment = $environment;
     }
 
     public function configure()
@@ -49,18 +55,17 @@ class GenerateClassCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $env = $this->getApplication()->getKernel()->getEnvironment();
         $style = new SymfonyStyle($input, $output);
 
         $style->comment(sprintf('Generating <info>%d</info> serializer classes for <info>%s</info> environment',
             count($this->classGenerator),
-            $env
+            $this->environment
         ));
 
         $this->classGenerator->generate(function (ClassMetadata $metadata) use ($style) {
             $style->writeln(sprintf('<comment>%s</comment>: Ok', $metadata->name), OutputInterface::VERBOSITY_VERBOSE);
         });
 
-        $style->success('Classes for "'.$env.'" environment were successfully generated.');
+        $style->success('Classes for "'.$this->environment.'" environment were successfully generated.');
     }
 }
