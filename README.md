@@ -1,4 +1,4 @@
-# TSantos Serializer Bundle
+# TSantos Serializer Bundle [![Build Status](https://travis-ci.org/tsantos84/serializer-bundle.svg?branch=master)](https://travis-ci.org/tsantos84/serializer-bundle)
 
 This bundle integrates the TSantos Serializer into Symfony applications
 
