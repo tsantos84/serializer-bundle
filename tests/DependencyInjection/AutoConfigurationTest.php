@@ -28,13 +28,13 @@ class AutoConfigurationTest extends DependencyInjectionTest
      * @test
      * @dataProvider getPaths
      */
-    public function it_should_auto_configure_metadata_path_when_the_package_directory_exists(?string $metadataPath, string $namespace)
+    public function it_should_auto_configure_metadata_path_when_the_package_directory_exists(?string $srcMetadata, string $namespace)
     {
         $projectDir = $this->projectDir;
 
         $configMetadataPath = sprintf('%s/config/serializer', $projectDir);
-        $metadataPath = sprintf('%s%s', $projectDir, $metadataPath);
-        $dirs = [$configMetadataPath, $metadataPath];
+        $srcMetadata = sprintf('%s%s', $projectDir, $srcMetadata);
+        $dirs = [$configMetadataPath, $srcMetadata];
 
         $this->fs->mkdir($dirs);
 
@@ -43,6 +43,7 @@ class AutoConfigurationTest extends DependencyInjectionTest
         ]);
 
         $paths = $container->getDefinition('tsantos_serializer.metadata_file_locator')->getArgument(0);
+
         $this->assertArrayHasKey($namespace, $paths);
         $this->assertEquals($configMetadataPath, $paths[$namespace]);
     }

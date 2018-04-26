@@ -87,7 +87,8 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $mappings = [
             'App\\Entity' => $projectDir . '/src/Entity',
             'App\\Document' => $projectDir . '/src/Document',
-            'App\\Model' => $projectDir . '/src/Model'
+            'App\\Model' => $projectDir . '/src/Model',
+            '' => $projectDir . '/config/serializer' // should be the last item
         ];
 
         $pathLocator = function () use ($mappings): ?string {
@@ -101,11 +102,9 @@ class TSantosSerializerExtension extends ConfigurableExtension
 
         if (is_dir($configPath = $projectDir . '/config/serializer')) {
             if (null !== $namespace = $pathLocator()) {
-                $paths[$namespace] = $mappings[$namespace];
+                $paths[$namespace] = $configPath;
                 return;
             }
-            $paths[''] = $configPath;
-            return;
         }
 
         if (null !== $namespace = $pathLocator()) {
