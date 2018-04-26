@@ -3,12 +3,19 @@
     "description": "Integrates TSantos Serializer in Symfony applications",
     "type": "symfony-bundle",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Tales Santos",
+            "email": "tales.augusto.santos@gmail.com"
+        }
+    ],
     "require": {
         "php":"^7.2",
         "symfony/config": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/http-kernel": "^4.0",
-        "tsantos/serializer": "^2.0"
+        "tsantos/serializer": "^2.0",
+        "symfony/console": "^4.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^4.0",
@@ -24,10 +31,7 @@
             "TSantos\\SerializerBundle\\Tests\\": "./tests"
         }
     },
-    "authors": [
-        {
-            "name": "Tales Santos",
-            "email": "tales.augusto.santos@gmail.com"
-        }
-    ]
+    "config": {
+        "sort-packages": true
+    }
 }

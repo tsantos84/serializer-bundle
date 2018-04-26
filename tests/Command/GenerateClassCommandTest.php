@@ -3,6 +3,9 @@
 namespace TSantos\SerializerBundle\Cache;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 use TSantos\SerializerBundle\Command\GenerateClassCommand;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
@@ -16,10 +19,17 @@ class GenerateClassCommandTest extends TestCase
     /** @test */
     public function it_should_generate_the_classes_properly()
     {
-        $this->markTestIncomplete('Need to add the Symfony Console Component to test this class');
         $generator = $this->createMock(ClassGenerator::class);
-        $command = new GenerateClassCommand($generator);
+        $generator
+            ->expects($this->once())
+            ->method('generate');
 
-        $this->warmer->warmUp('/some/path');
+        $app = new Application();
+        $app->setAutoExit(false);
+        $app->add(new GenerateClassCommand($generator, 'test'));
+
+        $input = new StringInput('serializer:generate-classes');
+        $output = new NullOutput();
+        $app->run($input, $output);
     }
 }
