@@ -3,8 +3,6 @@
 namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 
 use Symfony\Component\Filesystem\Filesystem;
-use TSantos\SerializerBundle\Tests\Fixture\TestKernel;
-use TSantos\SerializerBundle\Tests\KernelTestCase;
 
 /**
  * Class AutoConfigurationTest
