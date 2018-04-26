@@ -6,6 +6,7 @@ use Metadata\Driver\DriverInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Filesystem\Filesystem;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
@@ -91,12 +92,15 @@ class TSantosExtensionTest extends DependencyInjectionTest
     /** @test */
     public function it_should_configure_custom_metadata_paths_provided_in_configuration_properly()
     {
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($path = $this->projectDir . '/src/Model');
+
         $container = $this->getContainer([
             'mapping' => [
                 'paths' => [
                     [
                         'namespace' => $namespace = 'App\Entity',
-                        'path' => $path = __DIR__ . '/../Fixture'
+                        'path' => $path
                     ]
                 ]
             ]
