@@ -10,11 +10,15 @@
 
 namespace TSantos\SerializerBundle\DependencyInjection;
 
+use Metadata\Driver\DriverInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
+use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+use TSantos\Serializer\Normalizer\DenormalizerInterface;
+use TSantos\Serializer\Normalizer\NormalizerInterface;
 use TSantos\Serializer\SerializerClassLoader;
 
 /**
@@ -35,23 +39,30 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $loader->load('services.xml');
 
         $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
-        $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
 
-        if ($container->getParameter('tsantos_serializer.debug')) {
-            $loader->load('debug.xml');
-        }
+        $container->getDefinition('tsantos_serializer.class_writer')->replaceArgument(0, $mergedConfig['class_path']);
 
         $strategyDictionary = [
             'never' => SerializerClassLoader::AUTOGENERATE_NEVER,
             'always' => SerializerClassLoader::AUTOGENERATE_ALWAYS,
             'file_not_exists' => SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS,
         ];
-        $container->setParameter('tsantos_serializer.class_generate_strategy', $strategyDictionary[$mergedConfig['generate_strategy']]);
+        $container->getDefinition('tsantos_serializer.class_loader')->replaceArgument(3, $strategyDictionary[$mergedConfig['generate_strategy']]);
 
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['class_path']));
         $this->configMetadataPath($mergedConfig, $container);
         $this->configCache($container, $mergedConfig);
+
+        // add tags automatically to services
+        $container->registerForAutoconfiguration(DriverInterface::class)->addTag('tsantos_serializer.metadata_driver');
+        $container->registerForAutoconfiguration(NormalizerInterface::class)->addTag('tsantos_serializer.normalizer');
+        $container->registerForAutoconfiguration(DenormalizerInterface::class)->addTag('tsantos_serializer.denormalizer');
+        $container->registerForAutoconfiguration(EventSubscriberInterface::class)->addTag('tsantos_serializer.event_subscriber');
+
+        if ($container->getParameter('tsantos_serializer.debug')) {
+            $loader->load('debug.xml');
+        }
     }
 
     private function configMetadataPath(array &$config, ContainerBuilder $container)
@@ -66,28 +77,39 @@ class TSantosSerializerExtension extends ConfigurableExtension
             $normalizedPaths[$path['namespace']] = $path['path'];
         }
 
-        $container->setParameter('tsantos_serializer.metadata_paths', $normalizedPaths);
+        $container->getDefinition('tsantos_serializer.metadata_file_locator')->replaceArgument(0, $normalizedPaths);
     }
 
     private function configAutoConfiguration(ContainerBuilder $container, &$paths)
     {
         $projectDir = $container->getParameter('kernel.project_dir');
-        if (is_dir($configPath = $projectDir . '/config/serializer')) {
-            if (is_dir($projectDir . '/src/Document')) {
-                $paths['App\\Document'] = $configPath;
-            } elseif (is_dir($projectDir . '/src/Entity')) {
-                $paths['App\\Entity'] = $configPath;
-            } elseif (is_dir($projectDir . '/src/Model')) {
-                $paths['App\\Model'] = $configPath;
-            } else {
-                $paths[''] = $configPath;
+
+        $mappings = [
+            'App\\Entity' => $projectDir . '/src/Entity',
+            'App\\Document' => $projectDir . '/src/Document',
+            'App\\Model' => $projectDir . '/src/Model'
+        ];
+
+        $pathLocator = function () use ($mappings): ?string {
+            foreach ($mappings as $namespace => $path) {
+                if (is_dir($path)) {
+                    return $namespace;
+                }
             }
-        } elseif (is_dir($configPath = $projectDir . '/src/Document')) {
-            $paths['App\\Document'] = $configPath;
-        } elseif (is_dir($configPath = $projectDir . '/src/Entity')) {
-            $paths['App\\Entity'] = $configPath;
-        } elseif (is_dir($configPath = $projectDir . '/src/Model')) {
-            $paths['App\\Model'] = $configPath;
+            return null;
+        };
+
+        if (is_dir($configPath = $projectDir . '/config/serializer')) {
+            if (null !== $namespace = $pathLocator()) {
+                $paths[$namespace] = $mappings[$namespace];
+                return;
+            }
+            $paths[''] = $configPath;
+            return;
+        }
+
+        if (null !== $namespace = $pathLocator()) {
+            $paths[$namespace] = $mappings[$namespace];
         }
     }
 
@@ -97,17 +119,13 @@ class TSantosSerializerExtension extends ConfigurableExtension
 
         $cacheDefinitionId = sprintf('tsantos_serializer.metadata_%s_cache', $cacheConfig['type']);
 
-        if (!$container->hasDefinition($cacheDefinitionId)) {
-            return;
-        }
-
-        $container->setParameter('tsantos_serializer.metadata_cache_prefix', $cacheConfig['prefix']);
         if ('file' === $cacheConfig['type']) {
             $container
                 ->getDefinition($cacheDefinitionId)
                 ->replaceArgument(0, $cacheConfig['path']);
             $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
         } elseif (isset($cacheConfig['id'])) {
+            $container->getDefinition($cacheDefinitionId)->replaceArgument(0, $cacheConfig['prefix']);
             $container
                 ->getDefinition($cacheDefinitionId)
                 ->replaceArgument(1, new Reference($cacheConfig['id']));
