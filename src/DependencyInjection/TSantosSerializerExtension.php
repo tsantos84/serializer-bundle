@@ -34,9 +34,13 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator([__DIR__ . '/../Resources/config/']));
         $loader->load('services.xml');
 
-        $container->setParameter('tsantos_serializer.debug', $mergedConfig['debug']);
+        $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
         $container->setParameter('tsantos_serializer.class_path', $mergedConfig['class_path']);
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
+
+        if ($container->getParameter('tsantos_serializer.debug')) {
+            $loader->load('debug.xml');
+        }
 
         $strategyDictionary = [
             'never' => SerializerClassLoader::AUTOGENERATE_NEVER,
