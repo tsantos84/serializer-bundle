@@ -53,11 +53,11 @@
         </service>
         <service id="tsantos_serializer.metadata_doctrine_cache" class="Metadata\Cache\DoctrineCacheAdapter">
             <argument /> <!-- cache prefix -->
-            <argument />
+            <argument /> <!-- doctrine cache service -->
         </service>
         <service id="tsantos_serializer.metadata_psr_cache" class="Metadata\Cache\PsrCacheAdapter">
             <argument /> <!-- cache prefix -->
-            <argument />
+            <argument /> <!-- psr cache service -->
         </service>
         <service id="tsantos_serializer.class_generator" class="TSantos\SerializerBundle\Service\ClassGenerator">
             <argument type="service" id="tsantos_serializer.metadata_factory" />
