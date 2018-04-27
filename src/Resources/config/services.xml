@@ -37,6 +37,12 @@
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
         </service>
+        <service id="tsantos_serializer.metadata_annotation_driver" class="TSantos\Serializer\Metadata\Driver\AnnotationDriver">
+            <argument type="service">
+                <service class="Doctrine\Common\Annotations\AnnotationReader" />
+            </argument>
+            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+        </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
             <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
             <argument type="string">Metadata\ClassHierarchyMetadata</argument>
