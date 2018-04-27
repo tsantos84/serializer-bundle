@@ -84,10 +84,12 @@ Directory which will generated the serializer classes
 
 #### generate_strategy `default: file_not_found`
 
-Strategy used to generate the serializer classes. Can be `never`, `always` and `file_not_found`.
+Strategy used to generate the serializer classes. Should be `never`, `always` and `file_not_found`.
 
-`never` means that the serializer classes will never be generated (best for production environment)
-`always` means that every time a new class will be generated (best for debugging)
+`never` means that the serializer classes will never be generated (best for production environment, but will require to generate the classes in your continous deployment system).
+
+`always` means that every time a new class will be generated (best for debugging).
+
 `file_not_found` means that the serializer classes will be generated only if the class not exists (best for development environment)
 
 #### mapping.auto_configure `default: file`
