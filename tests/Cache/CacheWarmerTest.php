@@ -13,7 +13,6 @@ use TSantos\SerializerBundle\Service\ClassGenerator;
  * Class CacheWarmerTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
- * @group unit
  */
 class CacheWarmerTest extends TestCase
 {

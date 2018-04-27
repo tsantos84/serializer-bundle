@@ -11,7 +11,6 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\EventListenerPass;
  * Class CompilerTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
- * @group functional
  */
 class EventListenerPassTest extends TestCase
 {

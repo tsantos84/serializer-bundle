@@ -10,7 +10,6 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\NormalizerPass;
  * Class NormalizerPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
- * @group functional
  */
 class NormalizerPassTest extends TestCase
 {

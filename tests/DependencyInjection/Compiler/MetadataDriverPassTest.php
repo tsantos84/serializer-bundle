@@ -10,7 +10,6 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\MetadataDriverPass;
  * Class MetadataDriverPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
- * @group functional
  */
 class MetadataDriverPassTest extends TestCase
 {

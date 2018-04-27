@@ -13,7 +13,6 @@ use TSantos\SerializerBundle\Service\ClassGenerator;
  * Class ClassGeneratorTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
- * @group unit
  */
 class ClassGeneratorTest extends TestCase
 {

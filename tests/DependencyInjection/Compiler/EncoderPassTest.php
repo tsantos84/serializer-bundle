@@ -10,7 +10,6 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\EncoderPass;
  * Class EventListenerPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
- * @group functional
  */
 class EncoderPassTest extends TestCase
 {
