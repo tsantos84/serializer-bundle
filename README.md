@@ -6,29 +6,24 @@ This bundle integrates the TSantos Serializer into Symfony applications
 
 You can install this library through composer:
 
-`composer require tsantos/serializer-bundle`
+```sh
+composer require tsantos/serializer-bundle`
+```
 
-or just add `tsantos/serializer-bundle` to your composer file and then
+**or** just add `tsantos/serializer-bundle` to your composer file and then
 
-`composer update`
+```sh
+composer update
+```
 
-Symfony Flex recipe: comming soon!
+If your application is based on Symfony 4, then Symfony Flex will automatically register this bundle in your `Kernel` after `composer update`. Otherwise, you'll need to register it manually in you `AppKernel`.
 
 ## Usage
 
-Configure your application with the following configuration:
-
-```yaml
-# ./packages/tsantos_serializer.yml
-tsantos_serializer: ~
-```
-
-    Thanks to the `auto-configure` option, the default configuration is enough to get your application running in most scenarios.
+Thanks to the `mapping.auto_configure` option, the default configuration is enough to get your application running in most scenarios.
 After that, you can access the serializer service through the name `tsantos_serializer`:
 
 ```php
-<?php
-
 namespace App\Controller;
 
 use App\Document\Person;
@@ -41,6 +36,33 @@ class DefaultController extends Controller
     {
         $person = new Person(100, 'Tales Santos');
         return JsonResponse::fromJsonString($this->get('tsantos_serializer')->serialize($person));
+    }
+}
+```
+
+Or injecting the service directly in your controllers:
+
+```php
+namespace App\Controller;
+
+use App\Document\Person;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use TSantos\Serializer\SerializerInterface;
+
+class DefaultController extends Controller
+{
+    private $serializer;
+    
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    public function index()
+    {
+        $person = new Person(100, 'Tales Santos');
+        return JsonResponse::fromJsonString($this->serializer->serialize($person));
     }
 }
 ```
@@ -108,11 +130,9 @@ This bundle can be extended by adding new encoders and normalizers.
 
 ### Encoders
 
-Encoders are services that transform data from string to array and vice-versa. Although the TSantos Serializer Library currently supports only JSON encoder,
-you can register new encoders to your application by implementing the `EncoderInterface`, register the service and tag it like following:
+Encoders are services that transform data from string to array and vice-versa. Although the TSantos Serializer Library currently supports only JSON encoder, you can register new encoders to your application by just implementing the [EncoderInterface](https://github.com/tsantos84/serializer/blob/master/src/Encoder/EncoderInterface.php), register the service and tag it like following:
 
 ```php
-<?php
 // ./src/Serializer/JsonEncoder
 namespace App\Serializer;
 
@@ -149,16 +169,6 @@ services:
 
 ### (De)normalizers
 
-(De)normalizers are powerful services that transforms data without encoding/decoding them. For example,
-supposing your entity has a date/time field. In this case, you don't need to create a mapping for \DateTime. Instead, all you need is to create your custom (de)normalizers and tag it like bellow.
+(De)normalizers are powerful services that transforms data without encoding/decoding them. For example, supposing your entity has a date/time field. In this case, you don't need to create a mapping for `\DateTime`. Instead, all you need is to create your custom (de)normalizers. This bundle automatically recognize services that implements [NormalizeInterface](https://github.com/tsantos84/serializer/blob/master/src/Normalizer/NormalizerInterface.php) and [DenormalizeInterface](https://github.com/tsantos84/serializer/blob/master/src/Normalizer/DenormalizerInterface.php) and tag it with the proper tag name. 
 
-```yaml
-# ./services.yml
-services:
-    App\Serializer\Normalizer\DateTime:
-        tags:
-            - { name: "tsantos_serializer.normalizer" }
-            - { name: "tsantos_serializer.denormalizer" }
-```
-
-    Please, refer to TSantos Serializer Library repository for a detailed documentation about the normalization process.
+Please, refer to TSantos Serializer Library repository for a detailed documentation about the normalization process.
