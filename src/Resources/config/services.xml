@@ -10,6 +10,9 @@
     </parameters>
 
     <services>
+
+        <defaults autoconfigure="true" public="false" />
+
         <!-- encoders -->
         <service id="tsantos_serializer.json_encoder" class="TSantos\Serializer\Encoder\JsonEncoder">
             <tag name="tsantos_serializer.encoder" format="json" />
@@ -24,7 +27,7 @@
             <argument /> <!-- directories -->
         </service>
         <service id="tsantos_serializer.metadata_type_guesser" class="TSantos\Serializer\TypeGuesser" />
-        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" />
+        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" autoconfigure="false" />
         <service id="tsantos_serializer.metadata_yaml_driver" class="TSantos\Serializer\Metadata\Driver\YamlDriver">
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />

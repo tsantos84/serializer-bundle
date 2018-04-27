@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<serializer>
+    <class name="App\_NAMESPACE_\Post">
+        <property name="id" type="integer" />
+        <property name="title" type="string" />
+        <property name="summary" type="string"/>
+    </class>
+</serializer>
