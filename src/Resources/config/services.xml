@@ -106,5 +106,10 @@
         <service id="tsantos_serializer.event_dispatcher" class="TSantos\Serializer\EventDispatcher\EventDispatcher">
             <argument type="service" id="event_dispatcher" />
         </service>
+
+        <service id="tsantos_serializer.twig_extension" class="TSantos\SerializerBundle\Twig\SerializerExtension">
+            <argument type="service" id="tsantos_serializer" />
+            <tag name="twig.extension" />
+        </service>
     </services>
 </container>
