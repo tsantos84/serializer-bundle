@@ -21,7 +21,7 @@ class SerializerExtensionTest extends TestCase
 
         $extension = new SerializerExtension($serializer);
 
-        $twig = new \Twig_Environment(new \Twig_Loader_Array(['page' => '{{ data|serialize|raw }}']));
+        $twig = new \Twig_Environment(new \Twig_Loader_Array(['page' => '{{ data|serialize }}']));
         $twig->addExtension($extension);
 
         $result = $twig->render('page', ['data' => $data]);

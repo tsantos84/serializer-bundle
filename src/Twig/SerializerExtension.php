@@ -28,7 +28,9 @@ class SerializerExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('serialize', [$this, 'serialize'])
+            new \Twig_SimpleFilter('serialize', [$this, 'serialize'], [
+                'is_safe' => ['html']
+            ])
         ];
     }
 
