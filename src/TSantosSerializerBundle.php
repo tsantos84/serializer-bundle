@@ -16,6 +16,7 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\EncoderPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\EventListenerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\MetadataDriverPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\NormalizerPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\StopwatchPass;
 use TSantos\SerializerBundle\DependencyInjection\TSantosSerializerExtension;
 
 /**
@@ -31,6 +32,7 @@ class TSantosSerializerBundle extends Bundle
         $container->addCompilerPass(new EventListenerPass());
         $container->addCompilerPass(new MetadataDriverPass());
         $container->addCompilerPass(new NormalizerPass());
+        $container->addCompilerPass(new StopwatchPass());
     }
 
     public function getContainerExtension()
