@@ -40,6 +40,9 @@ class StopwatchListener implements EventSubscriberInterface
         $this->stopwatch = $stopwatch;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function getListeners(): array
     {
         return [

@@ -189,6 +189,33 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $this->assertMetadataFactoryCache($container, 'tsantos_serializer.metadata_doctrine_cache');
     }
 
+    /**
+     * @test
+     * @dataProvider getCacheType
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage You need to configure the node "mapping.cache.id"
+     */
+    public function it_should_require_the_service_id_for_cache_type_psr_or_doctrine(string $cacheType)
+    {
+        $this->getContainer([
+            'mapping' => [
+                'cache' => [
+                    'type' => $cacheType,
+                    'id' => null,
+                    'prefix' => 'my_prefix_'
+                ]
+            ]
+        ]);
+    }
+
+    public function getCacheType()
+    {
+        return [
+            ['doctrine'],
+            ['psr']
+        ];
+    }
+
     /** @test @dataProvider getInterfacesForAutoConfiguration */
     public function it_should_register_services_for_auto_configuration(string $interface, string $tag)
     {

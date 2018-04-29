@@ -56,4 +56,15 @@ class ClassGeneratorTest extends TestCase
 
         $this->generator->generate();
     }
+
+    /** @test */
+    public function it_can_count_the_amount_of_metadata_classes()
+    {
+        $this->metadataFactory
+            ->expects($this->once())
+            ->method('getAllClassNames')
+            ->willReturn([ClassMetadata::class]);
+
+        $this->assertEquals(1, $this->generator->count());
+    }
 }
