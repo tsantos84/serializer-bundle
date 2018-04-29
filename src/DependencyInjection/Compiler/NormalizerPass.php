@@ -24,10 +24,6 @@ class NormalizerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('tsantos_serializer.normalizer_registry')) {
-            return;
-        }
-
         $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');
         $this->addMethodCall($definition, array_merge($container->findTaggedServiceIds('tsantos_serializer.normalizer'), $container->findTaggedServiceIds('tsantos_serializer.denormalizer')));
     }

@@ -23,10 +23,6 @@ class MetadataDriverPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('tsantos_serializer.metadata_chain_driver')) {
-            return;
-        }
-
         $definition = $container->getDefinition('tsantos_serializer.metadata_chain_driver');
 
         foreach ($container->findTaggedServiceIds('tsantos_serializer.metadata_driver') as $id => $serviceId) {
