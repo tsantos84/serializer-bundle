@@ -7,7 +7,7 @@ cache:
 
 env:
     global:
-        - PHPUNIT_FLAGS="-v"
+        - PHPUNIT_FLAGS="-v -c phpunit.xml.dist"
         - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
 
 matrix:
