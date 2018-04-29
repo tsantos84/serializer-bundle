@@ -23,10 +23,6 @@ class EncoderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasParameter('tsantos_serializer.format')) {
-            throw new \InvalidArgumentException('The parameter "tsantos_serializer.format" was not registered');
-        }
-
         $ids = [];
 
         foreach ($container->findTaggedServiceIds('tsantos_serializer.encoder') as $id => $tags) {
