@@ -19,8 +19,8 @@ import os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('/opt/sphinx-php/sensio/sphinx'))
-sys.path.append(os.path.abspath('/opt/symfony-docs/_build/_theme/_exts'))
+#sys.path.insert(0, os.path.abspath('/opt/sphinx-php/sensio/sphinx'))
+#sys.path.append(os.path.abspath('/opt/symfony-docs/_build/_theme/_exts'))
 
 # -- General configuration ------------------------------------------------
 
@@ -29,7 +29,7 @@ from pygments.lexers.compiled import CLexer
 from pygments.lexers.special import TextLexer
 from pygments.lexers.text import RstLexer
 from pygments.lexers.web import PhpLexer
-from symfonycom.sphinx.lexer import TerminalLexer
+#from symfonycom.sphinx.lexer import TerminalLexer
 
 lexers['php'] = PhpLexer(startinline=True)
 lexers['php-annotations'] = PhpLexer(startinline=True)
@@ -138,7 +138,7 @@ html_theme = 'classic'
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['/opt/symfony-docs/_build/_theme/_templates']
+html_theme_path = ['_templates']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
