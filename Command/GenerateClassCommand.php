@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the TSantos Serializer package.
+ * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
  *
