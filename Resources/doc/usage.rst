@@ -2,11 +2,11 @@ Usage
 =====
 
 This bundle exposes the service ``tsantos_serializer`` which contains a
-reference to :class:``TSantos\Serializer\SerializerInterface``.
-
-.. code-block:: php
+reference to :class:``TSantos\Serializer\SerializerInterface``::
 
     $serializer = $container->get('tsantos_serializer');
+    $serializer = $serializer->serialize($post);
+    $serializer = $serializer->deserialize($post, Post::class);
 
 .. note::
 
@@ -21,10 +21,9 @@ reference to :class:``TSantos\Serializer\SerializerInterface``.
 Auto-wiring the Serializer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Instead of fetching the serializer directly from the container, you can define the serializer as a dependency.
+Instead of fetching the serializer directly from the container, you can define the serializer as a dependency::
 
-.. code-block:: php
-
+    // src/Controller/DefaultController.php
     use TSantos\Serializer\SerializerInterface;
     use Symfony\Component\HttpFoundation\JsonResponse;
 

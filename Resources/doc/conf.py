@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# SerializerBundle documentation build configuration file, created by
-# sphinx-quickstart on Mon Apr 30 01:38:05 2018.
+# TSantos Serializer Bundle documentation build configuration file, created by
+# sphinx-quickstart on Mon Apr 30 17:26:22 2018.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -19,8 +19,6 @@ import os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-#sys.path.insert(0, os.path.abspath('/opt/sphinx-php/sensio/sphinx'))
-#sys.path.append(os.path.abspath('/opt/symfony-docs/_build/_theme/_exts'))
 
 # -- General configuration ------------------------------------------------
 
@@ -29,14 +27,11 @@ from pygments.lexers.compiled import CLexer
 from pygments.lexers.special import TextLexer
 from pygments.lexers.text import RstLexer
 from pygments.lexers.web import PhpLexer
-#from symfonycom.sphinx.lexer import TerminalLexer
 
 lexers['php'] = PhpLexer(startinline=True)
 lexers['php-annotations'] = PhpLexer(startinline=True)
 
 primary_domain = 'php'
-
-api_url = 'https://github.com/tsantos84/serializer/blob/master/src/%s'
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
@@ -44,11 +39,7 @@ api_url = 'https://github.com/tsantos84/serializer/blob/master/src/%s'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-#extensions = [
-#    'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
-#    'sensio.sphinx.refinclude', 'sensio.sphinx.configurationblock', 'sensio.sphinx.phpcode', 'sensio.sphinx.bestpractice', 'sensio.sphinx.codeblock',
-#    'symfonycom.sphinx'
-#]
+extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -63,7 +54,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SerializerBundle'
+project = u'TSantos Serializer Bundle'
 copyright = u'2018, Tales Santos'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -113,20 +104,17 @@ pygments_style = 'sphinx'
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
 
-# -- Settings for symfony doc extension ---------------------------------------------------
-
-# enable highlighting for PHP code not between ``<?php ... ?>`` by default
-lexers['markdown'] = TextLexer()
-lexers['php'] = PhpLexer(startinline=True)
-lexers['php-annotations'] = PhpLexer(startinline=True)
-lexers['php-standalone'] = PhpLexer(startinline=True)
-lexers['php-symfony'] = PhpLexer(startinline=True)
-lexers['rst'] = RstLexer()
-lexers['varnish3'] = CLexer()
-lexers['varnish4'] = CLexer()
-#lexers['terminal'] = TerminalLexer()
 
 # -- Options for HTML output ----------------------------------------------
+
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+else:
+    html_theme = 'default'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -138,7 +126,7 @@ html_theme = 'sphinx_rtd_theme'
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['_templates']
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -208,7 +196,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SerializerBundledoc'
+htmlhelp_basename = 'TSantosSerializerBundledoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -228,7 +216,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'SerializerBundle.tex', u'SerializerBundle Documentation',
+  ('index', 'TSantosSerializerBundle.tex', u'TSantos Serializer Bundle Documentation',
    u'Tales Santos', 'manual'),
 ]
 
@@ -258,7 +246,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'serializerbundle', u'SerializerBundle Documentation',
+    ('index', 'tsantosserializerbundle', u'TSantos Serializer Bundle Documentation',
      [u'Tales Santos'], 1)
 ]
 
@@ -272,8 +260,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'SerializerBundle', u'SerializerBundle Documentation',
-   u'Tales Santos', 'SerializerBundle', 'One line description of project.',
+  ('index', 'TSantosSerializerBundle', u'TSantos Serializer Bundle Documentation',
+   u'Tales Santos', 'TSantosSerializerBundle', 'One line description of project.',
    'Miscellaneous'),
 ]
 

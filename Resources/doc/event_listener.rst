@@ -10,22 +10,21 @@ Event Listeners
 Event listeners are single PHP methods or `callable` that will be called when some event is triggered by the serializer.
 To register listener in this bundle, first you need to create a class::
 
-    <?php
+    // src/EventListener/PostSerializerListener.php
+    namespace App\EventListener;
 
-        namespace App\EventListener;
+    use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;
+    use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+    use TSantos\Serializer\EventDispatcher\SerializerEvents;
 
-        use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;
-        use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
-        use TSantos\Serializer\EventDispatcher\SerializerEvents;
-
-        class PostSerializerListener
+    class PostSerializerListener
+    {
+        public function onPreSerialization(PreSerializationEvent $event): void
         {
-            public function onPreSerialization(PreSerializationEvent $event): void
-            {
-                $post = $event->getData();
-                $post->setTitle('serialized_title');
-            }
+            $post = $event->getData();
+            $post->setTitle('serialized_title');
         }
+    }
 
 .. code:: yaml
 
@@ -36,24 +35,23 @@ Then register and tag it with `tsantos_serializer.event_listener`::
             tags:
                 - { name: "tsantos_serializer.event_listener", event:"serializer.pre_serialization", method:"onPreSerialization" }
 
-You can even omit the attribute `method` from the tag if your class have the `__invoke` method::
+You can even omit the attribute `method` from the tag if your class is invokable by implement the `__invoke` method::
 
-    <?php
+    // src/EventListener/PostSerializerListener.php
+    namespace App\EventListener;
 
-        namespace App\EventListener;
+    use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;
+    use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+    use TSantos\Serializer\EventDispatcher\SerializerEvents;
 
-        use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;
-        use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
-        use TSantos\Serializer\EventDispatcher\SerializerEvents;
-
-        class PostSerializerListener
+    class PostSerializerListener
+    {
+        public function __invoke(PreSerializationEvent $event): void
         {
-            public function __invoke(PreSerializationEvent $event): void
-            {
-                $post = $event->getData();
-                $post->setTitle('serialized_title');
-            }
+            $post = $event->getData();
+            $post->setTitle('serialized_title');
         }
+    }
 
 .. code:: yaml
 
@@ -69,8 +67,7 @@ Event Subscribers
 A better way to define event listener is through event subscribers. All the above examples can be achieved by creating
 a subscriber class::
 
-    <?php
-
+    // src/EventListener/PostSerializerListener.php
     namespace App\EventListener;
 
     use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;

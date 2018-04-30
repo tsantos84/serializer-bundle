@@ -3,11 +3,9 @@ Encoder / Decoder
 
 Encoders are services that transform data from string to array and vice-versa. Although the TSantos Serializer Library
 currently supports only JSON encoder, you can register new encoders to your application by implementing the
-:class:`Encoder\\EncoderInterface` interface, register the service in the container and tag it like following:
+:class:`Encoder\\EncoderInterface` interface, register the service in the container and tag it like following::
 
-.. code::
-
-    // ./src/Serializer/JsonEncoder
+    // src/Serializer/JsonEncoder
     namespace App\Serializer;
 
     use TSantos\Serializer\Encoder\EncoderInterface;
@@ -30,7 +28,7 @@ currently supports only JSON encoder, you can register new encoders to your appl
         }
     }
 
-Now you can tag your encoder and you are done!
+Now you can tag your encoder and you are done to use your custom encoder.
 
 .. code-block:: yaml
 
@@ -42,5 +40,10 @@ Now you can tag your encoder and you are done!
 
 .. note::
 
-    The attribute `format` is required! This value will be matched against the option `tsantos_serializer.format` to
-    define what encoder will be used in your application.
+    The attribute `format` is required! This value will be matched against the option `tsantos_serializer.format` on
+    your configuration to define which encoder will be used in your application.
+
+.. note::
+
+    Different from the most used serializer libraries, you don't need to pass the format on `$serializer->serialize(...)`
+    calls.

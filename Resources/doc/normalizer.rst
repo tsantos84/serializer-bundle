@@ -5,8 +5,7 @@ Normalizer / Denormalizer
 your entity has a `date/time` field. In this case, you don't need to create a custom mapping for :phpclass:`\DateTime`
 class to define how to configure such data type. Instead, all you need is to create your custom (de)normalizers::
 
-    <?php
-
+    // src/Serializer/DateTimeNormalizer.php
     namespace App\Serializer;
 
     use TSantos\Serializer\Normalizer\DenormalizerInterface;
@@ -48,8 +47,6 @@ class to define how to configure such data type. Instead, all you need is to cre
         }
     }
 
-
-
 This bundle automatically recognize services that implements :class:`Normalizer\\NormalizerInterface` and
 :class:`Normalizer\\DenormalizeInterface` and tag them with the proper tag name.
 
@@ -75,8 +72,7 @@ This bundle automatically recognize services that implements :class:`Normalizer\
     You can use normalizers to transform read-only entities and avoid unnecessary over-head due the serialization
     process::
 
-        <?php
-
+        // src/Serializer/UserNormalizer.php
         namespace App\Serializer;
 
         use App\Entity\User;

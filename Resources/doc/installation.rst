@@ -34,7 +34,6 @@ in the ``app/AppKernel.php`` file of your project:
 
 .. code-block:: php
 
-    <?php
     // app/AppKernel.php
 
     // ...
