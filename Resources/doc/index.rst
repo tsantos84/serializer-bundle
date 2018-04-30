@@ -54,4 +54,19 @@ in the ``app/AppKernel.php`` file of your project:
         // ...
     }
 
+Step 3: Usage
+~~~~~~~~~~~~~
+
+This bundle exposes the service ``tsantos_serializer`` which contains a
+reference to :class:``TSantos\Serializer\SerializerInterface``.
+
+.. code-block:: php
+
+    $serializer = $container->get('tsantos_serializer');
+
+.. note::
+
+    The format utilized by the serializer is the one configured in your
+    configuration file.
+
 .. _`installation chapter`: https://getcomposer.org/doc/00-intro.md
