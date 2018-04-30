@@ -46,8 +46,7 @@ api_url = 'https://github.com/tsantos84/serializer/blob/master/src/%s'
 # ones.
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
-    'sensio.sphinx.refinclude', 'sensio.sphinx.configurationblock', 'sensio.sphinx.phpcode', 'sensio.sphinx.bestpractice', 'sensio.sphinx.codeblock',
-    'symfonycom.sphinx'
+    'sensio.sphinx.refinclude', 'sensio.sphinx.configurationblock', 'sensio.sphinx.phpcode', 'sensio.sphinx.bestpractice', 'sensio.sphinx.codeblock'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -124,7 +123,7 @@ lexers['php-symfony'] = PhpLexer(startinline=True)
 lexers['rst'] = RstLexer()
 lexers['varnish3'] = CLexer()
 lexers['varnish4'] = CLexer()
-lexers['terminal'] = TerminalLexer()
+#lexers['terminal'] = TerminalLexer()
 
 # -- Options for HTML output ----------------------------------------------
 
