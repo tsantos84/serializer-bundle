@@ -68,3 +68,4 @@ $ vendor/bin/simple-phpunit
 License
 =======
 
+* MIT
