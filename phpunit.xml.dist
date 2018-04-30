@@ -3,6 +3,13 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
          backupGlobals="false"
+         backupStaticAttributes="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
          colors="true"
          bootstrap="./vendor/autoload.php"
 >
@@ -15,13 +22,19 @@
 
     <testsuites>
         <testsuite name="TSantos Serializer Bundle Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+            <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./src</directory>
+            <directory>Cache</directory>
+            <directory>Command</directory>
+            <directory>DependencyInjection</directory>
+            <directory>EventListener</directory>
+            <directory>Service</directory>
+            <directory>Twig</directory>
+            <file>TSantosSerializerBundle.php</file>
         </whitelist>
     </filter>
 </phpunit>

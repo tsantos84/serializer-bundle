@@ -24,12 +24,15 @@
     },
     "autoload": {
         "psr-4": {
-            "TSantos\\SerializerBundle\\" : "./src"
-        }
+            "TSantos\\SerializerBundle\\" : ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "TSantos\\SerializerBundle\\Tests\\": "./tests"
+            "TSantos\\SerializerBundle\\Tests\\": "Tests"
         }
     },
     "config": {
