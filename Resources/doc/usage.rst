@@ -10,12 +10,13 @@ reference to :class:``TSantos\Serializer\SerializerInterface``.
 
 .. note::
 
-    The format used by the serializer is the one configured in your configuration file. Please go to the page
-    :doc:`configuration_reference` to see information about this configuration.
+    The format used by the serializer is the one configured in your configuration file. Please go to the
+    :doc:`configuration_reference` page to see more information about this configuration.
 
 .. note::
 
-    You can create and register new formats. You can read the dedicated documentation about encoders at :doc:`encoder`
+    You can create and register new formats. Please, read the dedicated documentation about encoders at :doc:`encoder`
+    page.
 
 Auto-wiring the Serializer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

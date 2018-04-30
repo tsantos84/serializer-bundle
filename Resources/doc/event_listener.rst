@@ -29,7 +29,7 @@ To register listener in this bundle, first you need to create a class::
 
 .. code:: yaml
 
-And then register and tag it with `tsantos_serializer.event_listener`::
+Then register and tag it with `tsantos_serializer.event_listener`::
 
     services:
         App\EventListener\PostSerializerListener:
