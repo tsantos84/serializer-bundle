@@ -22,6 +22,10 @@ class StopwatchPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
+        if (!$container->hasDefinition('tsantos_serializer.stopwatch_listener')) {
+            return;
+        }
+
         if (!$container->hasDefinition('debug.stopwatch')) {
             $container->removeDefinition('tsantos_serializer.stopwatch_listener');
         }

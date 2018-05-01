@@ -12,6 +12,8 @@ namespace TSantos\SerializerBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use TSantos\Serializer\SerializerInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
@@ -116,13 +118,15 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
         ];
     }
 
+    /**
+     * @param LoaderInterface $loader
+     * @throws \Exception
+     */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-//        $loader->load(function(ContainerBuilder $container) {
-//            $container->loadFromExtension('tsantos_serializer', [
-//                'mapping' => []
-//            ]);
-//        });
+        $loader->load(function(ContainerBuilder $container) {
+            $container->register('event_dispatcher', EventDispatcherInterface::class);
+        });
     }
 }
 
