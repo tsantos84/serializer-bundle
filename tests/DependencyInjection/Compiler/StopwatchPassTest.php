@@ -45,4 +45,23 @@ class StopwatchPassTest extends TestCase
 
         $this->assertTrue($container->hasDefinition('tsantos_serializer.stopwatch_listener'));
     }
+
+    /** @test */
+    public function it_should_do_nothing_if_stopwatch_listener_is_not_defined()
+    {
+        $container = $this->createMock(ContainerBuilder::class);
+        $container
+            ->expects($this->once())
+            ->method('hasDefinition')
+            ->with('tsantos_serializer.stopwatch_listener')
+            ->willReturn(false);
+
+        $container
+            ->expects($this->never())
+            ->method('removeDefinition')
+            ->with('tsantos_serializer.stopwatch_listener');
+
+        $compiler = new StopwatchPass();
+        $compiler->process($container);
+    }
 }
