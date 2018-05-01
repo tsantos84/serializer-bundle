@@ -16,11 +16,11 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class NormalizerPass
+ * Class AddNormalizerPass
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class NormalizerPass implements CompilerPassInterface
+class AddNormalizerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {

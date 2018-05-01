@@ -12,14 +12,14 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\EncoderPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\ConfigureEncoderPass;
 
 /**
- * Class EventListenerPassTest
+ * Class ConfigureEncoderPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class EncoderPassTest extends TestCase
+class ConfigureEncoderPassTest extends TestCase
 {
     /** @test */
     public function it_should_rewrite_the_definition_of_encoders()
@@ -34,7 +34,7 @@ class EncoderPassTest extends TestCase
             ->setClass('SomeClass')
             ->addTag('tsantos_serializer.encoder', ['format' => 'json']);
 
-        $compiler = new EncoderPass();
+        $compiler = new ConfigureEncoderPass();
         $compiler->process($container);
 
         $definition = $container->getDefinition('tsantos_serializer');
@@ -58,7 +58,7 @@ class EncoderPassTest extends TestCase
             ->setClass('SomeClass')
             ->addTag('tsantos_serializer.encoder');
 
-        $compiler = new EncoderPass();
+        $compiler = new ConfigureEncoderPass();
         $compiler->process($container);
     }
 
@@ -78,7 +78,7 @@ class EncoderPassTest extends TestCase
             ->setClass('SomeClass')
             ->addTag('tsantos_serializer.encoder', ['format' => 'json']);
 
-        $compiler = new EncoderPass();
+        $compiler = new ConfigureEncoderPass();
         $compiler->process($container);
     }
 }

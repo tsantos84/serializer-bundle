@@ -12,21 +12,22 @@ namespace TSantos\SerializerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class MetadataDriverPass
+ * Class RemoveStopwatchListenerPass
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class MetadataDriverPass implements CompilerPassInterface
+class RemoveStopwatchListenerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('tsantos_serializer.metadata_chain_driver');
+        if (!$container->hasDefinition('tsantos_serializer.stopwatch_listener')) {
+            return;
+        }
 
-        foreach ($container->findTaggedServiceIds('tsantos_serializer.metadata_driver') as $id => $serviceId) {
-            $definition->addMethodCall('addDriver', [new Reference($id)]);
+        if (!$container->hasDefinition('debug.stopwatch')) {
+            $container->removeDefinition('tsantos_serializer.stopwatch_listener');
         }
     }
 }

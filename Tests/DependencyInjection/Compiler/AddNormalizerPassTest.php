@@ -12,14 +12,14 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\NormalizerPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddNormalizerPass;
 
 /**
- * Class NormalizerPassTest
+ * Class AddNormalizerPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class NormalizerPassTest extends TestCase
+class AddNormalizerPassTest extends TestCase
 {
     /** @test */
     public function it_should_add_method_calls_to_normalizer_registry_definition()
@@ -32,7 +32,7 @@ class NormalizerPassTest extends TestCase
             ->addTag('tsantos_serializer.normalizer')
             ->addTag('tsantos_serializer.denormalizer');
 
-        $compiler = new NormalizerPass();
+        $compiler = new AddNormalizerPass();
         $compiler->process($container);
 
         $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');

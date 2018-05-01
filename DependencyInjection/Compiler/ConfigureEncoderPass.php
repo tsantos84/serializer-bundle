@@ -15,11 +15,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class EncoderPass
+ * Class ConfigureEncoderPass
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class EncoderPass implements CompilerPassInterface
+class ConfigureEncoderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {

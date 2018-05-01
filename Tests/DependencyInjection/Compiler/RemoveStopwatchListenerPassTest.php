@@ -12,14 +12,14 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\StopwatchPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\RemoveStopwatchListenerPass;
 
 /**
- * Class StopwatchPassTest
+ * Class RemoveStopwatchListenerPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class StopwatchPassTest extends TestCase
+class RemoveStopwatchListenerPassTest extends TestCase
 {
     /** @test */
     public function it_should_remove_the_stopwatch_listener_in_case_of_stopwatch_service_is_not_defined()
@@ -27,7 +27,7 @@ class StopwatchPassTest extends TestCase
         $container = new ContainerBuilder();
         $container->register('tsantos_serializer.stopwatch_listener');
 
-        $compiler = new StopwatchPass();
+        $compiler = new RemoveStopwatchListenerPass();
         $compiler->process($container);
 
         $this->assertFalse($container->hasDefinition('tsantos_serializer.stopwatch_listener'));
@@ -40,7 +40,7 @@ class StopwatchPassTest extends TestCase
         $container->register('tsantos_serializer.stopwatch_listener');
         $container->register('debug.stopwatch');
 
-        $compiler = new StopwatchPass();
+        $compiler = new RemoveStopwatchListenerPass();
         $compiler->process($container);
 
         $this->assertTrue($container->hasDefinition('tsantos_serializer.stopwatch_listener'));
@@ -61,7 +61,7 @@ class StopwatchPassTest extends TestCase
             ->method('removeDefinition')
             ->with('tsantos_serializer.stopwatch_listener');
 
-        $compiler = new StopwatchPass();
+        $compiler = new RemoveStopwatchListenerPass();
         $compiler->process($container);
     }
 }

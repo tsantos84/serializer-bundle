@@ -15,22 +15,18 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class EventListenerPass
+ * Class AddMetadataDriverPass
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class EventListenerPass implements CompilerPassInterface
+class AddMetadataDriverPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('tsantos_serializer.event_dispatcher')) {
-            return;
-        }
+        $definition = $container->getDefinition('tsantos_serializer.metadata_chain_driver');
 
-        $definition = $container->getDefinition('tsantos_serializer.event_dispatcher');
-
-        foreach ($container->findTaggedServiceIds('tsantos_serializer.event_subscriber') as $serviceId => $tags) {
-            $definition->addMethodCall('addSubscriber', [new Reference($serviceId)]);
+        foreach ($container->findTaggedServiceIds('tsantos_serializer.metadata_driver') as $id => $serviceId) {
+            $definition->addMethodCall('addDriver', [new Reference($id)]);
         }
     }
 }

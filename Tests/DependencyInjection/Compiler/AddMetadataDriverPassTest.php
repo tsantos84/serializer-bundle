@@ -12,14 +12,14 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\MetadataDriverPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataDriverPass;
 
 /**
- * Class MetadataDriverPassTest
+ * Class AddMetadataDriverPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class MetadataDriverPassTest extends TestCase
+class AddMetadataDriverPassTest extends TestCase
 {
     /** @test */
     public function it_should_add_method_calls_to_encoder_registry_definition()
@@ -31,7 +31,7 @@ class MetadataDriverPassTest extends TestCase
             ->register('some_driver_format')
             ->addTag('tsantos_serializer.metadata_driver');
 
-        $compiler = new MetadataDriverPass();
+        $compiler = new AddMetadataDriverPass();
         $compiler->process($container);
 
         $definition = $container->getDefinition('tsantos_serializer.metadata_chain_driver');

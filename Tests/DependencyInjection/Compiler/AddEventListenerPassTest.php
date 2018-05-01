@@ -14,14 +14,14 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\Serializer\EventEmitterSerializer;
 use TSantos\Serializer\Serializer;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\EventListenerPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
 
 /**
- * Class CompilerTest
+ * Class AddEventListenerPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class EventListenerPassTest extends TestCase
+class AddEventListenerPassTest extends TestCase
 {
     /** @test */
     public function it_should_add_method_calls_to_event_dispatcher_definition()
@@ -32,7 +32,7 @@ class EventListenerPassTest extends TestCase
             ->register('some_service')
             ->addTag('tsantos_serializer.event_subscriber');
 
-        $compiler = new EventListenerPass();
+        $compiler = new AddEventListenerPass();
         $compiler->process($container);
 
         $this->assertCount(1, $dispatcherDefinition->getMethodCalls());
@@ -53,7 +53,7 @@ class EventListenerPassTest extends TestCase
             ->method('getDefinition')
             ->with('tsantos_serializer.event_dispatcher');
 
-        $compiler = new EventListenerPass();
+        $compiler = new AddEventListenerPass();
         $compiler->process($container);
     }
 }

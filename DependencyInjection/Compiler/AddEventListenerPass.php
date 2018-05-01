@@ -12,22 +12,25 @@ namespace TSantos\SerializerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class StopwatchPass
+ * Class AddEventListenerPass
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class StopwatchPass implements CompilerPassInterface
+class AddEventListenerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('tsantos_serializer.stopwatch_listener')) {
+        if (!$container->hasDefinition('tsantos_serializer.event_dispatcher')) {
             return;
         }
 
-        if (!$container->hasDefinition('debug.stopwatch')) {
-            $container->removeDefinition('tsantos_serializer.stopwatch_listener');
+        $definition = $container->getDefinition('tsantos_serializer.event_dispatcher');
+
+        foreach ($container->findTaggedServiceIds('tsantos_serializer.event_subscriber') as $serviceId => $tags) {
+            $definition->addMethodCall('addSubscriber', [new Reference($serviceId)]);
         }
     }
 }
