@@ -27,7 +27,6 @@ class EventListenerPassTest extends TestCase
     public function it_should_add_method_calls_to_event_dispatcher_definition()
     {
         $container = new ContainerBuilder();
-        $serializerDefinition = $container->register('tsantos_serializer');
         $dispatcherDefinition = $container->register('tsantos_serializer.event_dispatcher');
         $container
             ->register('some_service')
@@ -37,22 +36,24 @@ class EventListenerPassTest extends TestCase
         $compiler->process($container);
 
         $this->assertCount(1, $dispatcherDefinition->getMethodCalls());
-        $this->assertEquals(EventEmitterSerializer::class, $serializerDefinition->getClass());
-        $this->assertEquals('tsantos_serializer.event_dispatcher', (string)$serializerDefinition->getArgument(0));
     }
 
     /** @test */
     public function it_should_not_add_listeners_if_the_dispatcher_definition_is_not_present()
     {
-        $container = new ContainerBuilder();
-        $serializerDefinition = $container->register('tsantos_serializer', Serializer::class);
+        $container = $this->createMock(ContainerBuilder::class);
         $container
-            ->register('some_service')
-            ->addTag('tsantos_serializer.event_subscriber');
+            ->expects($this->once())
+            ->method('hasDefinition')
+            ->with('tsantos_serializer.event_dispatcher')
+            ->willReturn(false);
+
+        $container
+            ->expects($this->never())
+            ->method('getDefinition')
+            ->with('tsantos_serializer.event_dispatcher');
 
         $compiler = new EventListenerPass();
         $compiler->process($container);
-
-        $this->assertEquals(Serializer::class, $serializerDefinition->getClass());
     }
 }
