@@ -14,6 +14,8 @@ This bundle integrates the library TSantos Serializer into a Symfony application
 
    installation
    usage
+   twig
+   console
    configuration_reference
    event_listener
    normalizer
