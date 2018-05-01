@@ -5,7 +5,7 @@ This bundle provides a console command useful for generate class metadata and se
 
 .. code-block:: bash
 
-    bin/console serializer:generate-classes
+    $ bin/console serializer:generate-classes
 
 .. note::
 
