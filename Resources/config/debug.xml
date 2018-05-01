@@ -16,6 +16,7 @@
     <services>
         <service id="tsantos_serializer.stopwatch_listener" class="TSantos\SerializerBundle\EventListener\StopwatchListener">
             <argument type="service" id="debug.stopwatch" />
+            <tag name="tsantos_serializer.event_subscriber" />
         </service>
     </services>
 </container>

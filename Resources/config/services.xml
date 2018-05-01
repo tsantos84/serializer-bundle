@@ -20,7 +20,7 @@
 
     <services>
 
-        <defaults autoconfigure="true" public="false" />
+        <defaults public="false" />
 
         <!-- encoders -->
         <service id="tsantos_serializer.json_encoder" class="TSantos\Serializer\Encoder\JsonEncoder">
@@ -29,31 +29,37 @@
 
         <!-- normalizers -->
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
-        <service id="tsantos_serializer.datetime_encoder" class="TSantos\Serializer\Normalizer\DateTimeNormalizer" />
+        <service id="tsantos_serializer.datetime_normalizer" class="TSantos\Serializer\Normalizer\DateTimeNormalizer">
+            <tag name="tsantos_serializer.normalizer" />
+        </service>
 
         <!-- metadata -->
         <service id="tsantos_serializer.metadata_file_locator" class="Metadata\Driver\FileLocator">
             <argument /> <!-- directories -->
         </service>
         <service id="tsantos_serializer.metadata_type_guesser" class="TSantos\Serializer\TypeGuesser" />
-        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" autoconfigure="false" />
+        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" />
         <service id="tsantos_serializer.metadata_yaml_driver" class="TSantos\Serializer\Metadata\Driver\YamlDriver">
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_xml_driver" class="TSantos\Serializer\Metadata\Driver\XmlDriver">
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_php_driver" class="TSantos\Serializer\Metadata\Driver\PhpDriver">
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_annotation_driver" class="TSantos\Serializer\Metadata\Driver\AnnotationDriver">
             <argument type="service">
                 <service class="Doctrine\Common\Annotations\AnnotationReader" />
             </argument>
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
+            <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
             <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
@@ -78,6 +84,7 @@
         </service>
         <service id="tsantos_serializer.metadata_cache_warmer" class="TSantos\SerializerBundle\Cache\CacheWarmer">
             <argument type="service" id="tsantos_serializer.class_generator" />
+            <tag name="kernel.cache_warmer" />
         </service>
 
         <!-- serializer class manager -->
