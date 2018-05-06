@@ -13,6 +13,6 @@ This bundle provides a console command useful for generate class metadata and se
 
 .. tip::
 
-    If your application is configured to never generate serializer classes automatically (best for production), add this
-    command to your continuous deploy to generate the classes before install your application in production.
+    If your application is configured to :doc:`never generate </configuration_reference>` serializer classes automatically (best for production), add this
+    command to your continuous deploy tool to generate the classes before install your application in production.
 
