@@ -49,11 +49,6 @@
             <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
-        <service id="tsantos_serializer.metadata_php_driver" class="TSantos\Serializer\Metadata\Driver\PhpDriver">
-            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
-            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
-            <tag name="tsantos_serializer.metadata_driver" />
-        </service>
         <service id="tsantos_serializer.metadata_annotation_driver" class="TSantos\Serializer\Metadata\Driver\AnnotationDriver">
             <argument type="service">
                 <service class="Doctrine\Common\Annotations\AnnotationReader" />
