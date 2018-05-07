@@ -28,13 +28,12 @@
 
     <filter>
         <whitelist>
-            <directory>Cache</directory>
-            <directory>Command</directory>
-            <directory>DependencyInjection</directory>
-            <directory>EventListener</directory>
-            <directory>Service</directory>
-            <directory>Twig</directory>
-            <file>TSantosSerializerBundle.php</file>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Resources</directory>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
