@@ -10,7 +10,7 @@ build:
     tests:
         override:
             -
-                command: vendor/bin/simple-phpunit --coverage-clover=coverage-file -v
+                command: vendor/bin/simple-phpunit --coverage-clover=coverage-file --coverage-text -v
                 coverage:
                     file: coverage-file
                     format: php-clover
