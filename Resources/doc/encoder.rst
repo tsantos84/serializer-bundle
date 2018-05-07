@@ -45,5 +45,4 @@ Now you can tag your encoder and you are done to use your custom encoder.
 
 .. note::
 
-    Different from the most used serializer libraries, you don't need to pass the format on `$serializer->serialize(...)`
-    calls.
+    Different from the most used serialization libraries, you don't need to pass the format on `$serializer->serialize(...)`       or `$serializer->deserialize(...)` calls.
