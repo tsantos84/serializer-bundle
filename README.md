@@ -55,8 +55,8 @@ class AppKernel extends Kernel
 Documentation
 =============
 
-Please, visit the http://tsantos-serializer-bundle.readthedocs.io/ page
-to read the complete documentation of this bundle.
+Please, visit the [documentation page](http://tsantos-serializer-bundle.readthedocs.io/)
+to read the detailed information about this bundle.
 
 Tests
 =====
