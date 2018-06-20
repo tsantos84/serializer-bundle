@@ -13,10 +13,12 @@ namespace TSantos\SerializerBundle\Tests;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use TSantos\Serializer\SerializerInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Class FunctionalTest
@@ -125,7 +127,14 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function(ContainerBuilder $container) {
-            $container->register('event_dispatcher', EventDispatcherInterface::class);
+            $container
+                ->register('event_dispatcher', EventDispatcherInterface::class);
+            $container
+                ->register('twig', \Twig_Environment::class)
+                ->addArgument(new Reference('twig.loader.native_filesystem'));
+            $container
+                ->register('twig.loader.native_filesystem', \Twig\Loader\LoaderInterface::class)
+                ->setClass(FilesystemLoader::class);
         });
     }
 }

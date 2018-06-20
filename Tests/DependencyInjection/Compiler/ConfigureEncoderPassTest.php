@@ -38,7 +38,7 @@ class ConfigureEncoderPassTest extends TestCase
         $compiler->process($container);
 
         $definition = $container->getDefinition('tsantos_serializer');
-        $encoderReference = $definition->getArgument(1);
+        $encoderReference = $definition->getArgument(0);
         $this->assertEquals('some_encoder', $encoderReference);
     }
 

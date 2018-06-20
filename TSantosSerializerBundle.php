@@ -12,6 +12,8 @@ namespace TSantos\SerializerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataConfiguratorPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ChangeSerializerDefinitionPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ConfigureEncoderPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
@@ -30,6 +32,8 @@ class TSantosSerializerBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new RemoveStopwatchListenerPass());
+        $container->addCompilerPass(new AddMetadataConfiguratorPass());
+        $container->addCompilerPass(new AddTwigPathPass());
         $container->addCompilerPass(new ConfigureEncoderPass());
         $container->addCompilerPass(new AddEventListenerPass());
         $container->addCompilerPass(new AddMetadataDriverPass());

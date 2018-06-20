@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
 use TSantos\Serializer\HydratorLoader;
@@ -244,6 +245,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
             [NormalizerInterface::class, 'tsantos_serializer.normalizer'],
             [DenormalizerInterface::class, 'tsantos_serializer.denormalizer'],
             [EventSubscriberInterface::class, 'tsantos_serializer.event_subscriber'],
+            [ConfiguratorInterface::class, 'tsantos_serializer.metadata_configurator'],
         ];
     }
 

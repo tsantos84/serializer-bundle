@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
 use TSantos\Serializer\HydratorLoader;
@@ -54,11 +55,16 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $this->configMetadataPath($mergedConfig, $container);
         $this->configCache($container, $mergedConfig);
 
+        $container
+            ->getDefinition('tsantos_serializer.hydrator_template_metadata_configurator')
+            ->replaceArgument(0, $mergedConfig['hydrator_template']);
+
         // add tags automatically to services
         $container->registerForAutoconfiguration(DriverInterface::class)->addTag('tsantos_serializer.metadata_driver');
         $container->registerForAutoconfiguration(NormalizerInterface::class)->addTag('tsantos_serializer.normalizer');
         $container->registerForAutoconfiguration(DenormalizerInterface::class)->addTag('tsantos_serializer.denormalizer');
         $container->registerForAutoconfiguration(EventSubscriberInterface::class)->addTag('tsantos_serializer.event_subscriber');
+        $container->registerForAutoconfiguration(ConfiguratorInterface::class)->addTag('tsantos_serializer.metadata_configurator');
 
         if ($container->getParameter('tsantos_serializer.debug')) {
             $loader->load('debug.xml');
