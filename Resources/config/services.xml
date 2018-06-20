@@ -29,7 +29,15 @@
 
         <!-- normalizers -->
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
-        <service id="tsantos_serializer.datetime_normalizer" class="TSantos\Serializer\Normalizer\DateTimeNormalizer">
+        <service id="tsantos_serializer.object_normalizer" class="TSantos\Serializer\Normalizer\ObjectNormalizer">
+            <argument type="service" id="tsantos_serializer.hydrator_loader" />
+            <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
+            <tag name="tsantos_serializer.normalizer" />
+        </service>
+        <service id="tsantos_serializer.collection_normalizer" class="TSantos\Serializer\Normalizer\CollectionNormalizer">
+            <tag name="tsantos_serializer.normalizer" />
+        </service>
+        <service id="tsantos_serializer.json_normalizer" class="TSantos\Serializer\Normalizer\JsonNormalizer">
             <tag name="tsantos_serializer.normalizer" />
         </service>
 
@@ -37,23 +45,19 @@
         <service id="tsantos_serializer.metadata_file_locator" class="Metadata\Driver\FileLocator">
             <argument /> <!-- directories -->
         </service>
-        <service id="tsantos_serializer.metadata_type_guesser" class="TSantos\Serializer\TypeGuesser" />
         <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" />
         <service id="tsantos_serializer.metadata_yaml_driver" class="TSantos\Serializer\Metadata\Driver\YamlDriver">
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
-            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_xml_driver" class="TSantos\Serializer\Metadata\Driver\XmlDriver">
             <argument type="service" id="tsantos_serializer.metadata_file_locator" />
-            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_annotation_driver" class="TSantos\Serializer\Metadata\Driver\AnnotationDriver">
             <argument type="service">
                 <service class="Doctrine\Common\Annotations\AnnotationReader" />
             </argument>
-            <argument type="service" id="tsantos_serializer.metadata_type_guesser" />
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
@@ -74,8 +78,8 @@
         </service>
         <service id="tsantos_serializer.class_generator" class="TSantos\SerializerBundle\Service\ClassGenerator">
             <argument type="service" id="tsantos_serializer.metadata_factory" />
-            <argument type="service" id="tsantos_serializer.class_code_generator" />
-            <argument type="service" id="tsantos_serializer.class_writer" />
+            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
+            <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
         </service>
         <service id="tsantos_serializer.metadata_cache_warmer" class="TSantos\SerializerBundle\Cache\CacheWarmer">
             <argument type="service" id="tsantos_serializer.class_generator" />
@@ -83,22 +87,22 @@
         </service>
 
         <!-- serializer class manager -->
-        <service id="tsantos_serializer.class_code_generator" class="TSantos\Serializer\SerializerClassCodeGenerator" />
-        <service id="tsantos_serializer.class_writer" class="TSantos\Serializer\SerializerClassWriter">
-            <argument /> <!-- directory to store the serializer classes -->
+        <service id="tsantos_serializer.hydrator_code_generator" class="TSantos\Serializer\HydratorCodeGenerator">
+            <argument type="service" id="twig" />
         </service>
-        <service id="tsantos_serializer.class_loader" class="TSantos\Serializer\SerializerClassLoader">
+        <service id="tsantos_serializer.hydrator_code_writer" class="TSantos\Serializer\HydratorCodeWriter">
+            <argument /> <!-- directory to store the hydrator classes -->
+        </service>
+        <service id="tsantos_serializer.hydrator_loader" class="TSantos\Serializer\HydratorLoader">
             <argument type="service" id="tsantos_serializer.metadata_factory" />
-            <argument type="service" id="tsantos_serializer.class_code_generator" />
-            <argument type="service" id="tsantos_serializer.class_writer" />
-            <argument /> <!-- class generate strategy -->
+            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
+            <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
+            <argument /> <!-- hydrator generation strategy -->
         </service>
 
         <service id="tsantos_serializer" class="TSantos\Serializer\Serializer" public="true">
-            <argument type="service" id="tsantos_serializer.class_loader"/>
             <argument /> <!-- Encoder -->
             <argument type="service" id="tsantos_serializer.normalizer_registry"/>
-            <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
         </service>
         <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" public="false" />
 

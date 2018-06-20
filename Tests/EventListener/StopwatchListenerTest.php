@@ -13,10 +13,10 @@ namespace TSantos\SerializerBundle\Tests\EventListener;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use TSantos\Serializer\DeserializationContext;
-use TSantos\Serializer\EventDispatcher\Event\PostDeserializationEvent;
-use TSantos\Serializer\EventDispatcher\Event\PostSerializationEvent;
-use TSantos\Serializer\EventDispatcher\Event\PreDeserializationEvent;
-use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;
+use TSantos\Serializer\Event\PostDeserializationEvent;
+use TSantos\Serializer\Event\PostSerializationEvent;
+use TSantos\Serializer\Event\PreDeserializationEvent;
+use TSantos\Serializer\Event\PreSerializationEvent;
 use TSantos\Serializer\SerializationContext;
 use TSantos\SerializerBundle\EventListener\StopwatchListener;
 

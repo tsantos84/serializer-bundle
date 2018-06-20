@@ -9,8 +9,8 @@ Default Configuration
     tsantos_serializer:
         debug: "%kernel.debug%"
         format: "json"
-        class_path: "%kernel.cache_dir%/tsantos_serializer/classes"
-        generate_strategy: "file_not_exists"
+        hydrator_path: "%kernel.cache_dir%/tsantos_serializer/classes"
+        generation_strategy: "file_not_exists"
         mapping:
             auto_configure: true
             paths: {  }
@@ -28,10 +28,10 @@ Configuration Reference
     format
         The input and output format of serialization operations (e.g: encoder)
 
-    class_path
-        Directory that will store the generated classes
+    hydrator_path
+        Directory that will store the hydrator classes
 
-    generate_strategy
+    generation_strategy
         Class generation strategy. Can be one of:
 
         `never`: serializer classes will never be generated (best for production environment,

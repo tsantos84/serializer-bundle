@@ -13,8 +13,8 @@ namespace TSantos\SerializerBundle\Cache;
 use Metadata\AdvancedMetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use TSantos\Serializer\Metadata\ClassMetadata;
-use TSantos\Serializer\SerializerClassCodeGenerator;
-use TSantos\Serializer\SerializerClassWriter;
+use TSantos\Serializer\HydratorCodeGenerator;
+use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
@@ -32,8 +32,8 @@ class ClassGeneratorTest extends TestCase
     public function setUp()
     {
         $this->metadataFactory = $this->createMock(AdvancedMetadataFactoryInterface::class);
-        $this->codeGenerator = $this->createMock(SerializerClassCodeGenerator::class);
-        $this->classWriter = $this->createMock(SerializerClassWriter::class);
+        $this->codeGenerator = $this->createMock(HydratorCodeGenerator::class);
+        $this->classWriter = $this->createMock(HydratorCodeWriter::class);
         $this->generator = new ClassGenerator($this->metadataFactory, $this->codeGenerator, $this->classWriter);
     }
 

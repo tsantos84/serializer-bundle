@@ -13,8 +13,8 @@ namespace TSantos\SerializerBundle\Cache;
 use Metadata\AdvancedMetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use TSantos\Serializer\Metadata\ClassMetadata;
-use TSantos\Serializer\SerializerClassCodeGenerator;
-use TSantos\Serializer\SerializerClassWriter;
+use TSantos\Serializer\HydratorCodeGenerator;
+use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**

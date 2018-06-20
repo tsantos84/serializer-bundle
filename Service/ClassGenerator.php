@@ -12,8 +12,8 @@ namespace TSantos\SerializerBundle\Service;
 
 use Metadata\AdvancedMetadataFactoryInterface;
 use TSantos\Serializer\Metadata\ClassMetadata;
-use TSantos\Serializer\SerializerClassCodeGenerator;
-use TSantos\Serializer\SerializerClassWriter;
+use TSantos\Serializer\HydratorCodeGenerator;
+use TSantos\Serializer\HydratorCodeWriter;
 
 /**
  * Class ClassGenerator
@@ -28,22 +28,22 @@ class ClassGenerator implements \Countable
     private $metadataFactory;
 
     /**
-     * @var SerializerClassCodeGenerator
+     * @var HydratorCodeGenerator
      */
     private $codeGenerator;
 
     /**
-     * @var SerializerClassWriter
+     * @var HydratorCodeWriter
      */
     private $writer;
 
     /**
      * ClassGenerator constructor.
      * @param AdvancedMetadataFactoryInterface $metadataFactory
-     * @param SerializerClassCodeGenerator $codeGenerator
-     * @param SerializerClassWriter $writer
+     * @param HydratorCodeGenerator $codeGenerator
+     * @param HydratorCodeWriter $writer
      */
-    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, SerializerClassCodeGenerator $codeGenerator, SerializerClassWriter $writer)
+    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, HydratorCodeGenerator $codeGenerator, HydratorCodeWriter $writer)
     {
         $this->metadataFactory = $metadataFactory;
         $this->codeGenerator = $codeGenerator;

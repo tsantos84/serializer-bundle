@@ -42,6 +42,6 @@ class ConfigureEncoderPass implements CompilerPassInterface
 
         $container
             ->getDefinition('tsantos_serializer')
-            ->replaceArgument(1, new Reference($ids[$format]));
+            ->replaceArgument(0, new Reference($ids[$format]));
     }
 }

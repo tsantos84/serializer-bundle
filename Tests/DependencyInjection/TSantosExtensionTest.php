@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
-use TSantos\Serializer\SerializerClassLoader;
+use TSantos\Serializer\HydratorLoader;
 
 /**
  * Class TSantosExtensionTest
@@ -47,14 +47,14 @@ class TSantosExtensionTest extends DependencyInjectionTest
     }
 
     /** @test */
-    public function it_should_setup_the_class_path_with_default_value_properly()
+    public function it_should_setup_the_hydrator_path_with_default_value_properly()
     {
         $container = $this->getContainer();
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.class_writer'),
+            $container->getDefinition('tsantos_serializer.hydrator_code_writer'),
             0,
-            $dir = '%kernel.cache_dir%/tsantos_serializer/classes'
+            $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators'
         );
 
         $path = $container->getParameterBag()->resolveValue($dir);
@@ -63,14 +63,14 @@ class TSantosExtensionTest extends DependencyInjectionTest
     }
 
     /** @test */
-    public function it_should_setup_the_class_path_with_custom_value_properly()
+    public function it_should_setup_the_hydrator_path_with_custom_value_properly()
     {
-        $container = $this->getContainer(['class_path' => '%kernel.cache_dir%/tsantos_serializer/classes_custom']);
+        $container = $this->getContainer(['hydrator_path' => '%kernel.cache_dir%/tsantos_serializer/hydrators_custom']);
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.class_writer'),
+            $container->getDefinition('tsantos_serializer.hydrator_code_writer'),
             0,
-            $dir = '%kernel.cache_dir%/tsantos_serializer/classes_custom'
+            $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators_custom'
         );
 
         $path = $container->getParameterBag()->resolveValue($dir);
@@ -79,21 +79,21 @@ class TSantosExtensionTest extends DependencyInjectionTest
     }
 
     /** @test @dataProvider getClassLoaderStrategy */
-    public function it_should_configure_the_class_loader_service_properly(string $name, int $expected)
+    public function it_should_configure_the_hydrator_loader_service_properly(string $name, int $expected)
     {
         $container = $this->getContainer([
-            'generate_strategy' => $name
+            'generation_strategy' => $name
         ]);
 
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.class_loader'), 3, $expected);
+        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.hydrator_loader'), 3, $expected);
     }
 
     public function getClassLoaderStrategy()
     {
         return [
-            ['never', SerializerClassLoader::AUTOGENERATE_NEVER],
-            ['always', SerializerClassLoader::AUTOGENERATE_ALWAYS],
-            ['file_not_exists', SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS],
+            ['never', HydratorLoader::AUTOGENERATE_NEVER],
+            ['always', HydratorLoader::AUTOGENERATE_ALWAYS],
+            ['file_not_exists', HydratorLoader::AUTOGENERATE_FILE_NOT_EXISTS],
         ];
     }
 

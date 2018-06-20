@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
-use TSantos\Serializer\SerializerClassLoader;
+use TSantos\Serializer\HydratorLoader;
 
 /**
  * Class TSantosSerializerExtension
@@ -41,16 +41,16 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
 
-        $container->getDefinition('tsantos_serializer.class_writer')->replaceArgument(0, $mergedConfig['class_path']);
+        $container->getDefinition('tsantos_serializer.hydrator_code_writer')->replaceArgument(0, $mergedConfig['hydrator_path']);
 
         $strategyDictionary = [
-            'never' => SerializerClassLoader::AUTOGENERATE_NEVER,
-            'always' => SerializerClassLoader::AUTOGENERATE_ALWAYS,
-            'file_not_exists' => SerializerClassLoader::AUTOGENERATE_FILE_NOT_EXISTS,
+            'never' => HydratorLoader::AUTOGENERATE_NEVER,
+            'always' => HydratorLoader::AUTOGENERATE_ALWAYS,
+            'file_not_exists' => HydratorLoader::AUTOGENERATE_FILE_NOT_EXISTS,
         ];
-        $container->getDefinition('tsantos_serializer.class_loader')->replaceArgument(3, $strategyDictionary[$mergedConfig['generate_strategy']]);
+        $container->getDefinition('tsantos_serializer.hydrator_loader')->replaceArgument(3, $strategyDictionary[$mergedConfig['generation_strategy']]);
 
-        $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['class_path']));
+        $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['hydrator_path']));
         $this->configMetadataPath($mergedConfig, $container);
         $this->configCache($container, $mergedConfig);
 

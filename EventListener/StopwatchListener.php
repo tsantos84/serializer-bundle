@@ -12,12 +12,12 @@ namespace TSantos\SerializerBundle\EventListener;
 
 use Symfony\Component\Stopwatch\Stopwatch;
 use TSantos\Serializer\AbstractContext;
-use TSantos\Serializer\EventDispatcher\Event\PostDeserializationEvent;
-use TSantos\Serializer\EventDispatcher\Event\PostSerializationEvent;
-use TSantos\Serializer\EventDispatcher\Event\PreDeserializationEvent;
-use TSantos\Serializer\EventDispatcher\Event\PreSerializationEvent;
+use TSantos\Serializer\Event\PostDeserializationEvent;
+use TSantos\Serializer\Event\PostSerializationEvent;
+use TSantos\Serializer\Event\PreDeserializationEvent;
+use TSantos\Serializer\Event\PreSerializationEvent;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
-use TSantos\Serializer\EventDispatcher\SerializerEvents;
+use TSantos\Serializer\Events;
 
 /**
  * Class StopwatchListener
@@ -46,10 +46,10 @@ class StopwatchListener implements EventSubscriberInterface
     public static function getListeners(): array
     {
         return [
-            SerializerEvents::PRE_SERIALIZATION => 'startSerialization',
-            SerializerEvents::POST_SERIALIZATION => 'stopSerialization',
-            SerializerEvents::PRE_DESERIALIZATION => 'startSerialization',
-            SerializerEvents::POST_DESERIALIZATION => 'stopSerialization',
+            Events::PRE_SERIALIZATION => 'startSerialization',
+            Events::POST_SERIALIZATION => 'stopSerialization',
+            Events::PRE_DESERIALIZATION => 'startSerialization',
+            Events::POST_DESERIALIZATION => 'stopSerialization',
         ];
     }
 
