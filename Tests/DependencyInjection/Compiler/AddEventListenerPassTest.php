@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -12,12 +13,10 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use TSantos\Serializer\EventEmitterSerializer;
-use TSantos\Serializer\Serializer;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
 
 /**
- * Class AddEventListenerPassTest
+ * Class AddEventListenerPassTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */

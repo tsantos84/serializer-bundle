@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class TwigPass
+ * Class TwigPass.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -26,10 +27,10 @@ class AddTwigPathPass implements CompilerPassInterface
             return;
         }
 
-        $path = realpath(__DIR__ . '/../../vendor/tsantos/serializer/src/Resources/templates');
+        $path = realpath(__DIR__.'/../../vendor/tsantos/serializer/src/Resources/templates');
 
         $container
             ->getDefinition('twig.loader.native_filesystem')
-            ->addMethodCall('addPath', array($path));
+            ->addMethodCall('addPath', [$path]);
     }
 }

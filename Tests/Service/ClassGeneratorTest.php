@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -12,13 +13,13 @@ namespace TSantos\SerializerBundle\Cache;
 
 use Metadata\AdvancedMetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
-use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\Serializer\HydratorCodeGenerator;
 use TSantos\Serializer\HydratorCodeWriter;
+use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
- * Class ClassGeneratorTest
+ * Class ClassGeneratorTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -73,6 +74,6 @@ class ClassGeneratorTest extends TestCase
             ->method('getAllClassNames')
             ->willReturn([ClassMetadata::class]);
 
-        $this->assertEquals(1, $this->generator->count());
+        $this->assertSame(1, $this->generator->count());
     }
 }

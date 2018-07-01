@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -11,13 +12,13 @@
 namespace App\_NAMESPACE_;
 
 /**
- * Class Post
+ * Class Post.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
 class Post
 {
-    /** @var integer */
+    /** @var int */
     private $id;
 
     /** @var string */
@@ -28,7 +29,8 @@ class Post
 
     /**
      * Post constructor.
-     * @param int $id
+     *
+     * @param int    $id
      * @param string $title
      * @param string $summary
      */

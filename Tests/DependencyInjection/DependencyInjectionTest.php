@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -17,7 +18,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use TSantos\SerializerBundle\DependencyInjection\TSantosSerializerExtension;
 
 /**
- * Class DependencyInjectionTest
+ * Class DependencyInjectionTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -28,14 +29,14 @@ abstract class DependencyInjectionTest extends TestCase
 
     public function setUp()
     {
-        $this->projectDir = realpath(__DIR__ . '/../../') . '/project-tmp';
-        $this->cacheDir = $this->projectDir . '/var/cache/test';
+        $this->projectDir = realpath(__DIR__.'/../../').'/project-tmp';
+        $this->cacheDir = $this->projectDir.'/var/cache/test';
     }
 
     public function tearDown()
     {
         if (is_dir($this->projectDir)) {
-            $command = 'rm -rf ' . $this->projectDir;
+            $command = 'rm -rf '.$this->projectDir;
             exec($command);
         }
     }
@@ -47,7 +48,7 @@ abstract class DependencyInjectionTest extends TestCase
             'kernel.debug' => true,
             'kernel.cache_dir' => $this->cacheDir,
             'kernel.project_dir' => $this->projectDir,
-            'kernel.environment' => 'test'
+            'kernel.environment' => 'test',
         ]));
 
         // disable auto-configuration on unit testing
@@ -60,30 +61,31 @@ abstract class DependencyInjectionTest extends TestCase
 
     protected function assertDICHasParameter(ContainerBuilder $container, string $name, $value = null)
     {
-        if (func_num_args() === 2) {
-            $this->assertArrayHasKey($name, $container->getParameterBag()->all(), 'Expected container has parameter ' . $name);
+        if (2 === func_num_args()) {
+            $this->assertArrayHasKey($name, $container->getParameterBag()->all(), 'Expected container has parameter '.$name);
         } else {
-            $this->assertEquals($value, $container->getParameter($name), 'Expected container has parameter ' . $name . ' with value ' . $value);
+            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.$value);
         }
     }
 
     protected function assertDICDefinitionHasArgument(Definition $definition, $argument, $value)
     {
-        $this->assertEquals($value, $definition->getArgument($argument), sprintf('Expected the argument#%s of definition "%s" have the value "%s"', $argument, $definition->getClass(), is_scalar($value) ? $value : gettype($value)));
+        $this->assertSame($value, $definition->getArgument($argument), sprintf('Expected the argument#%s of definition "%s" have the value "%s"', $argument, $definition->getClass(), is_scalar($value) ? $value : gettype($value)));
     }
 
     /**
-     * Method copied from MonologBundle
+     * Method copied from MonologBundle.
+     *
      * @see https://github.com/symfony/monolog-bundle/blob/master/Tests/DependencyInjection/DependencyInjectionTest.php#L34
      */
     protected function assertDICDefinitionMethodCallAt(Definition $definition, int $pos, string $methodName, array $params = null)
     {
         $calls = $definition->getMethodCalls();
         if (isset($calls[$pos][0])) {
-            $this->assertEquals($methodName, $calls[$pos][0], "Method '".$methodName."' is expected to be called at position $pos.");
+            $this->assertSame($methodName, $calls[$pos][0], "Method '".$methodName."' is expected to be called at position $pos.");
 
-            if ($params !== null) {
-                $this->assertEquals($params, $calls[$pos][1], "Expected parameters to methods '".$methodName."' do not match the actual parameters.");
+            if (null !== $params) {
+                $this->assertSame($params, $calls[$pos][1], "Expected parameters to methods '".$methodName."' do not match the actual parameters.");
             }
         } else {
             $this->fail("Method '".$methodName."' is expected to be called at position $pos.");
@@ -94,8 +96,8 @@ abstract class DependencyInjectionTest extends TestCase
     {
         $calls = $definition->getMethodCalls();
 
-        if (count($calls) === 0) {
-            $this->fail('No method call registered for definition ' . $definition->getClass());
+        if (0 === count($calls)) {
+            $this->fail('No method call registered for definition '.$definition->getClass());
         }
 
         return $calls[$pos][1];

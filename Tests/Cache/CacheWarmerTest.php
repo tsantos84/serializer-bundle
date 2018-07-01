@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -10,15 +11,11 @@
 
 namespace TSantos\SerializerBundle\Cache;
 
-use Metadata\AdvancedMetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
-use TSantos\Serializer\Metadata\ClassMetadata;
-use TSantos\Serializer\HydratorCodeGenerator;
-use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
- * Class CacheWarmerTest
+ * Class CacheWarmerTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */

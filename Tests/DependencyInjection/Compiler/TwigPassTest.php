@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 
 /**
- * Class TwigPassTest
+ * Class TwigPassTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -32,7 +33,7 @@ class TwigPassTest extends TestCase
 
         $definition = $container->getDefinition('twig.loader.native_filesystem');
         $this->assertCount(1, $calls = $definition->getMethodCalls());
-        $this->assertEquals('addPath', $calls[0][0]);
+        $this->assertSame('addPath', $calls[0][0]);
         $this->assertStringEndsWith('/serializer/src/Resources/templates', $calls[0][1][0]);
     }
 

@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -13,7 +14,7 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Class AutoConfigurationTest
+ * Class AutoConfigurationTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -45,13 +46,13 @@ class AutoConfigurationTest extends DependencyInjectionTest
         $this->fs->mkdir($dirs);
 
         $container = $this->getContainer([
-            'mapping' => ['auto_configure' => true]
+            'mapping' => ['auto_configure' => true],
         ]);
 
         $paths = $container->getDefinition('tsantos_serializer.metadata_file_locator')->getArgument(0);
 
         $this->assertArrayHasKey($namespace, $paths);
-        $this->assertEquals($configMetadataPath, $paths[$namespace]);
+        $this->assertSame($configMetadataPath, $paths[$namespace]);
     }
 
     /**
@@ -60,17 +61,17 @@ class AutoConfigurationTest extends DependencyInjectionTest
      */
     public function it_should_auto_configure_metadata_path_with_src_directory_only(string $metadataPath, string $namespace)
     {
-        $metadataPath = $this->projectDir . $metadataPath;
+        $metadataPath = $this->projectDir.$metadataPath;
         $this->fs->mkdir($metadataPath);
 
         $container = $this->getContainer([
-            'mapping' => ['auto_configure' => true]
+            'mapping' => ['auto_configure' => true],
         ]);
 
         $paths = $container->getDefinition('tsantos_serializer.metadata_file_locator')->getArgument(0);
 
         $this->assertArrayHasKey($namespace, $paths);
-        $this->assertEquals($metadataPath, $paths[$namespace]);
+        $this->assertSame($metadataPath, $paths[$namespace]);
     }
 
     public function getPaths()

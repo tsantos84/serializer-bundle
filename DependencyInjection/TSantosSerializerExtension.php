@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -17,26 +18,27 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
-use TSantos\Serializer\HydratorLoader;
 
 /**
- * Class TSantosSerializerExtension
+ * Class TSantosSerializerExtension.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
 class TSantosSerializerExtension extends ConfigurableExtension
 {
     /**
-     * @param array $mergedConfig
+     * @param array            $mergedConfig
      * @param ContainerBuilder $container
+     *
      * @throws \Exception
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator([__DIR__ . '/../Resources/config/']));
+        $loader = new XmlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config/']));
         $loader->load('services.xml');
 
         $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
@@ -91,10 +93,10 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $projectDir = $container->getParameter('kernel.project_dir');
 
         $mappings = [
-            'App\\Entity' => $projectDir . '/src/Entity',
-            'App\\Document' => $projectDir . '/src/Document',
-            'App\\Model' => $projectDir . '/src/Model',
-            '' => $projectDir . '/config/serializer' // should be the last item
+            'App\\Entity' => $projectDir.'/src/Entity',
+            'App\\Document' => $projectDir.'/src/Document',
+            'App\\Model' => $projectDir.'/src/Model',
+            '' => $projectDir.'/config/serializer', // should be the last item
         ];
 
         $pathLocator = function () use ($mappings): ?string {
@@ -103,12 +105,14 @@ class TSantosSerializerExtension extends ConfigurableExtension
                     return $namespace;
                 }
             }
+
             return null;
         };
 
-        if (is_dir($configPath = $projectDir . '/config/serializer')) {
+        if (is_dir($configPath = $projectDir.'/config/serializer')) {
             if (null !== $namespace = $pathLocator()) {
                 $paths[$namespace] = $configPath;
+
                 return;
             }
         }

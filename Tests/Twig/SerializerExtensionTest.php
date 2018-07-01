@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -34,6 +35,6 @@ class SerializerExtensionTest extends TestCase
 
         $result = $twig->render('page', ['data' => $data]);
 
-        $this->assertEquals('{"foo":"bar"}', $result);
+        $this->assertSame('{"foo":"bar"}', $result);
     }
 }

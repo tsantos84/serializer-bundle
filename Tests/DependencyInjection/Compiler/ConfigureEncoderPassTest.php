@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ConfigureEncoderPass;
 
 /**
- * Class ConfigureEncoderPassTest
+ * Class ConfigureEncoderPassTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -39,7 +40,7 @@ class ConfigureEncoderPassTest extends TestCase
 
         $definition = $container->getDefinition('tsantos_serializer');
         $encoderReference = $definition->getArgument(0);
-        $this->assertEquals('some_encoder', $encoderReference);
+        $this->assertSame('some_encoder', $encoderReference);
     }
 
     /**

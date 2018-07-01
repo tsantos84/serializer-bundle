@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -13,7 +14,7 @@ namespace TSantos\SerializerBundle\Twig;
 use TSantos\Serializer\SerializerInterface;
 
 /**
- * Class SerializerExtension
+ * Class SerializerExtension.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -26,6 +27,7 @@ class SerializerExtension extends \Twig_Extension
 
     /**
      * SerializerExtension constructor.
+     *
      * @param SerializerInterface $serializer
      */
     public function __construct(SerializerInterface $serializer)
@@ -37,8 +39,8 @@ class SerializerExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFilter('serialize', [$this, 'serialize'], [
-                'is_safe' => ['html']
-            ])
+                'is_safe' => ['html'],
+            ]),
         ];
     }
 

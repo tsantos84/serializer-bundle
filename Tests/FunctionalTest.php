@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -21,7 +22,7 @@ use TSantos\SerializerBundle\TSantosSerializerBundle;
 use Twig\Loader\FilesystemLoader;
 
 /**
- * Class FunctionalTest
+ * Class FunctionalTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -65,13 +66,13 @@ class FunctionalTest extends TestCase
 
         // write the config content
         $this->fs->mkdir(sprintf('%s/config/serializer', $projectDir));
-        $configContent = file_get_contents(__DIR__ . '/Resources/config/serializer/Post.xml');
+        $configContent = file_get_contents(__DIR__.'/Resources/config/serializer/Post.xml');
         $configContent = str_replace('_NAMESPACE_', $srcPath, $configContent);
         file_put_contents(sprintf('%s/config/serializer/Post.xml', $projectDir), $configContent);
 
         // write the class content
         $this->fs->mkdir(sprintf('%s/src/%s', $projectDir, $srcPath));
-        $classContent = file_get_contents(__DIR__ . '/Fixture/Post.php');
+        $classContent = file_get_contents(__DIR__.'/Fixture/Post.php');
         $classContent = str_replace('_NAMESPACE_', $srcPath, $classContent);
         file_put_contents($filename = sprintf('%s/src/%s/Post.php', $projectDir, $srcPath), $classContent);
 
@@ -80,10 +81,10 @@ class FunctionalTest extends TestCase
 
         $serializer = $this->kernel->getContainer()->get('tsantos_serializer');
 
-        $class = 'App\\' . $srcPath . '\\Post';
+        $class = 'App\\'.$srcPath.'\\Post';
         $post = new $class(1, 'Data Transformation', 'Serializer helps to...');
         $expected = '{"id":1,"title":"Data Transformation","summary":"Serializer helps to..."}';
-        $this->assertEquals($expected, $serializer->serialize($post));
+        $this->assertSame($expected, $serializer->serialize($post));
     }
 
     public function getSrcPaths()
@@ -100,33 +101,34 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
 {
     public function getProjectDir()
     {
-        return __DIR__ . '/../project-tmp';
+        return __DIR__.'/../project-tmp';
     }
 
     public function getCacheDir()
     {
-        return $this->getProjectDir() . '/var/cache';
+        return $this->getProjectDir().'/var/cache';
     }
 
     public function getLogDir()
     {
-        return $this->getProjectDir() . '/var/logs';
+        return $this->getProjectDir().'/var/logs';
     }
 
     public function registerBundles()
     {
         return [
-            new TSantosSerializerBundle()
+            new TSantosSerializerBundle(),
         ];
     }
 
     /**
      * @param LoaderInterface $loader
+     *
      * @throws \Exception
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(function(ContainerBuilder $container) {
+        $loader->load(function (ContainerBuilder $container) {
             $container
                 ->register('event_dispatcher', EventDispatcherInterface::class);
             $container
@@ -139,6 +141,7 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
     }
 }
 
-function require_file($filename) {
-    require_once($filename);
+function require_file($filename)
+{
+    require_once $filename;
 }

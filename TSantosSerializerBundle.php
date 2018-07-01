@@ -1,6 +1,7 @@
 <?php
-/**
- * This file is part of the TSantos Serializer package.
+
+/*
+ * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
  *
@@ -12,18 +13,18 @@ namespace TSantos\SerializerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataConfiguratorPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataDriverPass;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddNormalizerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ChangeSerializerDefinitionPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ConfigureEncoderPass;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataDriverPass;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\AddNormalizerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\RemoveStopwatchListenerPass;
 use TSantos\SerializerBundle\DependencyInjection\TSantosSerializerExtension;
 
 /**
- * Class TSantosSerializerBundle
+ * Class TSantosSerializerBundle.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */

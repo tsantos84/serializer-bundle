@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -11,12 +12,12 @@
 namespace TSantos\SerializerBundle\Service;
 
 use Metadata\AdvancedMetadataFactoryInterface;
-use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\Serializer\HydratorCodeGenerator;
 use TSantos\Serializer\HydratorCodeWriter;
+use TSantos\Serializer\Metadata\ClassMetadata;
 
 /**
- * Class ClassGenerator
+ * Class ClassGenerator.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -39,9 +40,10 @@ class ClassGenerator implements \Countable
 
     /**
      * ClassGenerator constructor.
+     *
      * @param AdvancedMetadataFactoryInterface $metadataFactory
-     * @param HydratorCodeGenerator $codeGenerator
-     * @param HydratorCodeWriter $writer
+     * @param HydratorCodeGenerator            $codeGenerator
+     * @param HydratorCodeWriter               $writer
      */
     public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, HydratorCodeGenerator $codeGenerator, HydratorCodeWriter $writer)
     {

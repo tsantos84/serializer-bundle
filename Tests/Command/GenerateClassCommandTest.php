@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -18,7 +19,7 @@ use TSantos\SerializerBundle\Command\GenerateClassCommand;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
- * Class GenerateClassCommandTest
+ * Class GenerateClassCommandTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */

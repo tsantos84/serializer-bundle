@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -17,7 +18,7 @@ use TSantos\Serializer\Serializer;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ChangeSerializerDefinitionPass;
 
 /**
- * Class ChangeSerializerDefinitionPassTest
+ * Class ChangeSerializerDefinitionPassTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -33,8 +34,8 @@ class ChangeSerializerDefinitionPassTest extends TestCase
         $compiler = new ChangeSerializerDefinitionPass();
         $compiler->process($container);
 
-        $this->assertEquals(EventEmitterSerializer::class, $serializerDefinition->getClass());
-        $this->assertEquals('tsantos_serializer.event_dispatcher', (string)$serializerDefinition->getArgument(0));
+        $this->assertSame(EventEmitterSerializer::class, $serializerDefinition->getClass());
+        $this->assertSame('tsantos_serializer.event_dispatcher', (string) $serializerDefinition->getArgument(0));
     }
 
     /** @test */
@@ -47,7 +48,7 @@ class ChangeSerializerDefinitionPassTest extends TestCase
         $compiler = new ChangeSerializerDefinitionPass();
         $compiler->process($container);
 
-        $this->assertEquals(Serializer::class, $serializerDefinition->getClass());
+        $this->assertSame(Serializer::class, $serializerDefinition->getClass());
         $this->assertCount(0, $serializerDefinition->getArguments());
     }
 
@@ -60,7 +61,7 @@ class ChangeSerializerDefinitionPassTest extends TestCase
         $compiler = new ChangeSerializerDefinitionPass();
         $compiler->process($container);
 
-        $this->assertEquals(Serializer::class, $serializerDefinition->getClass());
+        $this->assertSame(Serializer::class, $serializerDefinition->getClass());
         $this->assertCount(0, $serializerDefinition->getArguments());
     }
 }

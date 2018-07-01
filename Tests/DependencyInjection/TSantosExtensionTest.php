@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -16,13 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
-use TSantos\Serializer\HydratorLoader;
 
 /**
- * Class TSantosExtensionTest
+ * Class TSantosExtensionTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -33,7 +34,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
     {
         $container = $this->getContainer();
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', true);
-        $this->assertDICHasParameter($container,'tsantos_serializer.format', 'json');
+        $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'json');
     }
 
     /** @test */
@@ -41,10 +42,10 @@ class TSantosExtensionTest extends DependencyInjectionTest
     {
         $container = $this->getContainer([
             'debug' => false,
-            'format' => 'xml'
+            'format' => 'xml',
         ]);
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', false);
-        $this->assertDICHasParameter($container,'tsantos_serializer.format', 'xml');
+        $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'xml');
     }
 
     /** @test */
@@ -83,7 +84,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
     public function it_should_configure_the_hydrator_loader_service_properly(string $name, int $expected)
     {
         $container = $this->getContainer([
-            'generation_strategy' => $name
+            'generation_strategy' => $name,
         ]);
 
         $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.hydrator_loader'), 3, $expected);
@@ -102,17 +103,17 @@ class TSantosExtensionTest extends DependencyInjectionTest
     public function it_should_configure_custom_metadata_paths_provided_in_configuration_properly()
     {
         $filesystem = new Filesystem();
-        $filesystem->mkdir($path = $this->projectDir . '/src/Model');
+        $filesystem->mkdir($path = $this->projectDir.'/src/Model');
 
         $container = $this->getContainer([
             'mapping' => [
                 'paths' => [
                     [
                         'namespace' => $namespace = 'App\Entity',
-                        'path' => $path
-                    ]
-                ]
-            ]
+                        'path' => $path,
+                    ],
+                ],
+            ],
         ]);
 
         $expected = [$namespace => $path];
@@ -130,9 +131,9 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $this->getContainer([
             'mapping' => [
                 'paths' => [
-                    ['path' => '/some/invalid/path']
-                ]
-            ]
+                    ['path' => '/some/invalid/path'],
+                ],
+            ],
         ]);
     }
 
@@ -152,9 +153,9 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer([
             'mapping' => [
                 'cache' => [
-                    'path' => $dir = $this->cacheDir . '/custom_path'
-                ]
-            ]
+                    'path' => $dir = $this->cacheDir.'/custom_path',
+                ],
+            ],
         ]);
 
         $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_file_cache'), 0, $dir);
@@ -170,9 +171,9 @@ class TSantosExtensionTest extends DependencyInjectionTest
                 'cache' => [
                     'type' => 'psr',
                     'id' => 'some_psr_service',
-                    'prefix' => 'my_prefix_'
-                ]
-            ]
+                    'prefix' => 'my_prefix_',
+                ],
+            ],
         ]);
 
         $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_psr_cache'), 0, 'my_prefix_');
@@ -188,9 +189,9 @@ class TSantosExtensionTest extends DependencyInjectionTest
                 'cache' => [
                     'type' => 'doctrine',
                     'id' => 'some_doctrine_service',
-                    'prefix' => 'my_prefix_'
-                ]
-            ]
+                    'prefix' => 'my_prefix_',
+                ],
+            ],
         ]);
 
         $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_doctrine_cache'), 0, 'my_prefix_');
@@ -211,9 +212,9 @@ class TSantosExtensionTest extends DependencyInjectionTest
                 'cache' => [
                     'type' => $cacheType,
                     'id' => null,
-                    'prefix' => 'my_prefix_'
-                ]
-            ]
+                    'prefix' => 'my_prefix_',
+                ],
+            ],
         ]);
     }
 
@@ -221,7 +222,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
     {
         return [
             ['doctrine'],
-            ['psr']
+            ['psr'],
         ];
     }
 
@@ -260,7 +261,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
     public function it_should_not_load_debug_services_if_debug_mode_is_off()
     {
         $container = $this->getContainer([
-            'debug' => false
+            'debug' => false,
         ]);
         $this->assertFalse($container->hasDefinition('tsantos_serializer.stopwatch_listener'));
     }
@@ -268,11 +269,11 @@ class TSantosExtensionTest extends DependencyInjectionTest
     private function assertMetadataFactoryCache(ContainerBuilder $container, string $expectedService)
     {
         $factoryDefinition = $container->getDefinition('tsantos_serializer.metadata_factory');
-        $this->assertDICDefinitionMethodCallAt($factoryDefinition, 0,'setCache');
+        $this->assertDICDefinitionMethodCallAt($factoryDefinition, 0, 'setCache');
 
         /** @var Reference $reference */
         $args = $this->getDICDefinitionMethodArgsAt($factoryDefinition, 0);
         $reference = $args[0];
-        $this->assertEquals($expectedService, $reference);
+        $this->assertSame($expectedService, $reference);
     }
 }

@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class ConfigureEncoderPass
+ * Class ConfigureEncoderPass.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -37,7 +38,7 @@ class ConfigureEncoderPass implements CompilerPassInterface
         $format = $container->getParameter('tsantos_serializer.format');
 
         if (!isset($ids[$format])) {
-            throw new \InvalidArgumentException('There is no encoder able to handle "' . $format . '" format');
+            throw new \InvalidArgumentException('There is no encoder able to handle "'.$format.'" format');
         }
 
         $container

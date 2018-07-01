@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -18,7 +19,7 @@ use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
- * Class GenerateClassCommand
+ * Class GenerateClassCommand.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -36,8 +37,9 @@ class GenerateClassCommand extends Command
 
     /**
      * GenerateClassCommand constructor.
+     *
      * @param ClassGenerator $classGenerator
-     * @param string $environment
+     * @param string         $environment
      */
     public function __construct(ClassGenerator $classGenerator, string $environment)
     {

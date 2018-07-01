@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataConfiguratorPass;
 
 /**
- * Class AddMetadataConfiguratorPassTest
+ * Class AddMetadataConfiguratorPassTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -37,6 +38,6 @@ class AddMetadataConfiguratorPassTest extends TestCase
         $compiler->process($container);
         $definition = $container->getDefinition('tsantos_serializer.configurator_driver');
 
-        $this->assertEquals('some_metadata_configurator', (string) $definition->getArgument(1)[0]);
+        $this->assertSame('some_metadata_configurator', (string) $definition->getArgument(1)[0]);
     }
 }

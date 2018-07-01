@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -14,7 +15,7 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use TSantos\SerializerBundle\Service\ClassGenerator;
 
 /**
- * Class CacheWarmer
+ * Class CacheWarmer.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -27,6 +28,7 @@ class CacheWarmer implements CacheWarmerInterface
 
     /**
      * CacheWarmer constructor.
+     *
      * @param ClassGenerator $classGenerator
      */
     public function __construct(ClassGenerator $classGenerator)

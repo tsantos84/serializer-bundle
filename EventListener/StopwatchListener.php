@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -20,7 +21,7 @@ use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\Events;
 
 /**
- * Class StopwatchListener
+ * Class StopwatchListener.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -33,6 +34,7 @@ class StopwatchListener implements EventSubscriberInterface
 
     /**
      * StopwatchListener constructor.
+     *
      * @param Stopwatch $stopwatch
      */
     public function __construct(Stopwatch $stopwatch)
@@ -75,15 +77,15 @@ class StopwatchListener implements EventSubscriberInterface
 
     private function start(AbstractContext $context)
     {
-        if ($context->getCurrentDepth() === 0) {
-            $this->stopwatch->start('serializer');
+        if (0 === $context->getCurrentDepth()) {
+            $this->stopwatch->start('tsantos_serializer');
         }
     }
 
     private function stop(AbstractContext $context)
     {
-        if ($context->getCurrentDepth() === 0) {
-            $this->stopwatch->stop('serializer');
+        if (0 === $context->getCurrentDepth()) {
+            $this->stopwatch->stop('tsantos_serializer');
         }
     }
 }
