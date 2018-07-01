@@ -50,7 +50,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->once())
             ->method('start')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->startSerialization($event);
     }
@@ -73,7 +73,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->never())
             ->method('start')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->startSerialization($event);
     }
@@ -96,7 +96,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->once())
             ->method('stop')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->stopSerialization($event);
     }
@@ -119,7 +119,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->never())
             ->method('stop')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->stopSerialization($event);
     }
@@ -142,7 +142,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->once())
             ->method('start')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->startDeserialization($event);
     }
@@ -165,7 +165,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->never())
             ->method('start')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->startDeserialization($event);
     }
@@ -188,7 +188,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->once())
             ->method('stop')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->stopDeserialization($event);
     }
@@ -211,7 +211,7 @@ class StopwatchListenerTest extends TestCase
         $this->stopwatch
             ->expects($this->never())
             ->method('stop')
-            ->with('serializer');
+            ->with('tsantos_serializer');
 
         $this->listener->stopDeserialization($event);
     }

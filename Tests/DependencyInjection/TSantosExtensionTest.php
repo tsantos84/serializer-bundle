@@ -177,7 +177,12 @@ class TSantosExtensionTest extends DependencyInjectionTest
         ]);
 
         $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_psr_cache'), 0, 'my_prefix_');
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_psr_cache'), 1, 'some_psr_service');
+        $this->assertSame(
+            (string) $container
+                ->getDefinition('tsantos_serializer.metadata_psr_cache')
+                ->getArgument(1),
+            'some_psr_service'
+        );
         $this->assertMetadataFactoryCache($container, 'tsantos_serializer.metadata_psr_cache');
     }
 
@@ -195,7 +200,12 @@ class TSantosExtensionTest extends DependencyInjectionTest
         ]);
 
         $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_doctrine_cache'), 0, 'my_prefix_');
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_doctrine_cache'), 1, 'some_doctrine_service');
+        $this->assertSame(
+            (string) $container
+                ->getDefinition('tsantos_serializer.metadata_doctrine_cache')
+                ->getArgument(1),
+            'some_doctrine_service'
+        );
         $this->assertMetadataFactoryCache($container, 'tsantos_serializer.metadata_doctrine_cache');
     }
 
@@ -274,6 +284,6 @@ class TSantosExtensionTest extends DependencyInjectionTest
         /** @var Reference $reference */
         $args = $this->getDICDefinitionMethodArgsAt($factoryDefinition, 0);
         $reference = $args[0];
-        $this->assertSame($expectedService, $reference);
+        $this->assertSame($expectedService, (string) $reference);
     }
 }
