@@ -46,6 +46,7 @@ install:
     - ./vendor/bin/simple-phpunit install
 
 script:
+    - ./vendor/bin/php-cs-fixer fix
 #    - composer validate --strict --no-check-lock
     # simple-phpunit is the PHPUnit wrapper provided by the PHPUnit Bridge component and
     # it helps with testing legacy code and deprecations (composer require symfony/phpunit-bridge)
