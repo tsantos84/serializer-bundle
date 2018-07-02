@@ -57,4 +57,4 @@ script:
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
       rm -rf composer.lock
       composer install --ignore-platform-reqs
-      bin/console
+      bin/console serializer:posts

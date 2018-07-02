@@ -48,7 +48,7 @@ class PostSerializerCommand extends Command implements SerializerAwareInterface
     {
         $this
             ->setDescription('Serialize posts for test purpose')
-            ->setName('serialize:posts');
+            ->setName('serializer:posts');
     }
 
     /**
