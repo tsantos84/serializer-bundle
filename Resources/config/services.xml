@@ -70,6 +70,9 @@
             </argument>
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
+        <service id="tsantos_serializer.reflection_driver" class="TSantos\Serializer\Metadata\Driver\ReflectionDriver">
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
             <argument type="service" id="tsantos_serializer.configurator_driver" />
             <argument type="string">Metadata\ClassHierarchyMetadata</argument>
