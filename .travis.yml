@@ -51,3 +51,11 @@ script:
     # simple-phpunit is the PHPUnit wrapper provided by the PHPUnit Bridge component and
     # it helps with testing legacy code and deprecations (composer require symfony/phpunit-bridge)
     - ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
+    - |
+    # Create symfony demo application
+    composer create-project symfony/symfony-demo --no-install && cd symfony-demo
+    composer require tsantos/serializer-bundle *@dev --no-update
+    composer config repositories.serializer-bundle path ${TRAVIS_BUILD_DIR}
+    rm -rf composer.lock
+    composer install
+    bin/console debug:config tsantos_serializer
