@@ -42,3 +42,47 @@ Instead of fetching the serializer directly from the container, you can define t
             return JsonResponse::fromJsonString($this->serializer->serialize($post));
         }
     }
+
+Sometimes you want to inject the serializer instance by setting it on your service. To easily the injection, you can
+implement the SerializerAwareInterface interface and you are done.:
+
+    // src/Controller/DefaultController.php
+    use TSantos\Serializer\SerializerInterface;
+    use TSantos\Serializer\SerializerAwareInterface;
+    use Symfony\Component\HttpFoundation\JsonResponse;
+
+    class DefaultController implements SerializerAwareInterface
+    {
+        private $serializer;
+
+        public function setSerializer(SerializerInterface $serializer)
+        {
+            $this->serializer = $serializer;
+        }
+
+        public function indexAction(): JsonResponse
+        {
+            $post = ...;
+            return JsonResponse::fromJsonString($this->serializer->serialize($post));
+        }
+    }
+
+This bundle will automatically call the `setSerializer` method for you. The `TSantos Serializer` library ships with a
+useful trait where you can make use instead of add manually the `setSerializer` everywhere you need::
+
+    // src/Controller/DefaultController.php
+    use TSantos\Serializer\SerializerInterface;
+    use TSantos\Serializer\SerializerAwareInterface;
+    use TSantos\Serializer\Traits\SerializerAwareTrait;
+    use Symfony\Component\HttpFoundation\JsonResponse;
+
+    class DefaultController implements SerializerAwareInterface
+    {
+        use SerializerAwareTrait;
+
+        public function indexAction(): JsonResponse
+        {
+            $post = ...;
+            return JsonResponse::fromJsonString($this->serializer->serialize($post));
+        }
+    }
