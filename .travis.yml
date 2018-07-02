@@ -53,6 +53,4 @@ script:
       composer create-project symfony/symfony-demo --no-install && cd symfony-demo
       composer config repositories.serializer-bundle path ${TRAVIS_BUILD_DIR}
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs
-      rm -rf composer.lock
-      composer install
       bin/console debug:config tsantos_serializer
