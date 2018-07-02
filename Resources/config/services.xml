@@ -33,9 +33,15 @@
             <argument type="service" id="tsantos_serializer.hydrator_loader" />
             <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
             <tag name="tsantos_serializer.normalizer" />
+            <call method="setSerializer">
+                <argument type="service" id="tsantos_serializer"/>
+            </call>
         </service>
         <service id="tsantos_serializer.collection_normalizer" class="TSantos\Serializer\Normalizer\CollectionNormalizer">
             <tag name="tsantos_serializer.normalizer" />
+            <call method="setSerializer">
+                <argument type="service" id="tsantos_serializer"/>
+            </call>
         </service>
         <service id="tsantos_serializer.json_normalizer" class="TSantos\Serializer\Normalizer\JsonNormalizer">
             <tag name="tsantos_serializer.normalizer" />

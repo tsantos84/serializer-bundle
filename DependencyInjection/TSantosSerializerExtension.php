@@ -22,6 +22,7 @@ use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
+use TSantos\Serializer\SerializerAwareInterface;
 
 /**
  * Class TSantosSerializerExtension.
@@ -67,6 +68,8 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->registerForAutoconfiguration(DenormalizerInterface::class)->addTag('tsantos_serializer.denormalizer');
         $container->registerForAutoconfiguration(EventSubscriberInterface::class)->addTag('tsantos_serializer.event_subscriber');
         $container->registerForAutoconfiguration(ConfiguratorInterface::class)->addTag('tsantos_serializer.metadata_configurator');
+        $container->registerForAutoconfiguration(SerializerAwareInterface::class)
+            ->addMethodCall('setSerializer', [new Reference('tsantos_serializer')]);
 
         if ($container->getParameter('tsantos_serializer.debug')) {
             $loader->load('debug.xml');

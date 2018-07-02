@@ -21,6 +21,7 @@ use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
+use TSantos\Serializer\SerializerAwareInterface;
 
 /**
  * Class TSantosExtensionTest.
@@ -236,8 +237,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
         ];
     }
 
-    /** @test @dataProvider getInterfacesForAutoConfiguration */
-    public function it_should_register_services_for_auto_configuration(string $interface, string $tag)
+    /** @test @dataProvider getInterfacesWithTheirTagsForAutoConfiguration */
+    public function it_should_add_tags_for_services_with_auto_configuration(string $interface, string $tag)
     {
         $container = $this->getContainer();
         $instances = $container->getAutoconfiguredInstanceof();
@@ -249,7 +250,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $this->assertTrue($definition->hasTag($tag));
     }
 
-    public function getInterfacesForAutoConfiguration()
+    public function getInterfacesWithTheirTagsForAutoConfiguration()
     {
         return [
             [DriverInterface::class, 'tsantos_serializer.metadata_driver'],
@@ -258,6 +259,19 @@ class TSantosExtensionTest extends DependencyInjectionTest
             [EventSubscriberInterface::class, 'tsantos_serializer.event_subscriber'],
             [ConfiguratorInterface::class, 'tsantos_serializer.metadata_configurator'],
         ];
+    }
+
+    /** @test */
+    public function it_should_inject_the_serializer_in_classes_implementing_SerializerAwareInterface()
+    {
+        $container = $this->getContainer();
+        $instances = $container->getAutoconfiguredInstanceof();
+        $this->assertArrayHasKey(SerializerAwareInterface::class, $instances);
+
+        /** @var ChildDefinition $definition */
+        $definition = $instances[SerializerAwareInterface::class];
+
+        $this->assertDICDefinitionMethodCallAt($definition, 0, 'setSerializer');
     }
 
     /** @test */
