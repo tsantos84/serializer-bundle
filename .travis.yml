@@ -50,7 +50,7 @@ script:
 #    - ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
     - |
       # Create symfony demo application
-      composer create-project symfony/symfony-demo --no-install --stability dev --prefer-source && cd symfony-demo
+      composer create-project symfony/symfony-demo --no-install --stability dev --prefer-source /tmp/symfony-demo && cd /tmp/symfony-demo
       composer config repositories.serializer-bundle path ${TRAVIS_BUILD_DIR}
       composer config minimum-stability dev
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
