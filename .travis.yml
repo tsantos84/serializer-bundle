@@ -57,4 +57,9 @@ script:
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
       rm -rf composer.lock
       composer install --ignore-platform-reqs
+    - |
+      # Load data fixtures
+      bin/console doctrine:fixtures:load
+    - |
+      # Run symfony application
       bin/console serializer:posts
