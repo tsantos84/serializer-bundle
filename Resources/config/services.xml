@@ -116,16 +116,6 @@
             </argument>
         </service>
 
-        <service id="tsantos_serializer.class_generator" class="TSantos\SerializerBundle\Service\ClassGenerator">
-            <argument type="service" id="tsantos_serializer.metadata_factory" />
-            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
-            <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
-        </service>
-        <service id="tsantos_serializer.metadata_cache_warmer" class="TSantos\SerializerBundle\Cache\CacheWarmer">
-            <argument type="service" id="tsantos_serializer.class_generator" />
-            <tag name="kernel.cache_warmer" />
-        </service>
-
         <service id="tsantos_serializer.hydrator_code_generator" class="TSantos\Serializer\HydratorCodeGenerator">
             <argument type="service" id="twig" />
         </service>
@@ -144,12 +134,6 @@
             <argument type="service" id="tsantos_serializer.normalizer_registry"/>
         </service>
         <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" public="false" />
-
-        <service id="tsantos_serializer.generate_classes_command" class="TSantos\SerializerBundle\Command\GenerateClassCommand">
-            <argument type="service" id="tsantos_serializer.class_generator" />
-            <argument>%kernel.environment%</argument>
-            <tag name="console.command" />
-        </service>
 
         <service id="tsantos_serializer.object_instantiator.doctrine" class="TSantos\Serializer\ObjectInstantiator\DoctrineInstantiator">
             <argument type="service">
