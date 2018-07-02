@@ -59,7 +59,7 @@ script:
       composer install --ignore-platform-reqs
     - |
       # Load data fixtures
-      bin/console doctrine:fixtures:load
+      bin/console doctrine:fixtures:load --no-interaction
     - |
       # Run symfony application
       bin/console serializer:posts
