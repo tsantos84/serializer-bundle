@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
+use Symfony\Component\HttpKernel\Kernel;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
@@ -68,8 +69,11 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->registerForAutoconfiguration(DenormalizerInterface::class)->addTag('tsantos_serializer.denormalizer');
         $container->registerForAutoconfiguration(EventSubscriberInterface::class)->addTag('tsantos_serializer.event_subscriber');
         $container->registerForAutoconfiguration(ConfiguratorInterface::class)->addTag('tsantos_serializer.metadata_configurator');
-        $container->registerForAutoconfiguration(SerializerAwareInterface::class)
-            ->addMethodCall('setSerializer', [new Reference('tsantos_serializer')]);
+
+        if (version_compare(Kernel::VERSION, '4.1.0', '>=')) {
+            $container->registerForAutoconfiguration(SerializerAwareInterface::class)
+                ->addMethodCall('setSerializer', [new Reference('tsantos_serializer')]);
+        }
 
         if ($container->getParameter('tsantos_serializer.debug')) {
             $loader->load('debug.xml');

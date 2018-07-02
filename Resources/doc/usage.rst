@@ -86,3 +86,8 @@ useful trait where you can make use instead of add manually the `setSerializer` 
             return JsonResponse::fromJsonString($this->serializer->serialize($post));
         }
     }
+
+.. note::
+
+    The ability to auto inject the serializer instance is enable only on version 4.1.0 or above of Symfony Dependency
+    Injection.

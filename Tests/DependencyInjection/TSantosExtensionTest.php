@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Kernel;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
@@ -264,6 +265,13 @@ class TSantosExtensionTest extends DependencyInjectionTest
     /** @test */
     public function it_should_inject_the_serializer_in_classes_implementing_SerializerAwareInterface()
     {
+        if (!version_compare(Kernel::VERSION, '4.1.0', '>=')) {
+            $this->markTestSkipped(
+                'Auto injection of serializer instance is not enabled prior version 4.1.0 of Symfony Http ' .
+                'Kernel package. Current version is ' . Kernel::VERSION
+            );
+        }
+
         $container = $this->getContainer();
         $instances = $container->getAutoconfiguredInstanceof();
         $this->assertArrayHasKey(SerializerAwareInterface::class, $instances);
