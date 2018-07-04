@@ -267,8 +267,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
     {
         if (!version_compare(Kernel::VERSION, '4.1.0', '>=')) {
             $this->markTestSkipped(
-                'Auto injection of serializer instance is not enabled prior version 4.1.0 of Symfony Http ' .
-                'Kernel package. Current version is ' . Kernel::VERSION
+                'Auto injection of serializer instance is not enabled prior version 4.1.0 of Symfony Http '.
+                'Kernel package. Current version is '.Kernel::VERSION
             );
         }
 
