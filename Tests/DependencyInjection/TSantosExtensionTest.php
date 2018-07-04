@@ -14,6 +14,7 @@ namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 use Metadata\Driver\DriverInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
@@ -296,6 +297,42 @@ class TSantosExtensionTest extends DependencyInjectionTest
             'debug' => false,
         ]);
         $this->assertFalse($container->hasDefinition('tsantos_serializer.stopwatch_listener'));
+    }
+
+    /** @test */
+    public function it_should_inject_the_default_circular_reference_handler_into_object_normalizer()
+    {
+        $container = $this->getContainer();
+
+        $this->assertSame(
+            'tsantos_serializer.default_circular_reference_handler',
+            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2)
+        );
+    }
+
+    /** @test */
+    public function it_should_inject_a_custom_circular_reference_handler_into_object_normalizer()
+    {
+        $container = $this->getContainer([
+            'circular_reference_handler' => 'my_handler',
+        ]);
+
+        $this->assertSame(
+            'my_handler',
+            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2)
+        );
+    }
+
+    /** @test */
+    public function it_should_not_inject_any_circular_reference_handler_into_object_normalizer()
+    {
+        $this->expectException(OutOfBoundsException::class);
+
+        $container = $this->getContainer([
+            'circular_reference_handler' => null,
+        ]);
+
+        $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2);
     }
 
     private function assertMetadataFactoryCache(ContainerBuilder $container, string $expectedService)

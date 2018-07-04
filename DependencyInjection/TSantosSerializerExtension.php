@@ -75,6 +75,10 @@ class TSantosSerializerExtension extends ConfigurableExtension
                 ->addMethodCall('setSerializer', [new Reference('tsantos_serializer')]);
         }
 
+        if (null !== $mergedConfig['circular_reference_handler']) {
+            $container->getDefinition('tsantos_serializer.object_normalizer')->setArgument(2, new Reference($mergedConfig['circular_reference_handler']));
+        }
+
         if ($container->getParameter('tsantos_serializer.debug')) {
             $loader->load('debug.xml');
         }
