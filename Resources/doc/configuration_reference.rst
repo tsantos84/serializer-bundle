@@ -11,6 +11,7 @@ Default Configuration
         format: "json"
         hydrator_path: "%kernel.cache_dir%/tsantos_serializer/classes"
         generation_strategy: "file_not_exists"
+        circular_reference_handler: "tsantos_serializer.default_circular_reference_handler"
         mapping:
             auto_configure: true
             paths: {  }
@@ -41,6 +42,10 @@ Configuration Reference
 
         `file_not_found`: serializer classes will be generated only if the class not exists
         (best for development environment)
+
+    circular_reference_handler:
+        Service ID of the service that will handle Circular Reference Exceptions. Pass `~` to this option
+        to disable handling and force exceptions to be throw.
 
     mapping.auto_configure
         The bundle will try to read the mappings automatically from the directories following the order bellow:

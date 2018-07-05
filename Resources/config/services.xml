@@ -28,6 +28,7 @@
         </service>
 
         <!-- normalizers -->
+        <service id="tsantos_serializer.default_circular_reference_handler" class="TSantos\SerializerBundle\Serializer\CircularReferenceHandler" />
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
         <service id="tsantos_serializer.object_normalizer" class="TSantos\Serializer\Normalizer\ObjectNormalizer">
             <argument type="service" id="tsantos_serializer.hydrator_loader" />
@@ -70,6 +71,9 @@
             </argument>
             <tag name="tsantos_serializer.metadata_driver" />
         </service>
+        <service id="tsantos_serializer.reflection_driver" class="TSantos\Serializer\Metadata\Driver\ReflectionDriver">
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
         <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
             <argument type="service" id="tsantos_serializer.configurator_driver" />
             <argument type="string">Metadata\ClassHierarchyMetadata</argument>
@@ -88,18 +92,11 @@
         </service>
 
         <!-- metadata configurators -->
-        <service id="tsantos_serializer.datetime_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\DateTimeConfigurator">
+        <service id="tsantos_serializer.property_type_configurator" class="TSantos\Serializer\Metadata\Configurator\PropertyTypeConfigurator">
+            <argument type="service" id="tsantos_serializer.property_info" />
             <tag name="tsantos_serializer.metadata_configurator" />
         </service>
         <service id="tsantos_serializer.getter_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\GetterConfigurator">
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.hydrator_template_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\HydratorTemplateConfigurator">
-            <argument type="string" /> <!-- default twig template -->
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.property_type_configurator" class="TSantos\Serializer\Metadata\Configurator\PropertyTypeConfigurator">
-            <argument type="service" id="tsantos_serializer.property_info" />
             <tag name="tsantos_serializer.metadata_configurator" />
         </service>
         <service id="tsantos_serializer.setter_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\SetterConfigurator">
@@ -108,17 +105,27 @@
         <service id="tsantos_serializer.virtual_property_type_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\VirtualPropertyTypeConfigurator">
             <tag name="tsantos_serializer.metadata_configurator" />
         </service>
+        <service id="tsantos_serializer.datetime_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\DateTimeConfigurator">
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
+        <service id="tsantos_serializer.hydrator_template_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\HydratorTemplateConfigurator">
+            <argument type="string" /> <!-- default twig template -->
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
 
         <!-- property info -->
+        <service id="tsantos_serializer.reflection_extractor" class="Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor" />
+        <service id="tsantos_serializer.php_doc_extractor" class="Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor" />
         <service id="tsantos_serializer.property_info" class="Symfony\Component\PropertyInfo\PropertyInfoExtractor">
             <argument type="collection" />
             <argument type="collection">
-                <argument>
-                    <service class="Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor" />
-                </argument>
-                <argument>
-                    <service class="Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor" />
-                </argument>
+                <argument type="service" id="tsantos_serializer.reflection_extractor"/>
+                <argument type="service" id="tsantos_serializer.php_doc_extractor"/>
+            </argument>
+            <argument type="collection" />
+            <argument type="collection">
+                <argument type="service" id="tsantos_serializer.reflection_extractor"/>
+                <argument type="service" id="tsantos_serializer.php_doc_extractor"/>
             </argument>
         </service>
 

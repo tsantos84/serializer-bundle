@@ -2,6 +2,7 @@ language: php
 sudo: false
 cache:
     directories:
+        - $HOME/.composer/cache/files
         - $HOME/symfony-bridge/.phpunit
 
 env:
@@ -15,8 +16,11 @@ matrix:
           # Minimum supported dependencies with the latest and oldest PHP version
         - php: 7.2
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+        - php: 7.1
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
 
           # Test the latest stable release
+        - php: 7.1
         - php: 7.2
           env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
@@ -37,7 +41,6 @@ before_install:
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
     - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
-    - composer require doctrine/annotations "symfony/yaml:^3.4|^4.0" --dev --no-update
 
 install:
     # To be removed when this issue will be resolved: https://github.com/composer/composer/issues/5355
@@ -46,8 +49,26 @@ install:
     - ./vendor/bin/simple-phpunit install
 
 script:
-    - ./vendor/bin/php-cs-fixer fix
 #    - composer validate --strict --no-check-lock
-    # simple-phpunit is the PHPUnit wrapper provided by the PHPUnit Bridge component and
-    # it helps with testing legacy code and deprecations (composer require symfony/phpunit-bridge)
-    - ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
+    - |
+      # Code standard and unit test
+      ./vendor/bin/php-cs-fixer fix --dry-run
+      ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
+
+    - |
+      # Create symfony demo application
+      composer create-project symfony/symfony-demo --no-install --stability dev --prefer-source /tmp/symfony-demo && cd /tmp/symfony-demo
+      cp ${TRAVIS_BUILD_DIR}/.travis/PostSerializerCommand.php src/Command
+      composer config repositories.serializer-bundle path ${TRAVIS_BUILD_DIR}
+      composer config minimum-stability dev
+      composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
+      rm -rf composer.lock
+      composer install --ignore-platform-reqs
+
+    - |
+      # Load data fixtures
+      bin/console doctrine:fixtures:load --no-interaction
+
+    - |
+      # Run symfony application
+      bin/console serializer:posts
