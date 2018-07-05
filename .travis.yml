@@ -49,7 +49,7 @@ install:
     - ./vendor/bin/simple-phpunit install
 
 script:
-    - composer validate --strict --no-check-lock
+#    - composer validate --strict --no-check-lock
     - |
       # Code standard and unit test
       ./vendor/bin/php-cs-fixer fix --dry-run
