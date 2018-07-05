@@ -46,8 +46,11 @@ install:
     - ./vendor/bin/simple-phpunit install
 
 script:
-#    - ./vendor/bin/php-cs-fixer fix --dry-run
-#    - ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
+    - |
+      # Code standard and unit test
+      ./vendor/bin/php-cs-fixer fix --dry-run
+      ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
+
     - |
       # Create symfony demo application
       composer create-project symfony/symfony-demo --no-install --stability dev --prefer-source /tmp/symfony-demo && cd /tmp/symfony-demo
@@ -57,9 +60,11 @@ script:
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
       rm -rf composer.lock
       composer install --ignore-platform-reqs
+
     - |
       # Load data fixtures
       bin/console doctrine:fixtures:load --no-interaction
+
     - |
       # Run symfony application
       bin/console serializer:posts
