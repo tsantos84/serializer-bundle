@@ -61,6 +61,7 @@ script:
       cp ${TRAVIS_BUILD_DIR}/.travis/PostSerializerCommand.php src/Command
       composer config repositories.serializer-bundle path ${TRAVIS_BUILD_DIR}
       composer config minimum-stability dev
+      if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
       rm -rf composer.lock
       composer install --ignore-platform-reqs
