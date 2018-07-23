@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 
 /**
- * Class AddTwigPathPassTest
+ * Class AddTwigPathPassTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */

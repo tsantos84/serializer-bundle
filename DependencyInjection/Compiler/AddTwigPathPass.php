@@ -28,6 +28,7 @@ class AddTwigPathPass implements CompilerPassInterface
 
     /**
      * AddTwigPathPass constructor.
+     *
      * @param string $vendorDir
      */
     public function __construct(string $vendorDir)
