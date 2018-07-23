@@ -16,20 +16,19 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 
 /**
- * Class TwigPassTest.
+ * Class AddTwigPathPassTest
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class TwigPassTest extends TestCase
+class AddTwigPathPassTest extends TestCase
 {
     /** @test */
     public function it_should_add_path_to_hydrator_template()
     {
         $container = new ContainerBuilder();
         $container->register('twig.loader.native_filesystem');
-        $container->setParameter('kernel.project_dir', '/some/path');
 
-        $compiler = new AddTwigPathPass();
+        $compiler = new AddTwigPathPass('/some/path/vendor');
         $compiler->process($container);
 
         $definition = $container->getDefinition('twig.loader.native_filesystem');
@@ -53,7 +52,7 @@ class TwigPassTest extends TestCase
             ->method('getDefinition')
             ->with('twig.loader.native_filesystem');
 
-        $compiler = new AddTwigPathPass();
+        $compiler = new AddTwigPathPass('/vendor/path');
         $compiler->process($container);
     }
 }

@@ -21,13 +21,27 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class AddTwigPathPass implements CompilerPassInterface
 {
+    /**
+     * @var string
+     */
+    private $vendorDir;
+
+    /**
+     * AddTwigPathPass constructor.
+     * @param string $vendorDir
+     */
+    public function __construct(string $vendorDir)
+    {
+        $this->vendorDir = $vendorDir;
+    }
+
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('twig.loader.native_filesystem')) {
             return;
         }
 
-        $path = $container->getParameter('kernel.project_dir').'/vendor/tsantos/serializer/src/Resources/templates';
+        $path = $this->vendorDir.'/tsantos/serializer/src/Resources/templates';
 
         $container
             ->getDefinition('twig.loader.native_filesystem')

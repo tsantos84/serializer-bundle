@@ -34,7 +34,7 @@ class TSantosSerializerBundle extends Bundle
     {
         $container->addCompilerPass(new RemoveStopwatchListenerPass());
         $container->addCompilerPass(new AddMetadataConfiguratorPass());
-        $container->addCompilerPass(new AddTwigPathPass());
+        $container->addCompilerPass(new AddTwigPathPass($container->getParameter('kernel.project_dir') . '/vendor'));
         $container->addCompilerPass(new ConfigureEncoderPass());
         $container->addCompilerPass(new AddEventListenerPass());
         $container->addCompilerPass(new AddMetadataDriverPass());
