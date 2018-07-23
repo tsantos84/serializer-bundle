@@ -35,7 +35,7 @@ class TwigPassTest extends TestCase
         $definition = $container->getDefinition('twig.loader.native_filesystem');
         $this->assertCount(1, $calls = $definition->getMethodCalls());
         $this->assertSame('addPath', $calls[0][0]);
-        $this->assertSame('/some/path/serializer/src/Resources/templates', $calls[0][1][0]);
+        $this->assertSame('/some/path/vendor/tsantos/serializer/src/Resources/templates', $calls[0][1][0]);
     }
 
     /** @test */
