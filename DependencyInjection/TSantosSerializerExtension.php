@@ -11,6 +11,7 @@
 
 namespace TSantos\SerializerBundle\DependencyInjection;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Metadata\Driver\DriverInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,6 +19,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Yaml\Yaml;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
@@ -81,6 +83,14 @@ class TSantosSerializerExtension extends ConfigurableExtension
 
         if ($container->getParameter('tsantos_serializer.debug')) {
             $loader->load('debug.xml');
+        }
+
+        if (!class_exists(AnnotationReader::class)) {
+            $container->removeDefinition('tsantos_serializer.metadata_annotation_driver');
+        }
+
+        if (!class_exists(Yaml::class)) {
+            $container->removeDefinition('tsantos_serializer.metadata_yaml_driver');
         }
     }
 
