@@ -27,7 +27,7 @@ class AddTwigPathPass implements CompilerPassInterface
             return;
         }
 
-        $path = realpath(__DIR__.'/../../vendor/tsantos/serializer/src/Resources/templates');
+        $path = $container->getParameter('kernel.project_dir').'/vendor/tsantos/serializer/src/Resources/templates';
 
         $container
             ->getDefinition('twig.loader.native_filesystem')
