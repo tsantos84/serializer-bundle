@@ -53,14 +53,14 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue('file_not_exists')
             ->end()
             ->arrayNode('include_dir')
-                ->beforeNormalization()->ifString()->then(function ($v) { return array($v); })->end()
+                ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
                 ->defaultValue([
                     'src/{Entity,Document,ValueObject},src/*/{Entity,Document,ValueObject}',
                 ])
                 ->prototype('scalar')->end()
             ->end()
             ->arrayNode('exclude_dir')
-                ->beforeNormalization()->ifString()->then(function ($v) { return array($v); })->end()
+                ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
                 ->prototype('scalar')->end()
             ->end()
             ->arrayNode('mapping')

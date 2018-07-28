@@ -50,6 +50,7 @@ class ClassReader
      * Adapted from https://stackoverflow.com/a/14250011/2417395 answer.
      *
      * @param string $filename
+     *
      * @return array
      */
     public function readFile(string $filename): array
@@ -66,16 +67,16 @@ class ClassReader
                 $namespace = '';
                 for ($j = $i + 1; $j < $count; ++$j) {
                     if (T_STRING === $tokens[$j][0]) {
-                        $namespace .= $tokens[$j][1] . '\\';
+                        $namespace .= $tokens[$j][1].'\\';
                     } elseif ('{' === $tokens[$j] || ';' === $tokens[$j]) {
                         break;
                     }
                 }
             }
-            if (T_CLASS === $tokens[$i][0] && T_DOUBLE_COLON !== $tokens[$i-1][0]) {
+            if (T_CLASS === $tokens[$i][0] && T_DOUBLE_COLON !== $tokens[$i - 1][0]) {
                 for ($j = $i + 1; $j < $count; ++$j) {
                     if ('{' === $tokens[$j]) {
-                        $classes[] = trim($namespace . $tokens[$i + 2][1], "\\");
+                        $classes[] = trim($namespace.$tokens[$i + 2][1], '\\');
                         break;
                     }
                 }

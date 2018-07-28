@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -32,7 +33,7 @@ class GenerateHydratorCommandTest extends TestCase
             ['decorated' => false]
         );
 
-        $this->assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        $this->assertSame(0, $tester->getStatusCode(), 'Returns 0 in case of success');
         $this->assertSame('My\DummyClass: OK', trim($tester->getDisplay()));
     }
 
@@ -69,6 +70,7 @@ class GenerateHydratorCommandTest extends TestCase
 
         $application = new Application();
         $application->add(new GenerateHydratorCommand($reader, $metadataFactory, $generator, $writer));
+
         return new CommandTester($application->find('serializer:generate_hydrators'));
     }
 }

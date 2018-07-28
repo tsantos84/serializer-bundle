@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -9,7 +10,7 @@
  */
 
 /**
- * Class Dummy
+ * Class Dummy.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */

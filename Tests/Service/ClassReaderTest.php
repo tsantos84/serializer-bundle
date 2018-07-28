@@ -20,7 +20,7 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_directory()
     {
-        $reader = new ClassReader([__DIR__ . '/../Fixture'], []);
+        $reader = new ClassReader([__DIR__.'/../Fixture'], []);
 
         $expected = [
             'MultiNamespace\Bar',
@@ -40,7 +40,7 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_directory_with_exclusion_pattern()
     {
-        $reader = new ClassReader([__DIR__ . '/../Fixture'], [
+        $reader = new ClassReader([__DIR__.'/../Fixture'], [
             'Namespaced',
         ]);
 
@@ -64,16 +64,16 @@ class ClassReaderTest extends TestCase
     public function getFiles(): array
     {
         return [
-            [__DIR__ . '/../Fixture/Namespaced/SingleNamespace.php', [
+            [__DIR__.'/../Fixture/Namespaced/SingleNamespace.php', [
                 'SingleNamespace\Bar',
                 'SingleNamespace\Baz',
                 'SingleNamespace\Foo',
             ]],
-            [__DIR__ . '/../Fixture/Namespaced/MultipleNamespace.php', [
+            [__DIR__.'/../Fixture/Namespaced/MultipleNamespace.php', [
                 'MultiNamespace\Bar',
                 'MultiNamespace\Baz',
                 'FooBar',
-            ]]
+            ]],
         ];
     }
 }

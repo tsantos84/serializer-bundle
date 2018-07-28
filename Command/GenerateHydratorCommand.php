@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -21,7 +22,7 @@ use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\SerializerBundle\Service\ClassReader;
 
 /**
- * Class GenerateHydratorCommand
+ * Class GenerateHydratorCommand.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -49,10 +50,11 @@ class GenerateHydratorCommand extends Command
 
     /**
      * GenerateHydratorCommand constructor.
-     * @param ClassReader $classReader
-     * @param MetadataFactory $metadataFactory
+     *
+     * @param ClassReader           $classReader
+     * @param MetadataFactory       $metadataFactory
      * @param HydratorCodeGenerator $generator
-     * @param HydratorCodeWriter $writer
+     * @param HydratorCodeWriter    $writer
      */
     public function __construct(ClassReader $classReader, MetadataFactoryInterface $metadataFactory, HydratorCodeGenerator $generator, HydratorCodeWriter $writer)
     {
@@ -76,7 +78,7 @@ class GenerateHydratorCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         foreach ($classes as $class) {
-            $io->write($class . ': ');
+            $io->write($class.': ');
             $metadata = $this->metadataFactory->getMetadataForClass($class);
             $code = $this->generator->generate($metadata);
             $this->writer->write($metadata, $code);
