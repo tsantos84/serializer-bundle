@@ -167,5 +167,13 @@
             <argument type="collection" /> <!-- include dir -->
             <argument type="collection" /> <!-- exclude dir -->
         </service>
+
+        <service id="tsantos_serializer.generate_hydrator_command" class="TSantos\SerializerBundle\Command\GenerateHydratorCommand">
+            <argument type="service" id="tsantos_serializer.class_name_reader" />
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
+            <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
+            <tag name="console.command" />
+        </service>
     </services>
 </container>
