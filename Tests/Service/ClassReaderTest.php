@@ -32,7 +32,7 @@ class ClassReaderTest extends TestCase
             'Dummy',
         ];
 
-        $this->assertSame($expected, $reader->read());
+        $this->assertArraySubset($expected, $reader->read());
     }
 
     /**
