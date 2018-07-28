@@ -34,10 +34,10 @@ class ClassReaderTest extends TestCase
 
         $actual = $reader->read();
 
-        asort($expected);
-        asort($actual);
+        sort($expected);
+        sort($actual);
 
-        $this->assertArraySubset($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
