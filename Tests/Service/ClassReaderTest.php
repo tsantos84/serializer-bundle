@@ -32,7 +32,12 @@ class ClassReaderTest extends TestCase
             'Dummy',
         ];
 
-        $this->assertArraySubset($expected, $reader->read());
+        $actual = $reader->read();
+
+        asort($expected);
+        asort($actual);
+
+        $this->assertArraySubset($expected, $actual);
     }
 
     /**
