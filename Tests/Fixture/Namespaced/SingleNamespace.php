@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -11,7 +11,9 @@
 
 namespace SingleNamespace;
 
-class Bar
+interface Dummy {};
+
+class Bar extends \stdClass implements Dummy
 {
 }
 

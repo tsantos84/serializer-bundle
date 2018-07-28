@@ -11,6 +11,8 @@
 
 namespace TSantos\SerializerBundle\Service;
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Class ClassReader.
  *
@@ -18,7 +20,39 @@ namespace TSantos\SerializerBundle\Service;
  */
 class ClassReader
 {
-    public function read(string $filename): array
+    /**
+     * @var Finder
+     */
+    private $finder;
+
+    public function __construct(array $includeDirs, array $excludeDirs)
+    {
+        $this->finder = (new Finder())
+            ->in($includeDirs)
+            ->exclude($excludeDirs)
+            ->files()
+            ->name('*.php');
+    }
+
+    public function read(): array
+    {
+        $files = [];
+        foreach ($this->finder as $file) {
+            $files = array_merge($files, $this->readFile($file));
+        }
+
+        return $files;
+    }
+
+    /**
+     * Read class names from given PHP file.
+     *
+     * Adapted from https://stackoverflow.com/a/14250011/2417395 answer.
+     *
+     * @param string $filename
+     * @return array
+     */
+    public function readFile(string $filename): array
     {
         $content = file_get_contents($filename);
 
@@ -32,16 +66,16 @@ class ClassReader
                 $namespace = '';
                 for ($j = $i + 1; $j < $count; ++$j) {
                     if (T_STRING === $tokens[$j][0]) {
-                        $namespace .= $tokens[$j][1];
+                        $namespace .= $tokens[$j][1] . '\\';
                     } elseif ('{' === $tokens[$j] || ';' === $tokens[$j]) {
                         break;
                     }
                 }
             }
-            if (T_CLASS === $tokens[$i][0]) {
+            if (T_CLASS === $tokens[$i][0] && T_DOUBLE_COLON !== $tokens[$i-1][0]) {
                 for ($j = $i + 1; $j < $count; ++$j) {
                     if ('{' === $tokens[$j]) {
-                        $classes[] = trim($namespace.'\\'.$tokens[$i + 2][1], "\\");
+                        $classes[] = trim($namespace . $tokens[$i + 2][1], "\\");
                         break;
                     }
                 }

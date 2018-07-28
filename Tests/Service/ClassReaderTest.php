@@ -17,23 +17,59 @@ class ClassReaderTest extends TestCase
 {
     /**
      * @test
+     */
+    public function it_can_read_classes_from_directory()
+    {
+        $reader = new ClassReader([__DIR__ . '/../Fixture'], []);
+
+        $expected = [
+            'MultiNamespace\Bar',
+            'MultiNamespace\Baz',
+            'FooBar',
+            'SingleNamespace\Bar',
+            'SingleNamespace\Baz',
+            'SingleNamespace\Foo',
+            'Dummy',
+        ];
+
+        $this->assertSame($expected, $reader->read());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_read_classes_from_directory_with_exclusion_pattern()
+    {
+        $reader = new ClassReader([__DIR__ . '/../Fixture'], [
+            'Namespaced',
+        ]);
+
+        $expected = [
+            'Dummy',
+        ];
+
+        $this->assertSame($expected, $reader->read());
+    }
+
+    /**
+     * @test
      * @dataProvider getFiles
      */
-    public function it_can_read_classes_from_file(string $filename, array $classes)
+    public function it_can_read_classes_from_single_file(string $filename, array $classes)
     {
-        $reader = new ClassReader();
-        $this->assertSame($classes, $reader->read($filename));
+        $reader = new ClassReader([], []);
+        $this->assertSame($classes, $reader->readFile($filename));
     }
 
     public function getFiles(): array
     {
         return [
-            [__DIR__.'/../Fixture/SingleNamespace.php', [
+            [__DIR__ . '/../Fixture/Namespaced/SingleNamespace.php', [
                 'SingleNamespace\Bar',
                 'SingleNamespace\Baz',
                 'SingleNamespace\Foo',
             ]],
-            [__DIR__.'/../Fixture/MultipleNamespace.php', [
+            [__DIR__ . '/../Fixture/Namespaced/MultipleNamespace.php', [
                 'MultiNamespace\Bar',
                 'MultiNamespace\Baz',
                 'FooBar',
