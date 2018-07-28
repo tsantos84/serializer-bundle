@@ -335,6 +335,19 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2);
     }
 
+    /** @test */
+    public function it_should_configure_the_class_name_reader_service_properly()
+    {
+        $container = $this->getContainer([
+            'include_dir' => '/some/include/dir',
+            'exclude_dir' => ['/some/exclude/dir'],
+        ]);
+
+        $reader = $container->getDefinition('tsantos_serializer.class_name_reader');
+        $this->assertDICDefinitionHasArgument($reader, 0, ['/some/include/dir']);
+        $this->assertDICDefinitionHasArgument($reader, 1, ['/some/exclude/dir']);
+    }
+
     private function assertMetadataFactoryCache(ContainerBuilder $container, string $expectedService)
     {
         $factoryDefinition = $container->getDefinition('tsantos_serializer.metadata_factory');
