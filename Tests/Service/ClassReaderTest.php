@@ -20,7 +20,7 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_directory()
     {
-        $reader = new ClassReader([__DIR__.'/../Fixture'], []);
+        $reader = new ClassReader();
 
         $expected = [
             'MultiNamespace\Bar',
@@ -32,7 +32,7 @@ class ClassReaderTest extends TestCase
             'Dummy',
         ];
 
-        $actual = $reader->read();
+        $actual = $reader->readDirectory([__DIR__.'/../Fixture']);
 
         sort($expected);
         sort($actual);
@@ -45,15 +45,13 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_directory_with_exclusion_pattern()
     {
-        $reader = new ClassReader([__DIR__.'/../Fixture'], [
-            'Namespaced',
-        ]);
+        $reader = new ClassReader();
 
         $expected = [
             'Dummy',
         ];
 
-        $this->assertSame($expected, $reader->read());
+        $this->assertSame($expected, $reader->readDirectory([__DIR__.'/../Fixture'], ['Namespaced']));
     }
 
     /**
@@ -62,7 +60,7 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_single_file(string $filename, array $classes)
     {
-        $reader = new ClassReader([], []);
+        $reader = new ClassReader();
         $this->assertSame($classes, $reader->readFile($filename));
     }
 

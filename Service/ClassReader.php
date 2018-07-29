@@ -20,24 +20,17 @@ use Symfony\Component\Finder\Finder;
  */
 class ClassReader
 {
-    /**
-     * @var Finder
-     */
-    private $finder;
-
-    public function __construct(array $includeDirs, array $excludeDirs)
+    public function readDirectory(array $directories, array $excluded = []): array
     {
-        $this->finder = (new Finder())
-            ->in($includeDirs)
-            ->exclude($excludeDirs)
+        $finder = (new Finder())
+            ->in($directories)
+            ->exclude($excluded)
             ->files()
             ->name('*.php');
-    }
 
-    public function read(): array
-    {
         $files = [];
-        foreach ($this->finder as $file) {
+
+        foreach ($finder as $file) {
             $files = array_merge($files, $this->readFile($file));
         }
 
