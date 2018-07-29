@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\SerializerBundle\Tests\SerializerBundle\Command;
+namespace TSantos\SerializerBundle\Tests\Command;
 
 use Metadata\MetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ use TSantos\Serializer\HydratorCodeGenerator;
 use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Command\GenerateHydratorCommand;
-use TSantos\SerializerBundle\Service\ClassReader;
+use TSantos\SerializerBundle\Service\ClassNameReader;
 
 class GenerateHydratorCommandTest extends TestCase
 {
@@ -42,7 +42,7 @@ class GenerateHydratorCommandTest extends TestCase
      */
     private function createCommandTester()
     {
-        $reader = $this->createMock(ClassReader::class);
+        $reader = $this->createMock(ClassNameReader::class);
         $reader
             ->expects($this->once())
             ->method('read')
