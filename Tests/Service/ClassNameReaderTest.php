@@ -9,18 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\SerializerBundle\Service;
+namespace TSantos\SerializerBundle\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
+use TSantos\SerializerBundle\Service\ClassNameReader;
 
-class ClassReaderTest extends TestCase
+class ClassNameReaderTest extends TestCase
 {
     /**
      * @test
      */
     public function it_can_read_classes_from_directory()
     {
-        $reader = new ClassReader();
+        $reader = new ClassNameReader();
 
         $expected = [
             'MultiNamespace\Bar',
@@ -45,7 +46,7 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_directory_with_exclusion_pattern()
     {
-        $reader = new ClassReader();
+        $reader = new ClassNameReader();
 
         $expected = [
             'Dummy',
@@ -60,7 +61,7 @@ class ClassReaderTest extends TestCase
      */
     public function it_can_read_classes_from_single_file(string $filename, array $classes)
     {
-        $reader = new ClassReader();
+        $reader = new ClassNameReader();
         $this->assertSame($classes, $reader->readFile($filename));
     }
 

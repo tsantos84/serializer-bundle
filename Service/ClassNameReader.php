@@ -18,7 +18,7 @@ use Symfony\Component\Finder\Finder;
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class ClassReader
+class ClassNameReader
 {
     public function readDirectory(array $directories, array $excluded = []): array
     {

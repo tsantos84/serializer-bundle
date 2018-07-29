@@ -163,10 +163,7 @@
             <tag name="twig.extension" />
         </service>
 
-        <service id="tsantos_serializer.class_name_reader" class="TSantos\SerializerBundle\Service\ClassReader">
-            <argument type="collection" /> <!-- include dir -->
-            <argument type="collection" /> <!-- exclude dir -->
-        </service>
+        <service id="tsantos_serializer.class_name_reader" class="TSantos\SerializerBundle\Service\ClassNameReader" />
 
         <service id="tsantos_serializer.generate_hydrator_command" class="TSantos\SerializerBundle\Command\GenerateHydratorCommand">
             <argument type="service" id="tsantos_serializer.class_name_reader" />
