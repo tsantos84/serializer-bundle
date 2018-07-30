@@ -73,10 +73,17 @@ class GenerateHydratorCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        if ($output->isVerbose()) {
+            $io->section('Included paths');
+            $io->listing($this->directories);
+            $io->section('Excluded paths');
+            $io->listing($this->excluded);
+        }
+
         try {
             $classes = $this->classReader->readDirectory($this->directories, $this->excluded);
         } catch (\LogicException | \InvalidArgumentException $e) {
-            $io->warning('No hydrator to be generated because there is no existing path configured');
+            $io->warning('No hydrators to be generated because there is no existing path configured');
 
             return;
         }
@@ -84,7 +91,9 @@ class GenerateHydratorCommand extends Command
         foreach ($classes as $class) {
             $io->write($class.': ', false, OutputInterface::VERBOSITY_VERBOSE);
             $this->compiler->compile($class);
-            $io->write('OK');
+            $io->write('OK', false, OutputInterface::VERBOSITY_VERBOSE);
         }
+
+        $io->success('Hydrator classes generated successfully');
     }
 }
