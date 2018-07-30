@@ -11,14 +11,10 @@
 
 namespace TSantos\SerializerBundle\Tests\Command;
 
-use Metadata\MetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use TSantos\Serializer\HydratorCodeGenerator;
-use TSantos\Serializer\HydratorCodeWriter;
-use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Command\GenerateHydratorCommand;
 use TSantos\SerializerBundle\Serializer\Compiler;
 use TSantos\SerializerBundle\Service\ClassNameReader;

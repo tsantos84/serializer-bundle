@@ -38,6 +38,11 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer();
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', true);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'json');
+        $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', [
+            'src/{Entity,Document,Model,ValueObject}',
+            'src/*/{Entity,Document,Model,ValueObject}',
+        ]);
+        $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', []);
     }
 
     /** @test */
@@ -46,9 +51,13 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer([
             'debug' => false,
             'format' => 'xml',
+            'include_dir' => '/some/path',
+            'exclude_dir' => '/some/excluded/path',
         ]);
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', false);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'xml');
+        $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', ['/some/path']);
+        $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', ['/some/excluded/path']);
     }
 
     /** @test */
@@ -333,19 +342,6 @@ class TSantosExtensionTest extends DependencyInjectionTest
         ]);
 
         $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2);
-    }
-
-    /** @test */
-    public function it_should_configure_the_class_name_reader_service_properly()
-    {
-        $container = $this->getContainer([
-            'include_dir' => '/some/include/dir',
-            'exclude_dir' => ['/some/exclude/dir'],
-        ]);
-
-        $reader = $container->getDefinition('tsantos_serializer.class_name_reader');
-        $this->assertDICDefinitionHasArgument($reader, 0, ['/some/include/dir']);
-        $this->assertDICDefinitionHasArgument($reader, 1, ['/some/exclude/dir']);
     }
 
     private function assertMetadataFactoryCache(ContainerBuilder $container, string $expectedService)

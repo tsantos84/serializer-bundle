@@ -47,10 +47,11 @@ class GenerateHydratorCommand extends Command
 
     /**
      * GenerateHydratorCommand constructor.
+     *
      * @param ClassNameReader $classNameReader
-     * @param Compiler $compiler
-     * @param array $directories
-     * @param array $excluded
+     * @param Compiler        $compiler
+     * @param array           $directories
+     * @param array           $excluded
      */
     public function __construct(ClassNameReader $classNameReader, Compiler $compiler, array $directories, array $excluded = [])
     {
@@ -76,6 +77,7 @@ class GenerateHydratorCommand extends Command
             $classes = $this->classReader->readDirectory($this->directories, $this->excluded);
         } catch (\LogicException | \InvalidArgumentException $e) {
             $io->warning('No hydrator to be generated because there is no existing path configured');
+
             return;
         }
 

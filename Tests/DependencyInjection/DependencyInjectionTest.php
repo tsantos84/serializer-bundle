@@ -64,7 +64,7 @@ abstract class DependencyInjectionTest extends TestCase
         if (2 === func_num_args()) {
             $this->assertArrayHasKey($name, $container->getParameterBag()->all(), 'Expected container has parameter '.$name);
         } else {
-            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.$value);
+            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.is_scalar($value) ? $value : gettype($value));
         }
     }
 

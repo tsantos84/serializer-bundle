@@ -55,7 +55,8 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('include_dir')
                 ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
                 ->defaultValue([
-                    'src/{Entity,Document,ValueObject},src/*/{Entity,Document,ValueObject}',
+                    'src/{Entity,Document,Model,ValueObject}',
+                    'src/*/{Entity,Document,Model,ValueObject}',
                 ])
                 ->prototype('scalar')->end()
             ->end()

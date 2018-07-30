@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -9,13 +10,14 @@
  */
 
 namespace TSantos\SerializerBundle\Serializer;
+
 use Metadata\MetadataFactory;
 use TSantos\Serializer\HydratorCodeGenerator;
 use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\Serializer\Metadata\ClassMetadata;
 
 /**
- * Class Compiler
+ * Class Compiler.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -38,9 +40,10 @@ class Compiler
 
     /**
      * Compiler constructor.
+     *
      * @param HydratorCodeGenerator $generator
-     * @param HydratorCodeWriter $writer
-     * @param MetadataFactory $metadataFactory
+     * @param HydratorCodeWriter    $writer
+     * @param MetadataFactory       $metadataFactory
      */
     public function __construct(HydratorCodeGenerator $generator, HydratorCodeWriter $writer, MetadataFactory $metadataFactory)
     {
