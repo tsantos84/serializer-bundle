@@ -102,7 +102,7 @@ class GenerateHydratorCommand extends Command
                 $this->compiler->compile($class);
                 $io->writeln('OK', OutputInterface::VERBOSITY_VERBOSE);
             } catch (\Throwable $e) {
-                $io->writeln('NOK - ' . $e->getMessage(), OutputInterface::VERBOSITY_VERBOSE);
+                $io->writeln('NOK - '.$e->getMessage(), OutputInterface::VERBOSITY_VERBOSE);
                 $exitCode = 1;
             }
         }

@@ -104,7 +104,6 @@ STRING;
  [ERROR] Some error occurred while generating the hydrator classes
 STRING;
 
-
         $this->assertSame(1, $tester->getStatusCode(), 'Returns 1 in case of exception');
         $this->assertSame($output, trim($tester->getDisplay()));
     }
