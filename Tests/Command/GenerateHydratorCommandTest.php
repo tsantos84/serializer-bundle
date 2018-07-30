@@ -45,6 +45,9 @@ Excluded paths
 
  * /some/excluded/dir
 
+Classes
+-------
+
 My\DummyClass: OK
 
  [OK] Hydrator classes generated successfully
@@ -128,6 +131,9 @@ Excluded paths
 --------------
 
  * /some/excluded/dir
+
+Classes
+-------
 
 My\DummyClass: NOK - Some exception
 

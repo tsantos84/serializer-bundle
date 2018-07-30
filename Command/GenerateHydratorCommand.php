@@ -79,7 +79,7 @@ class GenerateHydratorCommand extends Command
             $io->section('Included paths');
             $io->listing($this->directories);
             $io->section('Excluded paths');
-            $io->listing($this->excluded);
+            $io->listing(empty($this->excluded) ? ['-'] : $this->excluded);
         }
 
         try {
@@ -91,6 +91,10 @@ class GenerateHydratorCommand extends Command
         }
 
         $exitCode = 0;
+
+        if ($output->isVerbose()) {
+            $io->section('Classes');
+        }
 
         foreach ($classes as $class) {
             $io->write($class.': ', false, OutputInterface::VERBOSITY_VERBOSE);
