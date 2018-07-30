@@ -39,8 +39,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', true);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'json');
         $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', [
-            'src/{Entity,Document,Model,ValueObject}',
-            'src/*/{Entity,Document,Model,ValueObject}',
+            '%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}',
         ]);
         $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', []);
     }
