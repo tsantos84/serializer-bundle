@@ -11,15 +11,12 @@
 
 namespace TSantos\SerializerBundle\Command;
 
-use Metadata\MetadataFactory;
-use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TSantos\Serializer\HydratorCodeGenerator;
-use TSantos\Serializer\HydratorCodeWriter;
-use TSantos\SerializerBundle\Service\ClassReader;
+use TSantos\SerializerBundle\Serializer\Compiler;
+use TSantos\SerializerBundle\Service\ClassNameReader;
 
 /**
  * Class GenerateHydratorCommand.
@@ -29,40 +26,39 @@ use TSantos\SerializerBundle\Service\ClassReader;
 class GenerateHydratorCommand extends Command
 {
     /**
-     * @var ClassReader
+     * @var ClassNameReader
      */
     private $classReader;
 
     /**
-     * @var HydratorCodeGenerator
+     * @var Compiler
      */
-    private $generator;
+    private $compiler;
 
     /**
-     * @var HydratorCodeWriter
+     * @var array
      */
-    private $writer;
+    private $directories;
 
     /**
-     * @var MetadataFactory
+     * @var array
      */
-    private $metadataFactory;
+    private $excluded;
 
     /**
      * GenerateHydratorCommand constructor.
-     *
-     * @param ClassReader           $classReader
-     * @param MetadataFactory       $metadataFactory
-     * @param HydratorCodeGenerator $generator
-     * @param HydratorCodeWriter    $writer
+     * @param ClassNameReader $classNameReader
+     * @param Compiler $compiler
+     * @param array $directories
+     * @param array $excluded
      */
-    public function __construct(ClassReader $classReader, MetadataFactoryInterface $metadataFactory, HydratorCodeGenerator $generator, HydratorCodeWriter $writer)
+    public function __construct(ClassNameReader $classNameReader, Compiler $compiler, array $directories, array $excluded = [])
     {
         parent::__construct();
-        $this->classReader = $classReader;
-        $this->generator = $generator;
-        $this->writer = $writer;
-        $this->metadataFactory = $metadataFactory;
+        $this->classReader = $classNameReader;
+        $this->compiler = $compiler;
+        $this->directories = $directories;
+        $this->excluded = $excluded;
     }
 
     public function configure()
@@ -74,14 +70,18 @@ class GenerateHydratorCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $classes = $this->classReader->read();
         $io = new SymfonyStyle($input, $output);
 
+        try {
+            $classes = $this->classReader->readDirectory($this->directories, $this->excluded);
+        } catch (\LogicException | \InvalidArgumentException $e) {
+            $io->warning('No hydrator to be generated because there is no existing path configured');
+            return;
+        }
+
         foreach ($classes as $class) {
-            $io->write($class.': ');
-            $metadata = $this->metadataFactory->getMetadataForClass($class);
-            $code = $this->generator->generate($metadata);
-            $this->writer->write($metadata, $code);
+            $io->write($class.': ', false, OutputInterface::VERBOSITY_VERBOSE);
+            $this->compiler->compile($class);
             $io->write('OK');
         }
     }

@@ -14,11 +14,13 @@ namespace TSantos\SerializerBundle\Tests\Command;
 use Metadata\MetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use TSantos\Serializer\HydratorCodeGenerator;
 use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Command\GenerateHydratorCommand;
+use TSantos\SerializerBundle\Serializer\Compiler;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
 class GenerateHydratorCommandTest extends TestCase
@@ -30,7 +32,7 @@ class GenerateHydratorCommandTest extends TestCase
 
         $tester->execute(
             [],
-            ['decorated' => false]
+            ['decorated' => false, 'verbosity' => OutputInterface::VERBOSITY_VERBOSE]
         );
 
         $this->assertSame(0, $tester->getStatusCode(), 'Returns 0 in case of success');
@@ -45,31 +47,18 @@ class GenerateHydratorCommandTest extends TestCase
         $reader = $this->createMock(ClassNameReader::class);
         $reader
             ->expects($this->once())
-            ->method('read')
+            ->method('readDirectory')
+            ->with(['/some/dir'], ['/some/excluded/dir'])
             ->willReturn(['My\\DummyClass']);
 
-        $metadataFactory = $this->createMock(MetadataFactoryInterface::class);
-        $metadataFactory
+        $compiler = $this->createMock(Compiler::class);
+        $compiler
             ->expects($this->once())
-            ->method('getMetadataForClass')
-            ->with('My\\DummyClass')
-            ->willReturn($metadata = $this->createMock(ClassMetadata::class));
-
-        $generator = $this->createMock(HydratorCodeGenerator::class);
-        $generator
-            ->expects($this->once())
-            ->method('generate')
-            ->with($metadata)
-            ->willReturn($code = '<?php class MyHydrator {}');
-
-        $writer = $this->createMock(HydratorCodeWriter::class);
-        $writer
-            ->expects($this->once())
-            ->method('write')
-            ->with($metadata, $code);
+            ->method('compile')
+            ->with('My\\DummyClass');
 
         $application = new Application();
-        $application->add(new GenerateHydratorCommand($reader, $metadataFactory, $generator, $writer));
+        $application->add(new GenerateHydratorCommand($reader, $compiler, ['/some/dir'], ['/some/excluded/dir']));
 
         return new CommandTester($application->find('serializer:generate_hydrators'));
     }
