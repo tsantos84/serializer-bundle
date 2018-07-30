@@ -33,6 +33,8 @@ class GenerateHydratorCommandTest extends TestCase
         );
 
         $output = <<<STRING
+// Generating hydrator classes                                                 
+
 Included paths
 --------------
 
@@ -57,8 +59,14 @@ STRING;
     {
         $tester = $this->createCommandTester($this->returnValue(['My\\DummyClass']));
         $tester->execute([], ['decorated' => false]);
+        $output = <<<STRING
+// Generating hydrator classes                                                 
+
+ [OK] Hydrator classes generated successfully
+STRING;
+
         $this->assertSame(0, $tester->getStatusCode(), 'Returns 0 in case of success');
-        $this->assertSame('[OK] Hydrator classes generated successfully', trim($tester->getDisplay()));
+        $this->assertSame($output, trim($tester->getDisplay()));
     }
 
     /** @test */
@@ -66,9 +74,15 @@ STRING;
     {
         $tester = $this->createCommandTester($this->throwException(new \LogicException()));
         $tester->execute([], ['decorated' => false]);
+        $output = <<<STRING
+// Generating hydrator classes                                                 
+
+ [WARNING] No hydrators to be generated because there is no existing path       
+           configured
+STRING;
+
         $this->assertSame(0, $tester->getStatusCode(), 'Returns 0 in case of success');
-        $this->assertSame('[WARNING] No hydrators to be generated because there is no existing path       
-           configured', trim($tester->getDisplay()));
+        $this->assertSame($output, trim($tester->getDisplay()));
     }
 
     /** @test */
@@ -81,8 +95,15 @@ STRING;
 
         $tester->execute([], ['decorated' => false]);
 
+        $output = <<<STRING
+// Generating hydrator classes                                                 
+
+ [ERROR] Some error occurred while generating the hydrator classes
+STRING;
+
+
         $this->assertSame(1, $tester->getStatusCode(), 'Returns 1 in case of exception');
-        $this->assertSame('[ERROR] Some error occurred while generating the hydrator classes', trim($tester->getDisplay()));
+        $this->assertSame($output, trim($tester->getDisplay()));
     }
 
     /** @test */
@@ -96,6 +117,8 @@ STRING;
         $tester->execute([], ['decorated' => false, 'verbosity' => OutputInterface::VERBOSITY_VERBOSE]);
 
         $output = <<<STRING
+// Generating hydrator classes                                                 
+
 Included paths
 --------------
 

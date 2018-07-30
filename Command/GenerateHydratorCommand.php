@@ -73,6 +73,8 @@ class GenerateHydratorCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $io->comment('Generating hydrator classes');
+
         if ($output->isVerbose()) {
             $io->section('Included paths');
             $io->listing($this->directories);
