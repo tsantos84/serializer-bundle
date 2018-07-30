@@ -85,15 +85,28 @@ class GenerateHydratorCommand extends Command
         } catch (\LogicException | \InvalidArgumentException $e) {
             $io->warning('No hydrators to be generated because there is no existing path configured');
 
-            return;
+            return 0;
         }
+
+        $exitCode = 0;
 
         foreach ($classes as $class) {
             $io->write($class.': ', false, OutputInterface::VERBOSITY_VERBOSE);
-            $this->compiler->compile($class);
-            $io->write('OK', false, OutputInterface::VERBOSITY_VERBOSE);
+            try {
+                $this->compiler->compile($class);
+                $io->writeln('OK', OutputInterface::VERBOSITY_VERBOSE);
+            } catch (\Throwable $e) {
+                $io->writeln('NOK - ' . $e->getMessage(), OutputInterface::VERBOSITY_VERBOSE);
+                $exitCode = 1;
+            }
         }
 
-        $io->success('Hydrator classes generated successfully');
+        if (0 === $exitCode) {
+            $io->success('Hydrator classes generated successfully');
+        } else {
+            $io->error('Some error occurred while generating the hydrator classes');
+        }
+
+        return $exitCode;
     }
 }
