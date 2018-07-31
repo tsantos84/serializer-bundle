@@ -48,7 +48,11 @@ Excluded paths
 Classes
 -------
 
-My\DummyClass: OK
+ --------------- -------- ------- 
+  Class           Status   Error  
+ --------------- -------- ------- 
+  My\DummyClass   OK       -      
+ --------------- -------- ------- 
 
  [OK] Hydrator classes generated successfully
 STRING;
@@ -134,7 +138,11 @@ Excluded paths
 Classes
 -------
 
-My\DummyClass: NOK - Some exception
+ --------------- -------- ---------------- 
+  Class           Status   Error           
+ --------------- -------- ---------------- 
+  My\DummyClass   NOK      Some exception  
+ --------------- -------- ---------------- 
 
  [ERROR] Some error occurred while generating the hydrator classes
 STRING;

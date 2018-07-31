@@ -91,20 +91,24 @@ class GenerateHydratorCommand extends Command
         }
 
         $exitCode = 0;
+        $rows = [];
 
         if ($output->isVerbose()) {
             $io->section('Classes');
         }
 
         foreach ($classes as $class) {
-            $io->write($class.': ', false, OutputInterface::VERBOSITY_VERBOSE);
             try {
                 $this->compiler->compile($class);
-                $io->writeln('OK', OutputInterface::VERBOSITY_VERBOSE);
+                $rows[] = [$class, 'OK', '-'];
             } catch (\Throwable $e) {
-                $io->writeln('NOK - '.$e->getMessage(), OutputInterface::VERBOSITY_VERBOSE);
+                $rows[] = [$class, 'NOK', $e->getMessage()];
                 $exitCode = 1;
             }
+        }
+
+        if ($output->isVerbose()) {
+            $io->table(['Class', 'Status', 'Error'], $rows);
         }
 
         if (0 === $exitCode) {
