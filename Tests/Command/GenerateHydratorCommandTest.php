@@ -11,7 +11,6 @@
 
 namespace TSantos\SerializerBundle\Tests\Command;
 
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -154,7 +153,7 @@ STRING;
     /**
      * @return CommandTester
      */
-    private function createCommandTester(Stub $readerBehavior, Stub $compilerBehavior = null)
+    private function createCommandTester($readerBehavior, $compilerBehavior = null)
     {
         $reader = $this->createMock(ClassNameReader::class);
         $reader

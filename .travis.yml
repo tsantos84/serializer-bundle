@@ -72,5 +72,5 @@ script:
 
     - |
       # Run symfony application
-      bin/console serializer:generate_hydrators -v
-      bin/console serializer:posts
+      bin/console serializer:generate_hydrators -v --no-interaction
+      bin/console serializer:posts --no-interaction
