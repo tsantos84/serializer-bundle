@@ -56,6 +56,6 @@ class PostSerializerCommand extends Command implements SerializerAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln($this->serializer->serialize($this->posts->findLatest()));
+        $output->writeln($this->serializer->serialize($this->posts->find(1)));
     }
 }

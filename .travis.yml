@@ -64,7 +64,7 @@ script:
       if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
       composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
       rm -rf composer.lock
-      composer install --ignore-platform-reqs
+      composer install --ignore-platform-reqs --prefer-source
 
     - |
       # Load data fixtures
@@ -72,4 +72,5 @@ script:
 
     - |
       # Run symfony application
-      bin/console serializer:posts
+      bin/console serializer:generate_hydrators -v --no-interaction
+      bin/console serializer:posts --no-interaction

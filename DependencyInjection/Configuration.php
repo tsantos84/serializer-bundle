@@ -52,6 +52,17 @@ class Configuration implements ConfigurationInterface
                 ->values(['never', 'always', 'file_not_exists'])
                 ->defaultValue('file_not_exists')
             ->end()
+            ->arrayNode('include_dir')
+                ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
+                ->defaultValue([
+                    '%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}',
+                ])
+                ->prototype('scalar')->end()
+            ->end()
+            ->arrayNode('exclude_dir')
+                ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
+                ->prototype('scalar')->end()
+            ->end()
             ->arrayNode('mapping')
                 ->addDefaultsIfNotSet()
                 ->children()

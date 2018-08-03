@@ -38,6 +38,10 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer();
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', true);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'json');
+        $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', [
+            '%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}',
+        ]);
+        $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', []);
     }
 
     /** @test */
@@ -46,9 +50,13 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer([
             'debug' => false,
             'format' => 'xml',
+            'include_dir' => '/some/path',
+            'exclude_dir' => '/some/excluded/path',
         ]);
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', false);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'xml');
+        $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', ['/some/path']);
+        $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', ['/some/excluded/path']);
     }
 
     /** @test */
