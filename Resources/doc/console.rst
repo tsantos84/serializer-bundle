@@ -1,11 +1,11 @@
 Console Command
 ===============
 
-This bundle provides a console command useful for generate class metadata and serializer classes manually.
+This bundle provides a console command useful to generate hydrator classes.
 
 .. code-block:: bash
 
-    $ bin/console serializer:generate-classes
+    $ bin/console serializer:generate_hydrators
 
 .. note::
 
@@ -13,6 +13,5 @@ This bundle provides a console command useful for generate class metadata and se
 
 .. tip::
 
-    If your application is configured to :doc:`never generate </configuration_reference>` serializer classes automatically (best for production), add this
+    If your application is configured to :doc:`never generate </configuration_reference>` hydrator classes, add this
     command to your continuous deploy tool to generate the classes before install your application in production.
-
