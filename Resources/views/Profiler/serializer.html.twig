@@ -1,0 +1,52 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {#{% if collector.dumpsCount %}#}
+        {% set icon %}
+            {{ include('@Debug/Profiler/icon.svg') }}
+            <span class="sf-toolbar-value">3{#{{ collector.dumpsCount }}#}</span>
+        {% endset %}
+
+        {% set text %}
+            <div class="sf-toolbar-info-piece">
+                <span>4</span>
+            </div>
+        {% endset %}
+
+        {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { 'link': true }) }}
+    {#{% endif %}#}
+{% endblock %}
+
+{% block menu %}
+    <span class="label {#{{ collector.dumpsCount == 0 ? 'disabled' }}#}">
+        <span class="icon">{{ include('@TSantosSerializer/Profiler/icon.svg') }}</span>
+        <strong>Serializer</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Serializer Bundle</h2>
+    <h2>Object Mapping</h2>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">Class</th>
+            <th scope="col">Configuration path</th>
+            <th scope="col">Info</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for class in collector.mappedClasses %}
+            <tr>
+                <td>{{ class.name }}</td>
+                <td>{{ class.path }}</td>
+                <td>{{ profiler_dump(class.mapping) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No mapping provided.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
