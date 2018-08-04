@@ -187,9 +187,16 @@
             <tag name="kernel.cache_warmer" />
         </service>
 
+        <service id="tsantos_serializer.class_locator" class="TSantos\SerializerBundle\Service\ClassLocator">
+            <argument type="service" id="tsantos_serializer.class_name_reader" />
+            <argument>%tsantos_serializer.include_dir%</argument>
+            <argument>%tsantos_serializer.exclude_dir%</argument>
+        </service>
+
         <service id="tsantos_serializer.data_collector" class="TSantos\SerializerBundle\DataCollector\SerializerCollector">
             <argument type="service" id="tsantos_serializer.metadata_factory" />
             <argument type="collection" /> <!-- advancedDrivers -->
+            <argument type="service" id="tsantos_serializer.class_locator" />
             <tag name="data_collector" template="@TSantosSerializer/Profiler/serializer.html.twig" id="serializer"/>
         </service>
     </services>
