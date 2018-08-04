@@ -31,15 +31,13 @@
         <thead>
         <tr>
             <th scope="col">Class</th>
-            <th scope="col">Configuration path</th>
             <th scope="col">Info</th>
         </tr>
         </thead>
         <tbody>
         {% for class in collector.mappedClasses %}
             <tr>
-                <td>{{ class.name }}</td>
-                <td>{{ class.path }}</td>
+                <td><a href="{{ class.filename|file_link(class.line) }}">{{ class.name }}</a></td>
                 <td>{{ profiler_dump(class.mapping) }}</td>
             </tr>
         {% else %}

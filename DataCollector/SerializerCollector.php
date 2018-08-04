@@ -11,8 +11,7 @@
 namespace TSantos\SerializerBundle\DataCollector;
 
 use Metadata\AdvancedMetadataFactoryInterface;
-use Metadata\Driver\DriverChain;
-use Metadata\Driver\FileLocator;
+use Metadata\Driver\AdvancedDriverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -29,20 +28,21 @@ class SerializerCollector extends DataCollector
      * @var AdvancedMetadataFactoryInterface
      */
     private $metadataFactory;
+
     /**
-     * @var FileLocator
+     * @var AdvancedDriverInterface[]
      */
-    private $fileLocator;
+    private $advancedDrivers;
 
     /**
      * SerializerCollector constructor.
      * @param AdvancedMetadataFactoryInterface $metadataFactory
-     * @param FileLocator $fileLocator
+     * @param AdvancedDriverInterface[] $advancedDrivers
      */
-    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, FileLocator $fileLocator)
+    public function __construct(AdvancedMetadataFactoryInterface $metadataFactory, array $advancedDrivers)
     {
         $this->metadataFactory = $metadataFactory;
-        $this->fileLocator = $fileLocator;
+        $this->advancedDrivers = $advancedDrivers;
     }
 
     public function collect(Request $request, Response $response, \Exception $exception = null)
@@ -51,7 +51,13 @@ class SerializerCollector extends DataCollector
             'mapped_classes' => []
         ];
 
-        foreach (['App\\Entity\\Post'] as $className) {
+        $classes = array_map(function (AdvancedDriverInterface $driver) {
+            return $driver->getAllClassNames();
+        }, $this->advancedDrivers);
+
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($classes));
+
+        foreach ($iterator as $className) {
 
             $metadata = $this->metadataFactory->getMetadataForClass($className);
 
@@ -66,7 +72,8 @@ class SerializerCollector extends DataCollector
 
             $this->data['mapped_classes'][] = [
                 'name' => $className,
-                'path' => '/config/serializer/Post.yaml',
+                'filename' => $metadata->reflection->getFileName(),
+                'line' => $metadata->reflection->getStartLine(),
                 'mapping' => $this->cloneVar($mapping)
             ];
         }
