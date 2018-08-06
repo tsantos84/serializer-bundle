@@ -30,7 +30,7 @@ class CacheWarmerTest extends TestCase
     }
 
     /** @test */
-    public function it_should_warm_up_the_hydrators()
+    public function it_should_compile_the_hydrators()
     {
         $this->locator
             ->expects($this->once())
@@ -39,6 +39,21 @@ class CacheWarmerTest extends TestCase
 
         $this->compiler
             ->expects($this->once())
+            ->method('compile');
+
+        $this->warmer->warmUp('/some/cache/dir');
+    }
+
+    /** @test */
+    public function it_should_not_compile_the_hydrators()
+    {
+        $this->locator
+            ->expects($this->once())
+            ->method('findAllClasses')
+            ->will($this->throwException(new \LogicException()));
+
+        $this->compiler
+            ->expects($this->never())
             ->method('compile');
 
         $this->warmer->warmUp('/some/cache/dir');
