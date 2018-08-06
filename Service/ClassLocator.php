@@ -49,4 +49,20 @@ class ClassLocator
     {
         return $this->classNameReader->readDirectory($this->directories, $this->excluded);
     }
+
+    /**
+     * @return array
+     */
+    public function getDirectories(): array
+    {
+        return $this->directories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExcludedDirectories(): array
+    {
+        return $this->excluded;
+    }
 }

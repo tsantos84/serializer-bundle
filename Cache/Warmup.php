@@ -13,6 +13,7 @@ namespace TSantos\SerializerBundle\Cache;
 
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use TSantos\SerializerBundle\Serializer\Compiler;
+use TSantos\SerializerBundle\Service\ClassLocator;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
 /**
@@ -23,9 +24,9 @@ use TSantos\SerializerBundle\Service\ClassNameReader;
 class Warmup implements CacheWarmerInterface
 {
     /**
-     * @var ClassNameReader
+     * @var ClassLocator
      */
-    private $classReader;
+    private $classLocator;
 
     /**
      * @var Compiler
@@ -33,29 +34,14 @@ class Warmup implements CacheWarmerInterface
     private $compiler;
 
     /**
-     * @var array
+     * Warmup constructor.
+     * @param ClassLocator $classLocator
+     * @param Compiler $compiler
      */
-    private $directories;
-
-    /**
-     * @var array
-     */
-    private $excluded;
-
-    /**
-     * GenerateHydratorCommand constructor.
-     *
-     * @param ClassNameReader $classNameReader
-     * @param Compiler        $compiler
-     * @param array           $directories
-     * @param array           $excluded
-     */
-    public function __construct(ClassNameReader $classNameReader, Compiler $compiler, array $directories, array $excluded = [])
+    public function __construct(ClassLocator $classLocator, Compiler $compiler)
     {
-        $this->classReader = $classNameReader;
+        $this->classLocator = $classLocator;
         $this->compiler = $compiler;
-        $this->directories = $directories;
-        $this->excluded = $excluded;
     }
 
     public function isOptional()
@@ -66,7 +52,7 @@ class Warmup implements CacheWarmerInterface
     public function warmUp($cacheDir)
     {
         try {
-            $classes = $this->classReader->readDirectory($this->directories, $this->excluded);
+            $classes = $this->classLocator->findAllClasses();
         } catch (\LogicException | \InvalidArgumentException $e) {
             return;
         }

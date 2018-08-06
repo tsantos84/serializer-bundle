@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use TSantos\SerializerBundle\Command\GenerateHydratorCommand;
 use TSantos\SerializerBundle\Serializer\Compiler;
-use TSantos\SerializerBundle\Service\ClassNameReader;
+use TSantos\SerializerBundle\Service\ClassLocator;
 
 class GenerateHydratorCommandTest extends TestCase
 {
@@ -155,12 +155,19 @@ STRING;
      */
     private function createCommandTester($readerBehavior, $compilerBehavior = null)
     {
-        $reader = $this->createMock(ClassNameReader::class);
-        $reader
+        $locator = $this->createMock(ClassLocator::class);
+        $locator
             ->expects($this->once())
-            ->method('readDirectory')
-            ->with(['/some/dir'], ['/some/excluded/dir'])
+            ->method('findAllClasses')
             ->will($readerBehavior);
+
+        $locator
+            ->method('getDirectories')
+            ->willReturn(['/some/dir']);
+
+        $locator
+            ->method('getExcludedDirectories')
+            ->willReturn(['/some/excluded/dir']);
 
         $compiler = $this->createMock(Compiler::class);
         $compiler
@@ -169,7 +176,7 @@ STRING;
             ->will($compilerBehavior ?? $this->returnSelf());
 
         $application = new Application();
-        $application->add(new GenerateHydratorCommand($reader, $compiler, ['/some/dir'], ['/some/excluded/dir']));
+        $application->add(new GenerateHydratorCommand($locator, $compiler));
 
         return new CommandTester($application->find('serializer:generate_hydrators'));
     }
