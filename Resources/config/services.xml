@@ -177,7 +177,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\Warmup">
+        <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\CacheWarmer">
             <argument type="service" id="tsantos_serializer.class_locator" />
             <argument type="service" id="tsantos_serializer.compiler" />
             <tag name="kernel.cache_warmer" />

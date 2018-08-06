@@ -16,11 +16,11 @@ use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\Serializer\Compiler;
 
 /**
- * Class Warmup.
+ * Class CacheWarmer.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class Warmup implements CacheWarmerInterface
+class CacheWarmer implements CacheWarmerInterface
 {
     /**
      * @var ClassLocator

@@ -12,11 +12,11 @@
 namespace TSantos\SerializerBundle\Tests\Cache;
 
 use PHPUnit\Framework\TestCase;
-use TSantos\SerializerBundle\Cache\Warmup;
+use TSantos\SerializerBundle\Cache\CacheWarmer;
 use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\Serializer\Compiler;
 
-class WarmupTest extends TestCase
+class CacheWarmerTest extends TestCase
 {
     private $locator;
     private $compiler;
@@ -26,7 +26,7 @@ class WarmupTest extends TestCase
     {
         $this->locator = $this->createMock(ClassLocator::class);
         $this->compiler = $this->createMock(Compiler::class);
-        $this->warmer = new Warmup($this->locator, $this->compiler);
+        $this->warmer = new CacheWarmer($this->locator, $this->compiler);
     }
 
     /** @test */
