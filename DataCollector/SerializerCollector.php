@@ -11,8 +11,8 @@
 
 namespace TSantos\SerializerBundle\DataCollector;
 
-use Metadata\AdvancedMetadataFactoryInterface;
 use Metadata\Driver\AdvancedDriverInterface;
+use Metadata\MetadataFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -28,7 +28,7 @@ use TSantos\SerializerBundle\ClassLocator;
 class SerializerCollector extends DataCollector
 {
     /**
-     * @var AdvancedMetadataFactoryInterface
+     * @var MetadataFactoryInterface
      */
     private $metadataFactory;
 
@@ -45,12 +45,12 @@ class SerializerCollector extends DataCollector
     /**
      * SerializerCollector constructor.
      *
-     * @param AdvancedMetadataFactoryInterface $metadataFactory
+     * @param MetadataFactoryInterface $metadataFactory
      * @param array                            $advancedDrivers
      * @param ClassLocator                     $classLocator
      */
     public function __construct(
-        AdvancedMetadataFactoryInterface $metadataFactory,
+        MetadataFactoryInterface $metadataFactory,
         array $advancedDrivers,
         ClassLocator $classLocator
     ) {
