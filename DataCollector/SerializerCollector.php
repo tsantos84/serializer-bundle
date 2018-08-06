@@ -46,8 +46,8 @@ class SerializerCollector extends DataCollector
      * SerializerCollector constructor.
      *
      * @param MetadataFactoryInterface $metadataFactory
-     * @param array                            $advancedDrivers
-     * @param ClassLocator                     $classLocator
+     * @param array                    $advancedDrivers
+     * @param ClassLocator             $classLocator
      */
     public function __construct(
         MetadataFactoryInterface $metadataFactory,
