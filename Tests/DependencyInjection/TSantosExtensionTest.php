@@ -52,8 +52,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
             'format' => 'xml',
             'mapping' => [
                 'include_dir' => '/some/path',
-                'exclude_dir' => '/some/excluded/path'
-            ]
+                'exclude_dir' => '/some/excluded/path',
+            ],
         ]);
         $this->assertDICHasParameter($container, 'tsantos_serializer.debug', false);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'xml');
