@@ -15,8 +15,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\Serializer\Compiler;
-use TSantos\SerializerBundle\Service\ClassLocator;
 
 /**
  * Class GenerateHydratorCommand.
@@ -37,10 +37,11 @@ class GenerateHydratorCommand extends Command
 
     /**
      * GenerateHydratorCommand constructor.
+     *
      * @param ClassLocator $classLocator
-     * @param Compiler $compiler
-     * @param array $directories
-     * @param array $excluded
+     * @param Compiler     $compiler
+     * @param array        $directories
+     * @param array        $excluded
      */
     public function __construct(ClassLocator $classLocator, Compiler $compiler)
     {

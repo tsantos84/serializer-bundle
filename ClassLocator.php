@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -8,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\SerializerBundle\Service;
+namespace TSantos\SerializerBundle;
 
 /**
- * Class ClassLocator
+ * Class ClassLocator.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -34,9 +35,10 @@ class ClassLocator
 
     /**
      * ClassLocator constructor.
+     *
      * @param ClassNameReader $classNameReader
-     * @param array $directories
-     * @param array $excluded
+     * @param array           $directories
+     * @param array           $excluded
      */
     public function __construct(ClassNameReader $classNameReader, array $directories, array $excluded = [])
     {

@@ -28,9 +28,15 @@ class AddMetadataDriverPass implements CompilerPassInterface
         $definition = $container->getDefinition('tsantos_serializer.metadata_chain_driver');
         $advancedDrivers = [];
 
+        $hasDataCollector = $container->hasDefinition('tsantos_serializer.data_collector');
+
         foreach ($container->findTaggedServiceIds('tsantos_serializer.metadata_driver') as $id => $serviceId) {
             $reference = new Reference($id);
             $definition->addMethodCall('addDriver', [$reference]);
+
+            if (!$hasDataCollector) {
+                continue;
+            }
 
             $driver = $container->getDefinition($id);
             $ref = new \ReflectionClass($driver->getClass());
@@ -40,8 +46,10 @@ class AddMetadataDriverPass implements CompilerPassInterface
             }
         }
 
-        $container
-            ->getDefinition('tsantos_serializer.data_collector')
-            ->replaceArgument(1, $advancedDrivers);
+        if ($hasDataCollector) {
+            $container
+                ->getDefinition('tsantos_serializer.data_collector')
+                ->replaceArgument(1, $advancedDrivers);
+        }
     }
 }

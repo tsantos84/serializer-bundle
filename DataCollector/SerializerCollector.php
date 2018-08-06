@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the TSantos Serializer Bundle package.
  *
  * (c) Tales Santos <tales.augusto.santos@gmail.com>
@@ -17,10 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\Serializer\Metadata\PropertyMetadata;
-use TSantos\SerializerBundle\Service\ClassLocator;
+use TSantos\SerializerBundle\ClassLocator;
 
 /**
- * Class SerializerCollector
+ * Class SerializerCollector.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -43,9 +44,10 @@ class SerializerCollector extends DataCollector
 
     /**
      * SerializerCollector constructor.
+     *
      * @param AdvancedMetadataFactoryInterface $metadataFactory
-     * @param array $advancedDrivers
-     * @param ClassLocator $classLocator
+     * @param array                            $advancedDrivers
+     * @param ClassLocator                     $classLocator
      */
     public function __construct(
         AdvancedMetadataFactoryInterface $metadataFactory,
@@ -61,7 +63,7 @@ class SerializerCollector extends DataCollector
     {
         $this->data = [
             'mapped_classes' => [],
-            'auto_mapped_classes' => []
+            'auto_mapped_classes' => [],
         ];
 
         $mappedClasses = $this->doGetMappedClasses();
@@ -121,20 +123,20 @@ class SerializerCollector extends DataCollector
 
         $classes = array_diff($classes, $excluded);
 
-        return array_map(function(string $class) {
+        return array_map(function (string $class) {
             return $this->metadataFactory->getMetadataForClass($class);
         }, $classes);
     }
 
     /**
      * @param ClassMetadata[] $metadataClasses
+     *
      * @return array
      */
     private function createMappingInfo(array $classes): array
     {
         $info = [];
         foreach ($classes as $metadata) {
-
             $mapping = array_map(function (PropertyMetadata $propertyMetadata): array {
                 return [
                     'name' => $propertyMetadata->name,
@@ -149,7 +151,7 @@ class SerializerCollector extends DataCollector
                 'filename' => $metadata->reflection->getFileName(),
                 'path' => $metadata->reflection->getFilename(),
                 'line' => $metadata->reflection->getStartLine(),
-                'mapping' => $this->cloneVar($mapping)
+                'mapping' => $this->cloneVar($mapping),
             ];
         }
 

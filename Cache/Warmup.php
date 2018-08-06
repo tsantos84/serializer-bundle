@@ -12,9 +12,8 @@
 namespace TSantos\SerializerBundle\Cache;
 
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\Serializer\Compiler;
-use TSantos\SerializerBundle\Service\ClassLocator;
-use TSantos\SerializerBundle\Service\ClassNameReader;
 
 /**
  * Class Warmup.
@@ -35,8 +34,9 @@ class Warmup implements CacheWarmerInterface
 
     /**
      * Warmup constructor.
+     *
      * @param ClassLocator $classLocator
-     * @param Compiler $compiler
+     * @param Compiler     $compiler
      */
     public function __construct(ClassLocator $classLocator, Compiler $compiler)
     {

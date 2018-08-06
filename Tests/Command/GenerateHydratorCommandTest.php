@@ -15,9 +15,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\Command\GenerateHydratorCommand;
 use TSantos\SerializerBundle\Serializer\Compiler;
-use TSantos\SerializerBundle\Service\ClassLocator;
 
 class GenerateHydratorCommandTest extends TestCase
 {

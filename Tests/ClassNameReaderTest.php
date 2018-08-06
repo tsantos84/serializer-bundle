@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\SerializerBundle\Tests\Service;
+namespace TSantos\SerializerBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
-use TSantos\SerializerBundle\Service\ClassNameReader;
+use TSantos\SerializerBundle\ClassNameReader;
 
 class ClassNameReaderTest extends TestCase
 {
@@ -33,7 +33,7 @@ class ClassNameReaderTest extends TestCase
             'Dummy',
         ];
 
-        $actual = $reader->readDirectory([__DIR__.'/../Fixture']);
+        $actual = $reader->readDirectory([__DIR__.'/Fixture']);
 
         sort($expected);
         sort($actual);
@@ -52,7 +52,7 @@ class ClassNameReaderTest extends TestCase
             'Dummy',
         ];
 
-        $this->assertSame($expected, $reader->readDirectory([__DIR__.'/../Fixture'], ['Namespaced']));
+        $this->assertSame($expected, $reader->readDirectory([__DIR__.'/Fixture'], ['Namespaced']));
     }
 
     /**
@@ -68,12 +68,12 @@ class ClassNameReaderTest extends TestCase
     public function getFiles(): array
     {
         return [
-            [__DIR__.'/../Fixture/Namespaced/SingleNamespace.php', [
+            [__DIR__.'/Fixture/Namespaced/SingleNamespace.php', [
                 'SingleNamespace\Bar',
                 'SingleNamespace\Baz',
                 'SingleNamespace\Foo',
             ]],
-            [__DIR__.'/../Fixture/Namespaced/MultipleNamespace.php', [
+            [__DIR__.'/Fixture/Namespaced/MultipleNamespace.php', [
                 'MultiNamespace\Bar',
                 'MultiNamespace\Baz',
                 'FooBar',
