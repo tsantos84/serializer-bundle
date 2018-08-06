@@ -20,7 +20,7 @@ use TSantos\Serializer\Exception\CircularReferenceException;
  */
 class CircularReferenceHandler
 {
-    public function __invoke($data, CircularReferenceException $circularReferenceException)
+    public function __invoke($data, CircularReferenceException $circularReferenceException): string
     {
         $name = method_exists($data, '__toString')
             ? (string) $data
