@@ -15,8 +15,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\Serializer\Compiler;
-use TSantos\SerializerBundle\Service\ClassNameReader;
 
 /**
  * Class GenerateHydratorCommand.
@@ -26,9 +26,9 @@ use TSantos\SerializerBundle\Service\ClassNameReader;
 class GenerateHydratorCommand extends Command
 {
     /**
-     * @var ClassNameReader
+     * @var ClassLocator
      */
-    private $classReader;
+    private $classLocator;
 
     /**
      * @var Compiler
@@ -36,30 +36,18 @@ class GenerateHydratorCommand extends Command
     private $compiler;
 
     /**
-     * @var array
-     */
-    private $directories;
-
-    /**
-     * @var array
-     */
-    private $excluded;
-
-    /**
      * GenerateHydratorCommand constructor.
      *
-     * @param ClassNameReader $classNameReader
-     * @param Compiler        $compiler
-     * @param array           $directories
-     * @param array           $excluded
+     * @param ClassLocator $classLocator
+     * @param Compiler     $compiler
+     * @param array        $directories
+     * @param array        $excluded
      */
-    public function __construct(ClassNameReader $classNameReader, Compiler $compiler, array $directories, array $excluded = [])
+    public function __construct(ClassLocator $classLocator, Compiler $compiler)
     {
         parent::__construct();
-        $this->classReader = $classNameReader;
+        $this->classLocator = $classLocator;
         $this->compiler = $compiler;
-        $this->directories = $directories;
-        $this->excluded = $excluded;
     }
 
     public function configure()
@@ -75,15 +63,18 @@ class GenerateHydratorCommand extends Command
 
         $io->comment('Generating hydrator classes');
 
+        $directories = $this->classLocator->getDirectories();
+        $excludedDirectories = $this->classLocator->getExcludedDirectories();
+
         if ($output->isVerbose()) {
             $io->section('Included paths');
-            $io->listing($this->directories);
+            $io->listing($directories);
             $io->section('Excluded paths');
-            $io->listing(empty($this->excluded) ? ['-'] : $this->excluded);
+            $io->listing(empty($excludedDirectories) ? ['-'] : $excludedDirectories);
         }
 
         try {
-            $classes = $this->classReader->readDirectory($this->directories, $this->excluded);
+            $classes = $this->classLocator->findAllClasses();
         } catch (\LogicException | \InvalidArgumentException $e) {
             $io->warning('No hydrators to be generated because there is no existing path configured');
 

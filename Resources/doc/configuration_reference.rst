@@ -15,6 +15,8 @@ Default Configuration
         mapping:
             auto_configure: true
             paths: {  }
+            include_dir: ["%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}"]
+            exclude_dir: ["%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}"]
             cache:
                 type: file
                 prefix: TSantosSerializer
@@ -64,6 +66,12 @@ Configuration Reference
                 mapping:
                     paths:
                         - { namespace: "My\\Document", path: "%kernel.project_dir%/config/serializer" }
+
+    mapping.include_dir:
+        A list of directories where serializer will look for classes to generate its corresponding hydrators
+
+    mapping.exclude_dir:
+        A list of directories that serializer should exclude when looking for classes to generate its corresponding hydrators
 
     mapping.cache.type
         Type of cache implementation. Should be one of `file`, `psr` or `doctrine`.

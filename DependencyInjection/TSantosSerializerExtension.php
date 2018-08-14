@@ -65,8 +65,8 @@ class TSantosSerializerExtension extends ConfigurableExtension
             ->getDefinition('tsantos_serializer.hydrator_template_metadata_configurator')
             ->replaceArgument(0, $mergedConfig['hydrator_template']);
 
-        $container->setParameter('tsantos_serializer.include_dir', $mergedConfig['include_dir']);
-        $container->setParameter('tsantos_serializer.exclude_dir', $mergedConfig['exclude_dir']);
+        $container->setParameter('tsantos_serializer.include_dir', $mergedConfig['mapping']['include_dir']);
+        $container->setParameter('tsantos_serializer.exclude_dir', $mergedConfig['mapping']['exclude_dir']);
 
         // add tags automatically to services
         $container->registerForAutoconfiguration(DriverInterface::class)->addTag('tsantos_serializer.metadata_driver');

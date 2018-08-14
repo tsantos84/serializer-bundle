@@ -11,7 +11,7 @@
 
 namespace TSantos\SerializerBundle\Serializer;
 
-use Metadata\MetadataFactory;
+use Metadata\MetadataFactoryInterface;
 use TSantos\Serializer\HydratorCodeGenerator;
 use TSantos\Serializer\HydratorCodeWriter;
 use TSantos\Serializer\Metadata\ClassMetadata;
@@ -24,6 +24,11 @@ use TSantos\Serializer\Metadata\ClassMetadata;
 class Compiler
 {
     /**
+     * @var MetadataFactoryInterface
+     */
+    private $metadataFactory;
+
+    /**
      * @var HydratorCodeGenerator
      */
     private $generator;
@@ -34,22 +39,17 @@ class Compiler
     private $writer;
 
     /**
-     * @var MetadataFactory
-     */
-    private $metadataFactory;
-
-    /**
      * Compiler constructor.
      *
-     * @param HydratorCodeGenerator $generator
-     * @param HydratorCodeWriter    $writer
-     * @param MetadataFactory       $metadataFactory
+     * @param MetadataFactoryInterface $metadataFactory
+     * @param HydratorCodeGenerator    $generator
+     * @param HydratorCodeWriter       $writer
      */
-    public function __construct(HydratorCodeGenerator $generator, HydratorCodeWriter $writer, MetadataFactory $metadataFactory)
+    public function __construct(MetadataFactoryInterface $metadataFactory, HydratorCodeGenerator $generator, HydratorCodeWriter $writer)
     {
+        $this->metadataFactory = $metadataFactory;
         $this->generator = $generator;
         $this->writer = $writer;
-        $this->metadataFactory = $metadataFactory;
     }
 
     public function compile(string $class): void

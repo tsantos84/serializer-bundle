@@ -163,28 +163,46 @@
             <tag name="twig.extension" />
         </service>
 
-        <service id="tsantos_serializer.class_name_reader" class="TSantos\SerializerBundle\Service\ClassNameReader" />
+        <service id="tsantos_serializer.class_name_reader" class="TSantos\SerializerBundle\ClassNameReader" />
 
         <service id="tsantos_serializer.compiler" class="TSantos\SerializerBundle\Serializer\Compiler">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
             <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
             <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
-            <argument type="service" id="tsantos_serializer.metadata_factory" />
         </service>
 
         <service id="tsantos_serializer.generate_hydrator_command" class="TSantos\SerializerBundle\Command\GenerateHydratorCommand">
-            <argument type="service" id="tsantos_serializer.class_name_reader" />
+            <argument type="service" id="tsantos_serializer.class_locator" />
             <argument type="service" id="tsantos_serializer.compiler" />
-            <argument>%tsantos_serializer.include_dir%</argument>
-            <argument>%tsantos_serializer.exclude_dir%</argument>
             <tag name="console.command" />
         </service>
 
-        <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\Warmup">
-            <argument type="service" id="tsantos_serializer.class_name_reader" />
+        <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\CacheWarmer">
+            <argument type="service" id="tsantos_serializer.class_locator" />
             <argument type="service" id="tsantos_serializer.compiler" />
+            <tag name="kernel.cache_warmer" />
+        </service>
+
+        <service id="tsantos_serializer.class_locator" class="TSantos\SerializerBundle\ClassLocator">
+            <argument type="service" id="tsantos_serializer.class_name_reader" />
             <argument>%tsantos_serializer.include_dir%</argument>
             <argument>%tsantos_serializer.exclude_dir%</argument>
-            <tag name="kernel.cache_warmer" />
+        </service>
+
+        <service id="tsantos_serializer.data_collector" class="TSantos\SerializerBundle\DataCollector\SerializerCollector">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="collection" /> <!-- advancedDrivers -->
+            <argument type="service" id="tsantos_serializer.class_locator" />
+            <argument type="service" id="tsantos_serializer.profiler" />
+            <tag name="data_collector" template="@TSantosSerializer/Profiler/serializer.html.twig" id="serializer"/>
+        </service>
+
+        <service id="tsantos_serializer.profiler_listener" class="TSantos\SerializerBundle\EventListener\ProfilerListener">
+            <argument type="service" id="tsantos_serializer.profiler" />
+            <tag name="tsantos_serializer.event_subscriber" />
+        </service>
+
+        <service id="tsantos_serializer.profiler" class="TSantos\SerializerBundle\Serializer\Profiler">
         </service>
     </services>
 </container>

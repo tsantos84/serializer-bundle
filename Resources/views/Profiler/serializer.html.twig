@@ -1,0 +1,138 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% set duration = collector.totalDuration ? '%0.0f'|format(collector.time) : 'n/a' %}
+    {% set icon %}
+        {{ include('@TSantosSerializer/Profiler/icon.svg') }}
+        <span class="sf-toolbar-value">{{ collector.totalCount }}</span>
+        <span class="sf-toolbar-label">in</span>
+        <span class="sf-toolbar-value">{{ collector.totalDuration }}</span>
+        <span class="sf-toolbar-label">ms</span>
+    {% endset %}
+
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Serializations</b>
+            {% if collector.serializationCount %}
+                <span>{{ collector.serializationCount }} in {{ '%0.0f'|format(collector.serializationDuration) }} ms</span>
+            {% else %}
+                <span>n/a</span>
+            {% endif %}
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Deserializations</b>
+            {% if collector.serializationCount %}
+                <span>{{ collector.deserializationCount }} in {{ '%0.0f'|format(collector.deserializationDuration) }} ms</span>
+            {% else %}
+                <span>n/a</span>
+            {% endif %}
+        </div>
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url }) }}
+{% endblock %}
+
+{% block menu %}
+    <span class="label {{ collector.totalCount == 0 ? 'disabled' }}">
+        <span class="icon">{{ include('@TSantosSerializer/Profiler/icon.svg') }}</span>
+        <strong>Serializer</strong>
+        {% if collector.totalCount %}
+            <span class="count">
+                <span>{{ collector.totalCount }} / {{ '%.0f'|format(collector.totalDuration) }} ms</span>
+            </span>
+        {% endif %}
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Operations</h2>
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ '%.0f'|format(collector.serializationCount) }}</span>
+            <span class="label">Serializations</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ '%.0f'|format(collector.deserializationCount) }}</span>
+            <span class="label">Deserializations</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric">
+            <span class="value">{{ '%.0f'|format(collector.totalCount) }}</span>
+            <span class="label">Total</span>
+        </div>
+    </div>
+    <h2>Performance</h2>
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ '%.0f'|format(collector.serializationDuration) }} <span class="unit">ms</span></span>
+            <span class="label">Serialization</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ '%.0f'|format(collector.deserializationDuration) }} <span class="unit">ms</span></span>
+            <span class="label">Deserialization</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric">
+            <span class="value">{{ '%.0f'|format(collector.totalDuration) }} <span class="unit">ms</span></span>
+            <span class="label">Total</span>
+        </div>
+    </div>
+
+    <h2>Mapped Classes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Class</th>
+                <th scope="col">Path</th>
+                <th scope="col">Info</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for class in collector.mappedClasses %}
+            <tr>
+                <td><a href="{{ class.filename|file_link(class.line) }}">{{ class.name }}</a></td>
+                <td>{{ class.path }}</td>
+                <td>{{ profiler_dump(class.mapping) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No mapping provided.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if collector.mappedClasses|length %}
+        <p class="help">
+            Note: All the above classes will be used to create the hydrator classes when warming up the system cache
+        </p>
+    {% endif %}
+    <h2>Auto Mapped Classes</h2>
+    <p>Classes that weren't explicitly mapped but automatically discovered by this bundle</p>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">Class</th>
+            <th scope="col">Path</th>
+            <th scope="col">Info</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for class in collector.autoMappedClasses %}
+            <tr>
+                <td><a href="{{ class.filename|file_link(class.line) }}">{{ class.name }}</a></td>
+                <td>{{ class.path }}</td>
+                <td>{{ profiler_dump(class.mapping) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No mapping provided.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if collector.autoMappedClasses|length %}
+        <p class="help">
+            Note: All the above classes will be used to create the hydrator classes when warming up the system cache
+        </p>
+    {% endif %}
+{% endblock %}

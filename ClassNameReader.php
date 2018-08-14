@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TSantos\SerializerBundle\Service;
+namespace TSantos\SerializerBundle;
 
 use Symfony\Component\Finder\Finder;
 
