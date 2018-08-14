@@ -13,12 +13,12 @@ namespace TSantos\SerializerBundle\Tests\DataCollector;
 
 use Metadata\Driver\AdvancedDriverInterface;
 use Metadata\MetadataFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\ClassLocator;
 use TSantos\SerializerBundle\DataCollector\SerializerCollector;
+use TSantos\SerializerBundle\Serializer\ProfilerInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
 
 class SerializerCollectorTest extends TestCase
@@ -43,17 +43,18 @@ class SerializerCollectorTest extends TestCase
      */
     private $driver;
 
-    private $request;
-    private $response;
+    /**
+     * @var ProfilerInterface|MockObject
+     */
+    private $profiler;
 
     public function setUp()
     {
         $this->metadataFactory = $this->createMock(MetadataFactoryInterface::class);
         $this->classLocator = $this->createMock(ClassLocator::class);
         $this->driver = $this->createMock(AdvancedDriverInterface::class);
-        $this->request = $this->createMock(Request::class);
-        $this->response = $this->createMock(Response::class);
-        $this->collector = new SerializerCollector($this->metadataFactory, [$this->driver], $this->classLocator);
+        $this->profiler = $this->createMock(ProfilerInterface::class);
+        $this->collector = new SerializerCollector($this->metadataFactory, [$this->driver], $this->classLocator, $this->profiler);
     }
 
     /** @test */
@@ -63,7 +64,7 @@ class SerializerCollectorTest extends TestCase
             ->method('getAllClassNames')
             ->willReturn([]);
 
-        $this->collector->collect($this->request, $this->response);
+        $this->collector->lateCollect();
         $this->assertSame([], $this->collector->getMappedClasses());
         $this->assertSame([], $this->collector->getAutoMappedClasses());
     }
@@ -86,7 +87,7 @@ class SerializerCollectorTest extends TestCase
             ->method('findAllClasses')
             ->willReturn([TSantosSerializerBundle::class]);
 
-        $this->collector->collect($this->request, $this->response);
+        $this->collector->lateCollect();
         $this->assertCount(1, $this->collector->getMappedClasses());
         $this->assertCount(1, $this->collector->getAutoMappedClasses());
     }
@@ -108,8 +109,72 @@ class SerializerCollectorTest extends TestCase
             ->method('findAllClasses')
             ->willReturn([__CLASS__]);
 
-        $this->collector->collect($this->request, $this->response);
+        $this->collector->lateCollect();
         $this->assertCount(1, $this->collector->getMappedClasses());
         $this->assertCount(0, $this->collector->getAutoMappedClasses());
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_return_profiler_counting_information()
+    {
+        $this->driver
+            ->expects($this->once())
+            ->method('getAllClassNames')
+            ->willReturn([]);
+
+        $this->profiler
+            ->expects($this->once())
+            ->method('countSerializations')
+            ->willReturn(10);
+
+        $this->profiler
+            ->expects($this->once())
+            ->method('countDeserializations')
+            ->willReturn(10);
+
+        $this->profiler
+            ->expects($this->once())
+            ->method('countTotal')
+            ->willReturn(20);
+
+        $this->collector->lateCollect();
+
+        $this->assertSame(10, $this->collector->getSerializationCount());
+        $this->assertSame(10, $this->collector->getDeserializationCount());
+        $this->assertSame(20, $this->collector->getTotalCount());
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_return_profiler_timing_information()
+    {
+        $this->driver
+            ->expects($this->once())
+            ->method('getAllClassNames')
+            ->willReturn([]);
+
+        $this->profiler
+            ->expects($this->once())
+            ->method('getSerializationDuration')
+            ->willReturn(10.);
+
+        $this->profiler
+            ->expects($this->once())
+            ->method('getDeserializationDuration')
+            ->willReturn(10.);
+
+        $this->profiler
+            ->expects($this->once())
+            ->method('getTotalDuration')
+            ->willReturn(20.);
+
+        $this->collector->lateCollect();
+
+        $this->assertSame(10., $this->collector->getSerializationDuration());
+        $this->assertSame(10., $this->collector->getDeserializationDuration());
+        $this->assertSame(20., $this->collector->getTotalDuration());
     }
 }

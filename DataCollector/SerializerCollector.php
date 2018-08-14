@@ -69,6 +69,9 @@ class SerializerCollector extends DataCollector implements LateDataCollectorInte
         $this->profiler = $profiler;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
     }
@@ -118,24 +121,19 @@ class SerializerCollector extends DataCollector implements LateDataCollectorInte
         return $this->data['total_duration'];
     }
 
-    public function getSerializationCount(): ?float
+    public function getSerializationCount(): ?int
     {
         return $this->data['serialization_count'];
     }
 
-    public function getDeserializationCount(): ?float
+    public function getDeserializationCount(): ?int
     {
         return $this->data['deserialization_count'];
     }
 
-    public function getTotalCount(): ?float
+    public function getTotalCount(): ?int
     {
         return $this->data['total_count'];
-    }
-
-    public function getTotalTime(): ?float
-    {
-        return $this->data['total_time'];
     }
 
     public function getName()
