@@ -193,7 +193,16 @@
             <argument type="service" id="tsantos_serializer.metadata_factory" />
             <argument type="collection" /> <!-- advancedDrivers -->
             <argument type="service" id="tsantos_serializer.class_locator" />
+            <argument type="service" id="tsantos_serializer.profiler" />
             <tag name="data_collector" template="@TSantosSerializer/Profiler/serializer.html.twig" id="serializer"/>
+        </service>
+
+        <service id="tsantos_serializer.profiler_listener" class="TSantos\SerializerBundle\EventListener\ProfilerListener">
+            <argument type="service" id="tsantos_serializer.profiler" />
+            <tag name="tsantos_serializer.event_subscriber" />
+        </service>
+
+        <service id="tsantos_serializer.profiler" class="TSantos\SerializerBundle\Serializer\Profiler">
         </service>
     </services>
 </container>

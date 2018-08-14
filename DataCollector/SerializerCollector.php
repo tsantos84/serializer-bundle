@@ -16,16 +16,18 @@ use Metadata\MetadataFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\Serializer\Metadata\PropertyMetadata;
 use TSantos\SerializerBundle\ClassLocator;
+use TSantos\SerializerBundle\Serializer\ProfilerInterface;
 
 /**
  * Class SerializerCollector.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class SerializerCollector extends DataCollector
+class SerializerCollector extends DataCollector implements LateDataCollectorInterface
 {
     /**
      * @var MetadataFactoryInterface
@@ -43,27 +45,45 @@ class SerializerCollector extends DataCollector
     private $classLocator;
 
     /**
+     * @var ProfilerInterface
+     */
+    private $profiler;
+
+    /**
      * SerializerCollector constructor.
      *
      * @param MetadataFactoryInterface $metadataFactory
      * @param array                    $advancedDrivers
      * @param ClassLocator             $classLocator
+     * @param ProfilerInterface        $profiler
      */
     public function __construct(
         MetadataFactoryInterface $metadataFactory,
         array $advancedDrivers,
-        ClassLocator $classLocator
+        ClassLocator $classLocator,
+        ProfilerInterface $profiler
     ) {
         $this->metadataFactory = $metadataFactory;
         $this->advancedDrivers = $advancedDrivers;
         $this->classLocator = $classLocator;
+        $this->profiler = $profiler;
     }
 
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
+    }
+
+    public function lateCollect()
+    {
         $this->data = [
             'mapped_classes' => [],
             'auto_mapped_classes' => [],
+            'serialization_count' => $this->profiler->countSerializations(),
+            'deserialization_count' => $this->profiler->countDeserializations(),
+            'total_count' => $this->profiler->countTotal(),
+            'serialization_duration' => $this->profiler->getSerializationDuration(),
+            'deserialization_duration' => $this->profiler->getDeserializationDuration(),
+            'total_duration' => $this->profiler->getTotalDuration(),
         ];
 
         $mappedClasses = $this->doGetMappedClasses();
@@ -81,6 +101,41 @@ class SerializerCollector extends DataCollector
     public function getAutoMappedClasses(): array
     {
         return $this->data['auto_mapped_classes'];
+    }
+
+    public function getSerializationDuration(): ?float
+    {
+        return $this->data['serialization_duration'];
+    }
+
+    public function getDeserializationDuration(): ?float
+    {
+        return $this->data['deserialization_duration'];
+    }
+
+    public function getTotalDuration(): ?float
+    {
+        return $this->data['total_duration'];
+    }
+
+    public function getSerializationCount(): ?float
+    {
+        return $this->data['serialization_count'];
+    }
+
+    public function getDeserializationCount(): ?float
+    {
+        return $this->data['deserialization_count'];
+    }
+
+    public function getTotalCount(): ?float
+    {
+        return $this->data['total_count'];
+    }
+
+    public function getTotalTime(): ?float
+    {
+        return $this->data['total_time'];
     }
 
     public function getName()
