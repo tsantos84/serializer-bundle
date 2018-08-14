@@ -12,6 +12,10 @@
 namespace TSantos\SerializerBundle\Tests\Stopwatch;
 
 use PHPUnit\Framework\TestCase;
+use TSantos\Serializer\Event\PostDeserializationEvent;
+use TSantos\Serializer\Event\PostSerializationEvent;
+use TSantos\Serializer\Event\PreDeserializationEvent;
+use TSantos\Serializer\Event\PreSerializationEvent;
 use TSantos\SerializerBundle\Serializer\Profiler;
 
 /**
@@ -27,14 +31,16 @@ class ProfilerTest extends TestCase
     public function it_can_count_serialization_operations()
     {
         $profiler = new Profiler();
+        $preEvent = $this->createMock(PreSerializationEvent::class);
+        $postEvent = $this->createMock(PostSerializationEvent::class);
 
-        $profiler->startSerialization();
-        $profiler->startSerialization();
-        $profiler->startSerialization();
+        $profiler->start($preEvent);
+        $profiler->start($preEvent);
+        $profiler->start($preEvent);
         sleep(1);
-        $profiler->finishSerialization();
-        $profiler->finishSerialization();
-        $profiler->finishSerialization();
+        $profiler->stop($postEvent);
+        $profiler->stop($postEvent);
+        $profiler->stop($postEvent);
 
         $this->assertSame(3, $profiler->countSerializations());
         $this->assertGreaterThan(0, $profiler->getSerializationDuration());
@@ -45,15 +51,17 @@ class ProfilerTest extends TestCase
      */
     public function it_can_count_deserialization_operations()
     {
+        $preEvent = $this->createMock(PreDeserializationEvent::class);
+        $postEvent = $this->createMock(PostDeserializationEvent::class);
         $stopwatch = new Profiler();
 
-        $stopwatch->startDeserialization();
-        $stopwatch->startDeserialization();
-        $stopwatch->startDeserialization();
+        $stopwatch->start($preEvent);
+        $stopwatch->start($preEvent);
+        $stopwatch->start($preEvent);
         sleep(1);
-        $stopwatch->finishDeserialization();
-        $stopwatch->finishDeserialization();
-        $stopwatch->finishDeserialization();
+        $stopwatch->stop($postEvent);
+        $stopwatch->stop($postEvent);
+        $stopwatch->stop($postEvent);
 
         $this->assertSame(3, $stopwatch->countDeserializations());
         $this->assertGreaterThan(0, $stopwatch->getDeserializationDuration());
@@ -66,11 +74,11 @@ class ProfilerTest extends TestCase
     {
         $stopwatch = new Profiler();
 
-        $stopwatch->startSerialization();
-        $stopwatch->startDeserialization();
+        $stopwatch->start($this->createMock(PreSerializationEvent::class));
+        $stopwatch->start($this->createMock(PreDeserializationEvent::class));
         sleep(1);
-        $stopwatch->finishSerialization();
-        $stopwatch->finishDeserialization();
+        $stopwatch->stop($this->createMock(PostSerializationEvent::class));
+        $stopwatch->stop($this->createMock(PostDeserializationEvent::class));
 
         $this->assertSame(2, $stopwatch->countTotal());
         $this->assertGreaterThan(0, $stopwatch->getTotalDuration());

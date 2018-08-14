@@ -11,6 +11,8 @@
 
 namespace TSantos\SerializerBundle\Serializer;
 
+use TSantos\Serializer\Event\Event;
+
 /**
  * Class Stopwatch.
  *
@@ -18,13 +20,9 @@ namespace TSantos\SerializerBundle\Serializer;
  */
 interface ProfilerInterface
 {
-    public function startSerialization(): void;
+    public function start(Event $event): void;
 
-    public function finishSerialization(): void;
-
-    public function startDeserialization(): void;
-
-    public function finishDeserialization(): void;
+    public function stop(Event $event): void;
 
     public function countSerializations(): int;
 

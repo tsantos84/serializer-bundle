@@ -57,29 +57,21 @@ class ProfilerListener implements EventSubscriberInterface
 
     public function startSerialization(PreSerializationEvent $event): void
     {
-        $this->profiler->startSerialization();
+        $this->profiler->start($event);
     }
 
     public function stopSerialization(PostSerializationEvent $event): void
     {
-        $this->profiler->finishSerialization();
+        $this->profiler->stop($event);
     }
 
     public function startDeserialization(PreDeserializationEvent $event): void
     {
-        $this->profiler->startDeserialization();
+        $this->profiler->start($event);
     }
 
     public function stopDeserialization(PostDeserializationEvent $event): void
     {
-        $this->profiler->finishDeserialization();
-    }
-
-    /**
-     * @return ProfilerInterface
-     */
-    public function getProfiler(): ProfilerInterface
-    {
-        return $this->profiler;
+        $this->profiler->stop($event);
     }
 }

@@ -13,6 +13,11 @@ namespace TSantos\SerializerBundle\Serializer;
 
 use Symfony\Component\Stopwatch\Stopwatch as SfStopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
+use TSantos\Serializer\AbstractContext;
+use TSantos\Serializer\Event\Event;
+use TSantos\Serializer\Event\PostSerializationEvent;
+use TSantos\Serializer\Event\PreSerializationEvent;
+use TSantos\Serializer\SerializationContext;
 
 /**
  * Class Stopwatch.
@@ -54,26 +59,26 @@ final class Profiler implements ProfilerInterface
         $this->stopwatch = new SfStopwatch();
     }
 
-    public function startSerialization(): void
+    public function start(Event $event): void
     {
-        ++$this->serializeIndex;
-        $this->stopwatch->start('serialization_'.$this->serializeIndex);
-    }
+        if ($event instanceof PreSerializationEvent) {
+            ++$this->serializeIndex;
+            $this->stopwatch->start('serialization_'.$this->serializeIndex);
+            return;
+        }
 
-    public function finishSerialization(): void
-    {
-        $this->serializations[] = $this->stopwatch->stop('serialization_'.$this->serializeIndex);
-        --$this->serializeIndex;
-    }
-
-    public function startDeserialization(): void
-    {
         ++$this->deserializeIndex;
         $this->stopwatch->start('deserialization_'.$this->deserializeIndex);
     }
 
-    public function finishDeserialization(): void
+    public function stop(Event $event): void
     {
+        if ($event instanceof PostSerializationEvent) {
+            $this->serializations[] = $this->stopwatch->stop('serialization_' . $this->serializeIndex);
+            --$this->serializeIndex;
+            return;
+        }
+
         $this->deserializations[] = $this->stopwatch->stop('deserialization_'.$this->deserializeIndex);
         --$this->deserializeIndex;
     }

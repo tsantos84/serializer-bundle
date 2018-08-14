@@ -29,7 +29,7 @@ class ProfilerListenerTest extends TestCase
     /**
      * @var ProfilerInterface
      */
-    private $tracker;
+    private $profiler;
 
     /**
      * @var ProfilerListener
@@ -38,8 +38,8 @@ class ProfilerListenerTest extends TestCase
 
     public function setUp()
     {
-        $this->tracker = $this->createMock(ProfilerInterface::class);
-        $this->listener = new ProfilerListener($this->tracker);
+        $this->profiler = $this->createMock(ProfilerInterface::class);
+        $this->listener = new ProfilerListener($this->profiler);
     }
 
     /**
@@ -47,11 +47,14 @@ class ProfilerListenerTest extends TestCase
      */
     public function it_can_track_the_start_of_serialization()
     {
-        $this->tracker
-            ->expects($this->once())
-            ->method('startSerialization');
+        $event = $this->createMock(PreSerializationEvent::class);
 
-        $this->listener->startSerialization($this->createMock(PreSerializationEvent::class));
+        $this->profiler
+            ->expects($this->once())
+            ->method('start')
+            ->with($event);
+
+        $this->listener->startSerialization($event);
     }
 
     /**
@@ -59,11 +62,14 @@ class ProfilerListenerTest extends TestCase
      */
     public function it_can_track_the_end_of_serialization()
     {
-        $this->tracker
-            ->expects($this->once())
-            ->method('finishSerialization');
+        $event = $this->createMock(PostSerializationEvent::class);
 
-        $this->listener->stopSerialization($this->createMock(PostSerializationEvent::class));
+        $this->profiler
+            ->expects($this->once())
+            ->method('stop')
+            ->with($event);
+
+        $this->listener->stopSerialization($event);
     }
 
     /**
@@ -71,11 +77,14 @@ class ProfilerListenerTest extends TestCase
      */
     public function it_can_track_the_start_of_deserialization()
     {
-        $this->tracker
-            ->expects($this->once())
-            ->method('startDeserialization');
+        $event = $this->createMock(PreDeserializationEvent::class);
 
-        $this->listener->startDeserialization($this->createMock(PreDeserializationEvent::class));
+        $this->profiler
+            ->expects($this->once())
+            ->method('start')
+            ->with($event);
+
+        $this->listener->startDeserialization($event);
     }
 
     /**
@@ -83,10 +92,13 @@ class ProfilerListenerTest extends TestCase
      */
     public function it_can_track_the_end_of_deserialization()
     {
-        $this->tracker
-            ->expects($this->once())
-            ->method('finishDeserialization');
+        $event = $this->createMock(PostDeserializationEvent::class);
 
-        $this->listener->stopDeserialization($this->createMock(PostDeserializationEvent::class));
+        $this->profiler
+            ->expects($this->once())
+            ->method('stop')
+            ->with($event);
+
+        $this->listener->stopDeserialization($event);
     }
 }
