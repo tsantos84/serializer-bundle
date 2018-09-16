@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ This file is part of the TSantos Serializer Bundle package.
+  ~
+  ~ (c) Tales Santos <tales.augusto.santos@gmail.com>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+
+        <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
+            <argument type="service" id="tsantos_serializer.configurator_driver" />
+            <argument type="string">Metadata\ClassHierarchyMetadata</argument>
+            <argument>%tsantos_serializer.debug%</argument>
+        </service>
+
+        <service id="tsantos_serializer.metadata_file_locator" class="Metadata\Driver\FileLocator">
+            <argument /> <!-- directories -->
+        </service>
+
+        <!-- metadata drivers -->
+        <service id="tsantos_serializer.configurator_driver" class="TSantos\Serializer\Metadata\Driver\ConfiguratorDriver">
+            <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
+            <argument /> <!-- metadata configurators -->
+        </service>
+        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" />
+        <service id="tsantos_serializer.metadata_yaml_driver" class="TSantos\Serializer\Metadata\Driver\YamlDriver">
+            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+        <service id="tsantos_serializer.metadata_xml_driver" class="TSantos\Serializer\Metadata\Driver\XmlDriver">
+            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+        <service id="tsantos_serializer.metadata_annotation_driver" class="TSantos\Serializer\Metadata\Driver\AnnotationDriver">
+            <argument type="service">
+                <service class="Doctrine\Common\Annotations\AnnotationReader" />
+            </argument>
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+        <service id="tsantos_serializer.reflection_driver" class="TSantos\Serializer\Metadata\Driver\ReflectionDriver">
+            <tag name="tsantos_serializer.metadata_driver" />
+        </service>
+
+        <!-- metadata caching -->
+        <service id="tsantos_serializer.metadata_file_cache" class="Metadata\Cache\FileCache">
+            <argument /> <!-- cache directory -->
+        </service>
+        <service id="tsantos_serializer.metadata_doctrine_cache" class="Metadata\Cache\DoctrineCacheAdapter">
+            <argument /> <!-- cache prefix -->
+            <argument /> <!-- doctrine cache service -->
+        </service>
+        <service id="tsantos_serializer.metadata_psr_cache" class="Metadata\Cache\PsrCacheAdapter">
+            <argument /> <!-- cache prefix -->
+            <argument /> <!-- psr cache service -->
+        </service>
+
+        <!-- metadata configurators -->
+        <service id="tsantos_serializer.property_type_configurator" class="TSantos\Serializer\Metadata\Configurator\PropertyTypeConfigurator">
+            <argument type="service" id="tsantos_serializer.property_info" />
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
+        <service id="tsantos_serializer.getter_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\GetterConfigurator">
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
+        <service id="tsantos_serializer.setter_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\SetterConfigurator">
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
+        <service id="tsantos_serializer.virtual_property_type_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\VirtualPropertyTypeConfigurator">
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
+        <service id="tsantos_serializer.datetime_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\DateTimeConfigurator">
+            <tag name="tsantos_serializer.metadata_configurator" />
+        </service>
+
+        <!-- property info -->
+        <service id="tsantos_serializer.reflection_extractor" class="Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor" />
+        <service id="tsantos_serializer.php_doc_extractor" class="Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor" />
+        <service id="tsantos_serializer.property_info" class="Symfony\Component\PropertyInfo\PropertyInfoExtractor">
+            <argument type="collection" />
+            <argument type="collection">
+                <argument type="service" id="tsantos_serializer.reflection_extractor"/>
+                <argument type="service" id="tsantos_serializer.php_doc_extractor"/>
+            </argument>
+            <argument type="collection" />
+            <argument type="collection">
+                <argument type="service" id="tsantos_serializer.reflection_extractor"/>
+                <argument type="service" id="tsantos_serializer.php_doc_extractor"/>
+            </argument>
+        </service>
+    </services>
+</container>

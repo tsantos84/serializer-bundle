@@ -13,6 +13,7 @@ namespace TSantos\SerializerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddCodeDecoratorPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataConfiguratorPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataDriverPass;
@@ -40,6 +41,7 @@ class TSantosSerializerBundle extends Bundle
         $container->addCompilerPass(new AddMetadataDriverPass());
         $container->addCompilerPass(new AddNormalizerPass());
         $container->addCompilerPass(new ChangeSerializerDefinitionPass());
+        $container->addCompilerPass(new AddCodeDecoratorPass());
     }
 
     public function getContainerExtension()

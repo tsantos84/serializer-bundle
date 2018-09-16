@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ This file is part of the TSantos Serializer Bundle package.
+  ~
+  ~ (c) Tales Santos <tales.augusto.santos@gmail.com>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+        <service id="tsantos_serializer.code_template" class="TSantos\Serializer\CodeDecorator\Template" />
+
+        <service id="tsantos_serializer.code_writer" class="TSantos\Serializer\HydratorCodeWriter">
+            <argument type="service" id="tsantos_serializer.configuration"/>
+        </service>
+
+        <service id="tsantos_serializer.hydrator_loader" class="TSantos\Serializer\HydratorLoader">
+            <argument type="service" id="tsantos_serializer.configuration" />
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
+            <argument type="service" id="tsantos_serializer.hydrator_compiler" />
+            <argument type="service" id="tsantos_serializer.hydrator_factory" />
+        </service>
+        <service id="TSantos\Serializer\HydratorLoader" alias="tsantos_serializer.hydrator_loader" public="true" />
+
+        <service id="tsantos_serializer.hydrator_compiler" class="TSantos\Serializer\HydratorCompiler">
+            <argument type="service" id="tsantos_serializer.configuration" />
+            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
+            <argument type="service" id="tsantos_serializer.code_writer" />
+        </service>
+
+        <service id="tsantos_serializer.hydrator_factory" class="TSantos\Serializer\HydratorFactory">
+            <argument type="service" id="tsantos_serializer.configuration" />
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="TSantos\Serializer\HydratorFactoryInterface" alias="tsantos_serializer.hydrator_factory" public="true" />
+
+        <service id="tsantos_serializer.hydrator_code_generator" class="TSantos\Serializer\HydratorCodeGenerator">
+            <argument type="service" id="tsantos_serializer.configuration" />
+            <argument /> <!-- decorators -->
+        </service>
+
+        <!-- code decorators -->
+        <service id="tsantos_serializer.constructor_method_decorator" class="TSantos\Serializer\CodeDecorator\ConstructorMethodDecorator">
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+        <service id="tsantos_serializer.abstract_hydrator_decorator" class="TSantos\Serializer\CodeDecorator\AbstractHydratorDecorator">
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+        <service id="tsantos_serializer.extraction_decorator" class="TSantos\Serializer\CodeDecorator\ExtractionDecorator">
+            <argument type="service" id="tsantos_serializer.code_template" />
+            <argument /> <!-- enablePropertyGrouping -->
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+        <service id="tsantos_serializer.hydration_decorator" class="TSantos\Serializer\CodeDecorator\HydrationDecorator">
+            <argument type="service" id="tsantos_serializer.code_template" />
+            <argument /> <!-- enablePropertyGrouping -->
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+        <service id="tsantos_serializer.new_instance_method_decorator" class="TSantos\Serializer\CodeDecorator\NewInstanceMethodDecorator">
+            <argument type="service" id="tsantos_serializer.code_template" />
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+        <service id="tsantos_serializer.class_metadata_decorator" class="TSantos\Serializer\CodeDecorator\ClassMetadataDecorator">
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+        <service id="tsantos_serializer.exposed_keys_decorator" class="TSantos\Serializer\CodeDecorator\ExposedKeysDecorator">
+            <tag name="tsantos_serializer.code_decorator" />
+        </service>
+    </services>
+</container>

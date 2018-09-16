@@ -12,6 +12,7 @@
 namespace TSantos\SerializerBundle\Cache;
 
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use TSantos\Serializer\HydratorCompilerInterface;
 use TSantos\SerializerBundle\Serializer\Compiler;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
@@ -46,11 +47,11 @@ class Warmup implements CacheWarmerInterface
      * GenerateHydratorCommand constructor.
      *
      * @param ClassNameReader $classNameReader
-     * @param Compiler        $compiler
+     * @param HydratorCompilerInterface        $compiler
      * @param array           $directories
      * @param array           $excluded
      */
-    public function __construct(ClassNameReader $classNameReader, Compiler $compiler, array $directories, array $excluded = [])
+    public function __construct(ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, array $directories, array $excluded = [])
     {
         $this->classReader = $classNameReader;
         $this->compiler = $compiler;

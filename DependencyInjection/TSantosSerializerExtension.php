@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Yaml;
+use TSantos\Serializer\CodeDecoratorInterface;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\HydratorCompiler;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
@@ -44,26 +45,29 @@ class TSantosSerializerExtension extends ConfigurableExtension
     {
         $loader = new XmlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config/']));
         $loader->load('services.xml');
+        $loader->load('hydrator.xml');
+        $loader->load('metadata.xml');
 
         $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
-
-        $container->getDefinition('tsantos_serializer.hydrator_code_writer')->replaceArgument(0, $mergedConfig['hydrator_path']);
 
         $strategyDictionary = [
             'never' => HydratorCompiler::AUTOGENERATE_NEVER,
             'always' => HydratorCompiler::AUTOGENERATE_ALWAYS,
             'file_not_exists' => HydratorCompiler::AUTOGENERATE_FILE_NOT_EXISTS,
         ];
-        $container->getDefinition('tsantos_serializer.hydrator_loader')->replaceArgument(3, $strategyDictionary[$mergedConfig['generation_strategy']]);
+
+        $container
+            ->getDefinition('tsantos_serializer.configuration')
+            ->setArguments([
+                'App\\Hydrator',
+                $mergedConfig['hydrator_path'],
+                $strategyDictionary[$mergedConfig['generation_strategy']]
+            ]);
 
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['hydrator_path']));
         $this->configMetadataPath($mergedConfig, $container);
         $this->configCache($container, $mergedConfig);
-
-        $container
-            ->getDefinition('tsantos_serializer.hydrator_template_metadata_configurator')
-            ->replaceArgument(0, $mergedConfig['hydrator_template']);
 
         $container->setParameter('tsantos_serializer.include_dir', $mergedConfig['include_dir']);
         $container->setParameter('tsantos_serializer.exclude_dir', $mergedConfig['exclude_dir']);
@@ -81,7 +85,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
         }
 
         if (null !== $mergedConfig['circular_reference_handler']) {
-            $container->getDefinition('tsantos_serializer.object_normalizer')->setArgument(2, new Reference($mergedConfig['circular_reference_handler']));
+            $container->getDefinition('tsantos_serializer.object_normalizer')->setArgument(1, new Reference($mergedConfig['circular_reference_handler']));
         }
 
         if ($container->getParameter('tsantos_serializer.debug')) {

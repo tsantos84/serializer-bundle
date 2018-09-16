@@ -22,6 +22,12 @@
 
         <defaults public="false" />
 
+        <service id="tsantos_serializer.configuration" class="TSantos\Serializer\Configuration">
+            <argument /> <!-- hydratorNamespace -->
+            <argument /> <!-- hydratorDirectory -->
+            <argument /> <!-- hydratorGenerationStrategy -->
+        </service>
+
         <!-- encoders -->
         <service id="tsantos_serializer.json_encoder" class="TSantos\Serializer\Encoder\JsonEncoder">
             <tag name="tsantos_serializer.encoder" format="json" />
@@ -32,7 +38,6 @@
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
         <service id="tsantos_serializer.object_normalizer" class="TSantos\Serializer\Normalizer\ObjectNormalizer">
             <argument type="service" id="tsantos_serializer.hydrator_loader" />
-            <argument type="service" id="tsantos_serializer.object_instantiator.doctrine"/>
             <tag name="tsantos_serializer.normalizer" />
             <call method="setSerializer">
                 <argument type="service" id="tsantos_serializer"/>
@@ -48,111 +53,19 @@
             <tag name="tsantos_serializer.normalizer" />
         </service>
 
-        <!-- metadata -->
-        <service id="tsantos_serializer.metadata_file_locator" class="Metadata\Driver\FileLocator">
-            <argument /> <!-- directories -->
-        </service>
-        <service id="tsantos_serializer.configurator_driver" class="TSantos\Serializer\Metadata\Driver\ConfiguratorDriver">
-            <argument type="service" id="tsantos_serializer.metadata_chain_driver" />
-            <argument type="collection" /> <!-- metadata configurators -->
-        </service>
-        <service id="tsantos_serializer.metadata_chain_driver" class="Metadata\Driver\DriverChain" />
-        <service id="tsantos_serializer.metadata_yaml_driver" class="TSantos\Serializer\Metadata\Driver\YamlDriver">
-            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
-            <tag name="tsantos_serializer.metadata_driver" />
-        </service>
-        <service id="tsantos_serializer.metadata_xml_driver" class="TSantos\Serializer\Metadata\Driver\XmlDriver">
-            <argument type="service" id="tsantos_serializer.metadata_file_locator" />
-            <tag name="tsantos_serializer.metadata_driver" />
-        </service>
-        <service id="tsantos_serializer.metadata_annotation_driver" class="TSantos\Serializer\Metadata\Driver\AnnotationDriver">
-            <argument type="service">
-                <service class="Doctrine\Common\Annotations\AnnotationReader" />
-            </argument>
-            <tag name="tsantos_serializer.metadata_driver" />
-        </service>
-        <service id="tsantos_serializer.reflection_driver" class="TSantos\Serializer\Metadata\Driver\ReflectionDriver">
-            <tag name="tsantos_serializer.metadata_driver" />
-        </service>
-        <service id="tsantos_serializer.metadata_factory" class="Metadata\MetadataFactory">
-            <argument type="service" id="tsantos_serializer.configurator_driver" />
-            <argument type="string">Metadata\ClassHierarchyMetadata</argument>
-            <argument>%tsantos_serializer.debug%</argument>
-        </service>
-        <service id="tsantos_serializer.metadata_file_cache" class="Metadata\Cache\FileCache">
-            <argument /> <!-- cache directory -->
-        </service>
-        <service id="tsantos_serializer.metadata_doctrine_cache" class="Metadata\Cache\DoctrineCacheAdapter">
-            <argument /> <!-- cache prefix -->
-            <argument /> <!-- doctrine cache service -->
-        </service>
-        <service id="tsantos_serializer.metadata_psr_cache" class="Metadata\Cache\PsrCacheAdapter">
-            <argument /> <!-- cache prefix -->
-            <argument /> <!-- psr cache service -->
-        </service>
-
-        <!-- metadata configurators -->
-        <service id="tsantos_serializer.property_type_configurator" class="TSantos\Serializer\Metadata\Configurator\PropertyTypeConfigurator">
-            <argument type="service" id="tsantos_serializer.property_info" />
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.getter_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\GetterConfigurator">
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.setter_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\SetterConfigurator">
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.virtual_property_type_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\VirtualPropertyTypeConfigurator">
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.datetime_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\DateTimeConfigurator">
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-        <service id="tsantos_serializer.hydrator_template_metadata_configurator" class="TSantos\Serializer\Metadata\Configurator\HydratorTemplateConfigurator">
-            <argument type="string" /> <!-- default twig template -->
-            <tag name="tsantos_serializer.metadata_configurator" />
-        </service>
-
-        <!-- property info -->
-        <service id="tsantos_serializer.reflection_extractor" class="Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor" />
-        <service id="tsantos_serializer.php_doc_extractor" class="Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor" />
-        <service id="tsantos_serializer.property_info" class="Symfony\Component\PropertyInfo\PropertyInfoExtractor">
-            <argument type="collection" />
-            <argument type="collection">
-                <argument type="service" id="tsantos_serializer.reflection_extractor"/>
-                <argument type="service" id="tsantos_serializer.php_doc_extractor"/>
-            </argument>
-            <argument type="collection" />
-            <argument type="collection">
-                <argument type="service" id="tsantos_serializer.reflection_extractor"/>
-                <argument type="service" id="tsantos_serializer.php_doc_extractor"/>
-            </argument>
-        </service>
-
-        <service id="tsantos_serializer.hydrator_code_generator" class="TSantos\Serializer\HydratorCodeGenerator">
-            <argument type="service" id="twig" />
-        </service>
-        <service id="tsantos_serializer.hydrator_code_writer" class="TSantos\Serializer\HydratorCodeWriter">
-            <argument /> <!-- directory to store the hydrator classes -->
-        </service>
-        <service id="tsantos_serializer.hydrator_loader" class="TSantos\Serializer\HydratorLoader">
-            <argument type="service" id="tsantos_serializer.metadata_factory" />
-            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
-            <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
-            <argument /> <!-- hydrator generation strategy -->
-        </service>
-
+        <!-- serializer -->
         <service id="tsantos_serializer" class="TSantos\Serializer\Serializer" public="true">
             <argument /> <!-- Encoder -->
             <argument type="service" id="tsantos_serializer.normalizer_registry"/>
         </service>
-        <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" public="false" />
+        <service id="TSantos\Serializer\SerializerInterface" alias="tsantos_serializer" public="true" />
 
         <service id="tsantos_serializer.object_instantiator.doctrine" class="TSantos\Serializer\ObjectInstantiator\DoctrineInstantiator">
             <argument type="service">
                 <service id="tsantos_serializer.doctrine_instantiator" class="Doctrine\Instantiator\Instantiator" />
             </argument>
         </service>
+        <service id="TSantos\Serializer\ObjectInstantiator\ObjectInstantiatorInterface" alias="tsantos_serializer.object_instantiator.doctrine" public="true"/>
 
         <service id="tsantos_serializer.event_dispatcher" class="TSantos\Serializer\EventDispatcher\EventDispatcher">
             <argument type="service" id="event_dispatcher" />
@@ -165,15 +78,9 @@
 
         <service id="tsantos_serializer.class_name_reader" class="TSantos\SerializerBundle\Service\ClassNameReader" />
 
-        <service id="tsantos_serializer.compiler" class="TSantos\SerializerBundle\Serializer\Compiler">
-            <argument type="service" id="tsantos_serializer.hydrator_code_generator" />
-            <argument type="service" id="tsantos_serializer.hydrator_code_writer" />
-            <argument type="service" id="tsantos_serializer.metadata_factory" />
-        </service>
-
         <service id="tsantos_serializer.generate_hydrator_command" class="TSantos\SerializerBundle\Command\GenerateHydratorCommand">
             <argument type="service" id="tsantos_serializer.class_name_reader" />
-            <argument type="service" id="tsantos_serializer.compiler" />
+            <argument type="service" id="tsantos_serializer.hydrator_compiler" />
             <argument>%tsantos_serializer.include_dir%</argument>
             <argument>%tsantos_serializer.exclude_dir%</argument>
             <tag name="console.command" />
@@ -181,7 +88,7 @@
 
         <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\Warmup">
             <argument type="service" id="tsantos_serializer.class_name_reader" />
-            <argument type="service" id="tsantos_serializer.compiler" />
+            <argument type="service" id="tsantos_serializer.hydrator_compiler" />
             <argument>%tsantos_serializer.include_dir%</argument>
             <argument>%tsantos_serializer.exclude_dir%</argument>
             <tag name="kernel.cache_warmer" />

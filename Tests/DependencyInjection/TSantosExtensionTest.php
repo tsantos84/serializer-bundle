@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
+use TSantos\Serializer\HydratorCompiler;
 use TSantos\Serializer\HydratorLoader;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
@@ -65,7 +66,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer();
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.hydrator_code_writer'),
+            $container->getDefinition('tsantos_serializer.code_writer'),
             0,
             $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators'
         );
@@ -81,7 +82,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer(['hydrator_path' => '%kernel.cache_dir%/tsantos_serializer/hydrators_custom']);
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.hydrator_code_writer'),
+            $container->getDefinition('tsantos_serializer.code_writer'),
             0,
             $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators_custom'
         );
@@ -104,9 +105,9 @@ class TSantosExtensionTest extends DependencyInjectionTest
     public function getClassLoaderStrategy()
     {
         return [
-            ['never', HydratorLoader::AUTOGENERATE_NEVER],
-            ['always', HydratorLoader::AUTOGENERATE_ALWAYS],
-            ['file_not_exists', HydratorLoader::AUTOGENERATE_FILE_NOT_EXISTS],
+            ['never', HydratorCompiler::AUTOGENERATE_NEVER],
+            ['always', HydratorCompiler::AUTOGENERATE_ALWAYS],
+            ['file_not_exists', HydratorCompiler::AUTOGENERATE_FILE_NOT_EXISTS],
         ];
     }
 
