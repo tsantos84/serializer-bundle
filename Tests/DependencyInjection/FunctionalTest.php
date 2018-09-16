@@ -47,7 +47,6 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
     public function registerBundles()
     {
         return [
-            new FrameworkBundle(),
             new TSantosSerializerBundle()
         ];
     }
@@ -63,13 +62,6 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(function (ContainerBuilder $container) {
-            $container
-                ->loadFromExtension('framework', array(
-                    'secret' => '$ecret'
-                ))
-            ;
-        });
     }
 }
 

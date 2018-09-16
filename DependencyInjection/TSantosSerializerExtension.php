@@ -68,7 +68,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container
             ->getDefinition('tsantos_serializer.configuration')
             ->setArguments([
-                'App\\Hydrator',
+                $mergedConfig['hydrator_namespace'],
                 $mergedConfig['hydrator_path'],
                 $strategyDictionary[$mergedConfig['generation_strategy']]
             ]);

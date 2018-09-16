@@ -16,7 +16,6 @@
         "symfony/dependency-injection": "^3.4 || ^4.0",
         "symfony/event-dispatcher": "^3.4 || ^4.0",
         "symfony/http-kernel": "^3.4 || ^4.0",
-        "symfony/framework-bundle":"^3.4||^4.0",
         "symfony/twig-bundle": "^3.4 || ^4.0",
         "tsantos/serializer": "dev-master"
     },

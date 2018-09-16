@@ -66,8 +66,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer();
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.code_writer'),
-            0,
+            $container->getDefinition('tsantos_serializer.configuration'),
+            1,
             $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators'
         );
 
@@ -82,8 +82,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer(['hydrator_path' => '%kernel.cache_dir%/tsantos_serializer/hydrators_custom']);
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.code_writer'),
-            0,
+            $container->getDefinition('tsantos_serializer.configuration'),
+            1,
             $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators_custom'
         );
 
@@ -99,7 +99,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
             'generation_strategy' => $name,
         ]);
 
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.hydrator_loader'), 3, $expected);
+        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.configuration'), 2, $expected);
     }
 
     public function getClassLoaderStrategy()
@@ -315,7 +315,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
 
         $this->assertSame(
             'tsantos_serializer.default_circular_reference_handler',
-            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2)
+            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(1)
         );
     }
 
@@ -328,7 +328,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
 
         $this->assertSame(
             'my_handler',
-            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2)
+            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(1)
         );
     }
 
