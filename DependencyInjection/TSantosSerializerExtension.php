@@ -51,6 +51,14 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
 
+        $container
+            ->getDefinition('tsantos_serializer.extraction_decorator')
+            ->setArgument(1, $mergedConfig['enable_property_grouping']);
+
+        $container
+            ->getDefinition('tsantos_serializer.hydration_decorator')
+            ->setArgument(1, $mergedConfig['enable_property_grouping']);
+
         $strategyDictionary = [
             'never' => HydratorCompiler::AUTOGENERATE_NEVER,
             'always' => HydratorCompiler::AUTOGENERATE_ALWAYS,
