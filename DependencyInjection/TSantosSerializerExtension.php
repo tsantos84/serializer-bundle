@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Yaml;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
-use TSantos\Serializer\HydratorLoader;
+use TSantos\Serializer\HydratorCompiler;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
@@ -51,9 +51,9 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $container->getDefinition('tsantos_serializer.hydrator_code_writer')->replaceArgument(0, $mergedConfig['hydrator_path']);
 
         $strategyDictionary = [
-            'never' => HydratorLoader::AUTOGENERATE_NEVER,
-            'always' => HydratorLoader::AUTOGENERATE_ALWAYS,
-            'file_not_exists' => HydratorLoader::AUTOGENERATE_FILE_NOT_EXISTS,
+            'never' => HydratorCompiler::AUTOGENERATE_NEVER,
+            'always' => HydratorCompiler::AUTOGENERATE_ALWAYS,
+            'file_not_exists' => HydratorCompiler::AUTOGENERATE_FILE_NOT_EXISTS,
         ];
         $container->getDefinition('tsantos_serializer.hydrator_loader')->replaceArgument(3, $strategyDictionary[$mergedConfig['generation_strategy']]);
 
