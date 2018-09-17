@@ -11,7 +11,7 @@
 
 namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use TSantos\Serializer\SerializerInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
@@ -21,18 +21,26 @@ use TSantos\SerializerBundle\TSantosSerializerBundle;
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class FunctionalTest extends KernelTestCase
+class FunctionalTest extends TestCase
 {
+    /** @var Kernel */
+    private $kernel;
+
     public function setUp()
     {
-        $_SERVER['KERNEL_CLASS'] = Kernel::class;
+        $this->kernel = new Kernel('test', true);
+        $this->kernel->boot();
+    }
+
+    public function tearDown()
+    {
+        $this->kernel->shutdown();
     }
 
     /** @test */
     public function it_can_serialize_an_object_properly()
     {
-        $kernel = static::bootKernel();
-        $serializer = $kernel->getContainer()->get('tsantos_serializer');
+        $serializer = $this->kernel->getContainer()->get('tsantos_serializer');
         $this->assertInstanceOf(SerializerInterface::class, $serializer);
         $result = $serializer->serialize(new Dummy(1, 'bar'));
         $this->assertSame('{"foo":1,"bar":"bar"}', $result);
@@ -41,8 +49,7 @@ class FunctionalTest extends KernelTestCase
     /** @test */
     public function it_can_deserialize_an_object_properly()
     {
-        $kernel = static::bootKernel();
-        $serializer = $kernel->getContainer()->get('tsantos_serializer');
+        $serializer = $this->kernel->getContainer()->get('tsantos_serializer');
         $this->assertInstanceOf(SerializerInterface::class, $serializer);
         $result = $serializer->deserialize('{"foo":1,"bar":"bar"}', Dummy::class);
         $this->assertInstanceOf(Dummy::class, $result);
