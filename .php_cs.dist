@@ -11,7 +11,7 @@ COMMENT;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-    ->exclude('vendor')
+    ->exclude(['vendor', 'var'])
 ;
 
 return PhpCsFixer\Config::create()
@@ -35,5 +35,6 @@ return PhpCsFixer\Config::create()
         'strict_param' => true,
     ])
     ->setFinder($finder)
-    ->setUsingCache(false)
+    ->setUsingCache(true)
+    ->setCacheFile('var/.php_cs.cache')
     ;
