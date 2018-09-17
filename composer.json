@@ -24,12 +24,6 @@
         "symfony/phpunit-bridge": "^3.4 || ^4.0",
         "symfony/stopwatch": "^3.4 || ^4.0"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../serializer"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "TSantos\\SerializerBundle\\" : ""
