@@ -46,10 +46,10 @@ class Warmup implements CacheWarmerInterface
     /**
      * GenerateHydratorCommand constructor.
      *
-     * @param ClassNameReader $classNameReader
-     * @param HydratorCompilerInterface        $compiler
-     * @param array           $directories
-     * @param array           $excluded
+     * @param ClassNameReader           $classNameReader
+     * @param HydratorCompilerInterface $compiler
+     * @param array                     $directories
+     * @param array                     $excluded
      */
     public function __construct(ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, array $directories, array $excluded = [])
     {

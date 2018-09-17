@@ -53,11 +53,12 @@ class GenerateHydratorCommand extends Command
 
     /**
      * GenerateHydratorCommand constructor.
-     * @param MetadataFactoryInterface $metadataFactory
-     * @param ClassNameReader $classNameReader
+     *
+     * @param MetadataFactoryInterface  $metadataFactory
+     * @param ClassNameReader           $classNameReader
      * @param HydratorCompilerInterface $compiler
-     * @param array $directories
-     * @param array $excluded
+     * @param array                     $directories
+     * @param array                     $excluded
      */
     public function __construct(MetadataFactoryInterface $metadataFactory, ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, array $directories, array $excluded = [])
     {

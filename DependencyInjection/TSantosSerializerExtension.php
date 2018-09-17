@@ -20,7 +20,6 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Yaml;
-use TSantos\Serializer\CodeDecoratorInterface;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
 use TSantos\Serializer\HydratorCompiler;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
@@ -70,7 +69,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
             ->setArguments([
                 $mergedConfig['hydrator_namespace'],
                 $mergedConfig['hydrator_path'],
-                $strategyDictionary[$mergedConfig['generation_strategy']]
+                $strategyDictionary[$mergedConfig['generation_strategy']],
             ]);
 
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['hydrator_path']));

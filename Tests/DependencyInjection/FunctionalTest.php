@@ -1,16 +1,23 @@
 <?php
 
+/*
+ * This file is part of the TSantos Serializer Bundle package.
+ *
+ * (c) Tales Santos <tales.augusto.santos@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\Serializer\SerializerInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
 
 /**
- * Class FunctionalTest
+ * Class FunctionalTest.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
@@ -47,14 +54,14 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
     public function registerBundles()
     {
         return [
-            new TSantosSerializerBundle()
+            new TSantosSerializerBundle(),
         ];
     }
 
     public function getRootDir()
     {
         if (null === $this->rootDir) {
-            $this->rootDir = __DIR__ . '/../../var';
+            $this->rootDir = __DIR__.'/../../var';
         }
 
         return $this->rootDir;
@@ -75,7 +82,8 @@ class Dummy
 
     /**
      * Dummy constructor.
-     * @param int $foo
+     *
+     * @param int    $foo
      * @param string $bar
      */
     public function __construct(int $foo, string $bar)
