@@ -18,7 +18,6 @@ use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataConfiguratorPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataDriverPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddNormalizerPass;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ChangeSerializerDefinitionPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ConfigureEncoderPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\RemoveStopwatchListenerPass;

@@ -52,11 +52,11 @@ class Warmup implements CacheWarmerInterface
     /**
      * GenerateHydratorCommand constructor.
      *
-     * @param ClassNameReader $classNameReader
+     * @param ClassNameReader           $classNameReader
      * @param HydratorCompilerInterface $compiler
-     * @param MetadataFactoryInterface $metadataFactory
-     * @param array $directories
-     * @param array $excluded
+     * @param MetadataFactoryInterface  $metadataFactory
+     * @param array                     $directories
+     * @param array                     $excluded
      */
     public function __construct(ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, MetadataFactoryInterface $metadataFactory, array $directories, array $excluded = [])
     {
