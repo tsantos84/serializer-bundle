@@ -179,6 +179,6 @@ STRING;
         $application = new Application();
         $application->add(new GenerateHydratorCommand($metadataFactory, $reader, $compiler, ['/some/dir'], ['/some/excluded/dir']));
 
-        return new CommandTester($application->find('serializer:generate_hydrators'));
+        return new CommandTester($application->find('serializer:generate-hydrators'));
     }
 }
