@@ -11,8 +11,10 @@
 
 namespace TSantos\SerializerBundle\Cache;
 
+use Metadata\MetadataFactoryInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use TSantos\Serializer\HydratorCompilerInterface;
+use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Serializer\Compiler;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
@@ -29,7 +31,7 @@ class Warmup implements CacheWarmerInterface
     private $classReader;
 
     /**
-     * @var Compiler
+     * @var HydratorCompilerInterface
      */
     private $compiler;
 
@@ -42,21 +44,27 @@ class Warmup implements CacheWarmerInterface
      * @var array
      */
     private $excluded;
+    /**
+     * @var MetadataFactoryInterface
+     */
+    private $metadataFactory;
 
     /**
      * GenerateHydratorCommand constructor.
      *
-     * @param ClassNameReader           $classNameReader
+     * @param ClassNameReader $classNameReader
      * @param HydratorCompilerInterface $compiler
-     * @param array                     $directories
-     * @param array                     $excluded
+     * @param MetadataFactoryInterface $metadataFactory
+     * @param array $directories
+     * @param array $excluded
      */
-    public function __construct(ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, array $directories, array $excluded = [])
+    public function __construct(ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, MetadataFactoryInterface $metadataFactory, array $directories, array $excluded = [])
     {
         $this->classReader = $classNameReader;
         $this->compiler = $compiler;
         $this->directories = $directories;
         $this->excluded = $excluded;
+        $this->metadataFactory = $metadataFactory;
     }
 
     public function isOptional()
@@ -73,7 +81,9 @@ class Warmup implements CacheWarmerInterface
         }
 
         foreach ($classes as $class) {
-            $this->compiler->compile($class);
+            /** @var ClassMetadata $metadata */
+            $metadata = $this->metadataFactory->getMetadataForClass($class);
+            $this->compiler->compile($metadata);
         }
     }
 }

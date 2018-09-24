@@ -46,6 +46,7 @@ class GenerateHydratorCommand extends Command
      * @var array
      */
     private $directories;
+
     /**
      * @var array
      */
@@ -73,7 +74,7 @@ class GenerateHydratorCommand extends Command
     public function configure()
     {
         $this
-            ->setName('serializer:generate_hydrators')
+            ->setName('serializer:generate-hydrators')
             ->setDescription('Generates the hydrators classes for object (de-)serialization.');
     }
 

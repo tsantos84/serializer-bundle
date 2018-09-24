@@ -38,19 +38,19 @@
         <service id="tsantos_serializer.normalizer_registry" class="TSantos\Serializer\NormalizerRegistry" />
         <service id="tsantos_serializer.object_normalizer" class="TSantos\Serializer\Normalizer\ObjectNormalizer">
             <argument type="service" id="tsantos_serializer.hydrator_loader" />
-            <tag name="tsantos_serializer.normalizer" />
-            <call method="setSerializer">
-                <argument type="service" id="tsantos_serializer"/>
-            </call>
+            <tag name="tsantos_serializer.normalizer" priority="-800"/>
         </service>
         <service id="tsantos_serializer.collection_normalizer" class="TSantos\Serializer\Normalizer\CollectionNormalizer">
-            <tag name="tsantos_serializer.normalizer" />
             <call method="setSerializer">
-                <argument type="service" id="tsantos_serializer"/>
+                <argument type="service" id="tsantos_serializer" />
             </call>
+            <tag name="tsantos_serializer.normalizer" priority="-900" />
         </service>
         <service id="tsantos_serializer.json_normalizer" class="TSantos\Serializer\Normalizer\JsonNormalizer">
-            <tag name="tsantos_serializer.normalizer" />
+            <call method="setSerializer">
+                <argument type="service" id="tsantos_serializer" />
+            </call>
+            <tag name="tsantos_serializer.normalizer" priority="-1000" />
         </service>
 
         <!-- serializer -->
@@ -79,6 +79,7 @@
         <service id="tsantos_serializer.class_name_reader" class="TSantos\SerializerBundle\Service\ClassNameReader" />
 
         <service id="tsantos_serializer.generate_hydrator_command" class="TSantos\SerializerBundle\Command\GenerateHydratorCommand">
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
             <argument type="service" id="tsantos_serializer.class_name_reader" />
             <argument type="service" id="tsantos_serializer.hydrator_compiler" />
             <argument>%tsantos_serializer.include_dir%</argument>
@@ -89,6 +90,7 @@
         <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\Warmup">
             <argument type="service" id="tsantos_serializer.class_name_reader" />
             <argument type="service" id="tsantos_serializer.hydrator_compiler" />
+            <argument type="service" id="tsantos_serializer.metadata_factory" />
             <argument>%tsantos_serializer.include_dir%</argument>
             <argument>%tsantos_serializer.exclude_dir%</argument>
             <tag name="kernel.cache_warmer" />
