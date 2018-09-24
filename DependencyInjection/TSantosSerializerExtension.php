@@ -58,6 +58,10 @@ class TSantosSerializerExtension extends ConfigurableExtension
             ->getDefinition('tsantos_serializer.hydration_decorator')
             ->setArgument(1, $mergedConfig['enable_property_grouping']);
 
+        if (false === $mergedConfig['enable_property_grouping']) {
+            $container->removeDefinition( 'tsantos_serializer.exposed_keys_decorator');
+        }
+
         $strategyDictionary = [
             'never' => HydratorCompiler::AUTOGENERATE_NEVER,
             'always' => HydratorCompiler::AUTOGENERATE_ALWAYS,

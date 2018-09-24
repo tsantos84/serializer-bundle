@@ -343,6 +343,24 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2);
     }
 
+    /** @test */
+    public function it_should_remove_exposed_keys_decorators_if_property_grouping_is_not_enabled()
+    {
+        $container = $this->getContainer([
+            'enable_property_grouping' => false,
+        ]);
+        $this->assertFalse($container->hasDefinition('tsantos_serializer.exposed_keys_decorator'));
+    }
+
+    /** @test */
+    public function it_should_not_remove_exposed_keys_decorators_if_property_grouping_is_enabled()
+    {
+        $container = $this->getContainer([
+            'enable_property_grouping' => true,
+        ]);
+        $this->assertTrue($container->hasDefinition('tsantos_serializer.exposed_keys_decorator'));
+    }
+
     private function assertMetadataFactoryCache(ContainerBuilder $container, string $expectedService)
     {
         $factoryDefinition = $container->getDefinition('tsantos_serializer.metadata_factory');
