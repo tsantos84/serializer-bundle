@@ -36,7 +36,6 @@ class TSantosExtensionTest extends DependencyInjectionTest
     public function it_can_register_parameters_with_default_values_properly()
     {
         $container = $this->getContainer();
-        $this->assertDICHasParameter($container, 'tsantos_serializer.debug', true);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'json');
         $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', [
             '%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}',
@@ -53,7 +52,6 @@ class TSantosExtensionTest extends DependencyInjectionTest
             'include_dir' => '/some/path',
             'exclude_dir' => '/some/excluded/path',
         ]);
-        $this->assertDICHasParameter($container, 'tsantos_serializer.debug', false);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'xml');
         $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', ['/some/path']);
         $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', ['/some/excluded/path']);

@@ -47,7 +47,8 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $loader->load('hydrator.xml');
         $loader->load('metadata.xml');
 
-        $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
+        $debug = $container->getParameterBag()->resolveValue($mergedConfig['debug']);
+
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
 
         $container
@@ -59,7 +60,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
             ->setArgument(1, $mergedConfig['enable_property_grouping']);
 
         if (false === $mergedConfig['enable_property_grouping']) {
-            $container->removeDefinition( 'tsantos_serializer.exposed_keys_decorator');
+            $container->removeDefinition('tsantos_serializer.exposed_keys_decorator');
         }
 
         $strategyDictionary = [
@@ -75,6 +76,11 @@ class TSantosSerializerExtension extends ConfigurableExtension
                 $mergedConfig['hydrator_path'],
                 $strategyDictionary[$mergedConfig['generation_strategy']],
             ]);
+
+        $container
+            ->getDefinition('tsantos_serializer.ensure_production_settings_command')
+            ->replaceArgument(0, $debug)
+            ->replaceArgument(1, $strategyDictionary[$mergedConfig['generation_strategy']]);
 
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['hydrator_path']));
         $this->configMetadataPath($mergedConfig, $container);
@@ -99,7 +105,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
             $container->getDefinition('tsantos_serializer.object_normalizer')->setArgument(1, new Reference($mergedConfig['circular_reference_handler']));
         }
 
-        if ($container->getParameter('tsantos_serializer.debug')) {
+        if ($debug) {
             $loader->load('debug.xml');
         }
 
@@ -168,14 +174,14 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $cacheDefinitionId = sprintf('tsantos_serializer.metadata_%s_cache', $cacheConfig['type']);
 
         if ('file' === $cacheConfig['type']) {
+            $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
             $container
                 ->getDefinition($cacheDefinitionId)
                 ->replaceArgument(0, $cacheConfig['path']);
-            $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
         } elseif (isset($cacheConfig['id'])) {
-            $container->getDefinition($cacheDefinitionId)->replaceArgument(0, $cacheConfig['prefix']);
             $container
                 ->getDefinition($cacheDefinitionId)
+                ->replaceArgument(0, $cacheConfig['prefix'])
                 ->replaceArgument(1, new Reference($cacheConfig['id']));
         } else {
             throw new \InvalidArgumentException('You need to configure the node "mapping.cache.id"');

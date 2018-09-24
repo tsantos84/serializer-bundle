@@ -87,6 +87,12 @@
             <tag name="console.command" />
         </service>
 
+        <service id="tsantos_serializer.ensure_production_settings_command" class="TSantos\SerializerBundle\Command\EnsureProductionSettingsCommand">
+            <argument /> <!-- debug -->
+            <argument /> <!-- generation strategy -->
+            <tag name="console.command" />
+        </service>
+
         <service id="tsantos_serializer.cache_warmup" class="TSantos\SerializerBundle\Cache\Warmup">
             <argument type="service" id="tsantos_serializer.class_name_reader" />
             <argument type="service" id="tsantos_serializer.hydrator_compiler" />
