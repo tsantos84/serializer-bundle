@@ -12,7 +12,9 @@
 namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TSantos\Serializer\SerializerInterface;
 use TSantos\SerializerBundle\TSantosSerializerBundle;
 
@@ -62,6 +64,7 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
     {
         return [
             new TSantosSerializerBundle(),
+            new FrameworkBundle(),
         ];
     }
 
@@ -76,6 +79,9 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
+        $loader->load(function (ContainerBuilder $container) {
+            $container->setParameter('kernel.secret', 'abcdefgh');
+        });
     }
 }
 

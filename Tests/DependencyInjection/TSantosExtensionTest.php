@@ -147,13 +147,19 @@ class TSantosExtensionTest extends DependencyInjectionTest
     }
 
     /** @test */
-    public function it_should_configure_file_cache_with_default_values_properly()
+    public function it_should_configure_cache_with_default_values_properly()
     {
         $container = $this->getContainer();
-        $dir = '%kernel.cache_dir%/tsantos_serializer/metadata';
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_file_cache'), 0, $dir);
-        $dir = $container->getParameterBag()->resolveValue($dir);
-        $this->assertDirectoryExists($dir);
+
+        $psr = $container->getDefinition('tsantos_serializer.metadata_psr_cache');
+        $this->assertSame('cache.serializer', (string) $psr->getArgument(1));
+
+        $factory = $container->getDefinition('tsantos_serializer.metadata_factory');
+        $calls = $factory->getMethodCalls();
+        $this->assertCount(1, $calls);
+        $this->assertSame('setCache', $calls[0][0]);
+        $this->assertCount(1, $calls[0][1]);
+        $this->assertSame('tsantos_serializer.metadata_psr_cache', (string) $calls[0][1][0]);
     }
 
     /** @test */
@@ -162,6 +168,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer([
             'mapping' => [
                 'cache' => [
+                    'type' => 'file',
                     'path' => $dir = $this->cacheDir.'/custom_path',
                 ],
             ],
