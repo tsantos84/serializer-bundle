@@ -41,8 +41,11 @@
         </service>
         <service id="TSantos\Serializer\HydratorFactoryInterface" alias="tsantos_serializer.hydrator_factory" public="true" />
 
+        <service id="tsantos_serializer.psr_printer" class="Nette\PhpGenerator\PsrPrinter" />
+
         <service id="tsantos_serializer.hydrator_code_generator" class="TSantos\Serializer\HydratorCodeGenerator">
             <argument type="service" id="tsantos_serializer.configuration" />
+            <argument type="service" id="tsantos_serializer.psr_printer" />
             <argument /> <!-- decorators -->
         </service>
 
