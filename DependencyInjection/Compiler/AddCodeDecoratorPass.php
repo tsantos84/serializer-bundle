@@ -34,6 +34,6 @@ class AddCodeDecoratorPass implements CompilerPassInterface
 
         $container
             ->getDefinition('tsantos_serializer.hydrator_code_generator')
-            ->setArgument(1, $references);
+            ->setArgument(2, $references);
     }
 }
