@@ -30,13 +30,14 @@ class AddCodeDecoratorPassTest extends TestCase
 
         $container
             ->register('some_code_generator')
+            ->setArgument(2, [])
             ->addTag('tsantos_serializer.code_decorator');
 
         $compiler = new AddCodeDecoratorPass();
         $compiler->process($container);
 
         $definition = $container->getDefinition('tsantos_serializer.hydrator_code_generator');
-        $parameters = $definition->getArgument(1);
+        $parameters = $definition->getArgument(2);
         $this->assertCount(1, $parameters);
     }
 }
