@@ -65,7 +65,7 @@ script:
       composer require "tsantos/serializer-bundle:dev-${TRAVIS_BRANCH}" --no-update
       rm -rf composer.lock
       cp ${TRAVIS_BUILD_DIR}/.travis/PostSerializerCommand.php src/Command
-      composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction --prefer-stable
+      composer update --prefer-dist --no-interaction --prefer-stable
 
     - |
       # Load data fixtures
