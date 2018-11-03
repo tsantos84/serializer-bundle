@@ -31,7 +31,7 @@ class ChangeSerializerDefinitionPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('tsantos_serializer.event_dispatcher');
 
-        if (count($definition->getMethodCalls())) {
+        if (\count($definition->getMethodCalls())) {
             $container
                 ->getDefinition('tsantos_serializer')
                 ->setClass(EventEmitterSerializer::class)
