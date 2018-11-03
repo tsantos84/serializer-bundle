@@ -15,7 +15,9 @@
 
     <services>
         <defaults public="false" />
-        <service id="tsantos_serializer.code_template" class="TSantos\Serializer\CodeDecorator\Template" />
+        <service id="tsantos_serializer.code_template" class="TSantos\Serializer\CodeDecorator\Template">
+            <argument type="service" id="tsantos_serializer.configuration" />
+        </service>
 
         <service id="tsantos_serializer.code_writer" class="TSantos\Serializer\HydratorCodeWriter">
             <argument type="service" id="tsantos_serializer.configuration"/>

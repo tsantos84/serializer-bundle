@@ -26,6 +26,7 @@
             <argument /> <!-- hydratorNamespace -->
             <argument /> <!-- hydratorDirectory -->
             <argument /> <!-- hydratorGenerationStrategy -->
+            <argument /> <!-- enableMaxDepthCheck -->
         </service>
 
         <!-- encoders -->

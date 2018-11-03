@@ -75,6 +75,7 @@ class TSantosSerializerExtension extends ConfigurableExtension
                 $mergedConfig['hydrator_namespace'],
                 $mergedConfig['hydrator_path'],
                 $strategyDictionary[$mergedConfig['generation_strategy']],
+                $mergedConfig['enable_max_depth_check'],
             ]);
 
         $container

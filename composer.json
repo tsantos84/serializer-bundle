@@ -43,5 +43,11 @@
     },
     "suggest": {
         "symfony/yaml": "Allow to use Yaml format to define class metadata"
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../serializer"
+        }
+    ]
 }
