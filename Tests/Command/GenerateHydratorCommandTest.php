@@ -11,12 +11,14 @@
 
 namespace TSantos\SerializerBundle\Tests\Command;
 
+use Metadata\MetadataFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use TSantos\Serializer\HydratorCompilerInterface;
+use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Command\GenerateHydratorCommand;
-use TSantos\SerializerBundle\Serializer\Compiler;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
 class GenerateHydratorCommandTest extends TestCase
@@ -155,6 +157,12 @@ STRING;
      */
     private function createCommandTester($readerBehavior, $compilerBehavior = null)
     {
+        $metadataFactory = $this->createMock(MetadataFactoryInterface::class);
+        $metadataFactory
+            ->method('getMetadataForClass')
+            ->with('My\\DummyClass')
+            ->willReturn($metadata = $this->createMock(ClassMetadata::class));
+
         $reader = $this->createMock(ClassNameReader::class);
         $reader
             ->expects($this->once())
@@ -162,15 +170,15 @@ STRING;
             ->with(['/some/dir'], ['/some/excluded/dir'])
             ->will($readerBehavior);
 
-        $compiler = $this->createMock(Compiler::class);
+        $compiler = $this->createMock(HydratorCompilerInterface::class);
         $compiler
             ->method('compile')
-            ->with('My\\DummyClass')
+            ->with($metadata)
             ->will($compilerBehavior ?? $this->returnSelf());
 
         $application = new Application();
-        $application->add(new GenerateHydratorCommand($reader, $compiler, ['/some/dir'], ['/some/excluded/dir']));
+        $application->add(new GenerateHydratorCommand($metadataFactory, $reader, $compiler, ['/some/dir'], ['/some/excluded/dir']));
 
-        return new CommandTester($application->find('serializer:generate_hydrators'));
+        return new CommandTester($application->find('serializer:generate-hydrators'));
     }
 }

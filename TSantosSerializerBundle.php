@@ -13,11 +13,11 @@ namespace TSantos\SerializerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use TSantos\SerializerBundle\DependencyInjection\Compiler\AddCodeDecoratorPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddEventListenerPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataConfiguratorPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddMetadataDriverPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\AddNormalizerPass;
-use TSantos\SerializerBundle\DependencyInjection\Compiler\AddTwigPathPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ChangeSerializerDefinitionPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\ConfigureEncoderPass;
 use TSantos\SerializerBundle\DependencyInjection\Compiler\RemoveStopwatchListenerPass;
@@ -34,12 +34,12 @@ class TSantosSerializerBundle extends Bundle
     {
         $container->addCompilerPass(new RemoveStopwatchListenerPass());
         $container->addCompilerPass(new AddMetadataConfiguratorPass());
-        $container->addCompilerPass(new AddTwigPathPass($container->getParameter('kernel.project_dir').'/vendor'));
         $container->addCompilerPass(new ConfigureEncoderPass());
         $container->addCompilerPass(new AddEventListenerPass());
         $container->addCompilerPass(new AddMetadataDriverPass());
         $container->addCompilerPass(new AddNormalizerPass());
         $container->addCompilerPass(new ChangeSerializerDefinitionPass());
+        $container->addCompilerPass(new AddCodeDecoratorPass());
     }
 
     public function getContainerExtension()

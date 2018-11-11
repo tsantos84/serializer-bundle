@@ -11,11 +11,13 @@
 
 namespace TSantos\SerializerBundle\Command;
 
+use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TSantos\SerializerBundle\Serializer\Compiler;
+use TSantos\Serializer\HydratorCompilerInterface;
+use TSantos\Serializer\Metadata\ClassMetadata;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
 /**
@@ -26,12 +28,17 @@ use TSantos\SerializerBundle\Service\ClassNameReader;
 class GenerateHydratorCommand extends Command
 {
     /**
+     * @var MetadataFactoryInterface
+     */
+    private $metadataFactory;
+
+    /**
      * @var ClassNameReader
      */
     private $classReader;
 
     /**
-     * @var Compiler
+     * @var HydratorCompilerInterface
      */
     private $compiler;
 
@@ -48,24 +55,26 @@ class GenerateHydratorCommand extends Command
     /**
      * GenerateHydratorCommand constructor.
      *
-     * @param ClassNameReader $classNameReader
-     * @param Compiler        $compiler
-     * @param array           $directories
-     * @param array           $excluded
+     * @param MetadataFactoryInterface  $metadataFactory
+     * @param ClassNameReader           $classNameReader
+     * @param HydratorCompilerInterface $compiler
+     * @param array                     $directories
+     * @param array                     $excluded
      */
-    public function __construct(ClassNameReader $classNameReader, Compiler $compiler, array $directories, array $excluded = [])
+    public function __construct(MetadataFactoryInterface $metadataFactory, ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, array $directories, array $excluded = [])
     {
         parent::__construct();
         $this->classReader = $classNameReader;
         $this->compiler = $compiler;
         $this->directories = $directories;
         $this->excluded = $excluded;
+        $this->metadataFactory = $metadataFactory;
     }
 
     public function configure()
     {
         $this
-            ->setName('serializer:generate_hydrators')
+            ->setName('serializer:generate-hydrators')
             ->setDescription('Generates the hydrators classes for object (de-)serialization.');
     }
 
@@ -99,7 +108,9 @@ class GenerateHydratorCommand extends Command
 
         foreach ($classes as $class) {
             try {
-                $this->compiler->compile($class);
+                /** @var ClassMetadata $metadata */
+                $metadata = $this->metadataFactory->getMetadataForClass($class);
+                $this->compiler->compile($metadata);
                 $rows[] = [$class, 'OK', '-'];
             } catch (\Throwable $e) {
                 $rows[] = [$class, 'NOK', $e->getMessage()];

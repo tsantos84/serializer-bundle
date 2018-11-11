@@ -12,40 +12,28 @@
 namespace TSantos\SerializerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class TwigPass.
+ * Class AddCodeDecoratorPass.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class AddTwigPathPass implements CompilerPassInterface
+class AddCodeDecoratorPass implements CompilerPassInterface
 {
-    /**
-     * @var string
-     */
-    private $vendorDir;
-
-    /**
-     * AddTwigPathPass constructor.
-     *
-     * @param string $vendorDir
-     */
-    public function __construct(string $vendorDir)
-    {
-        $this->vendorDir = $vendorDir;
-    }
+    use PriorityTaggedServiceTrait;
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('twig.loader.native_filesystem')) {
-            return;
+        $references = [];
+        foreach ($this->findAndSortTaggedServices('tsantos_serializer.code_decorator', $container) as $serviceId) {
+            $references[] = new Reference($serviceId);
         }
 
-        $path = $this->vendorDir.'/tsantos/serializer/src/Resources/templates';
-
         $container
-            ->getDefinition('twig.loader.native_filesystem')
-            ->addMethodCall('addPath', [$path]);
+            ->getDefinition('tsantos_serializer.hydrator_code_generator')
+            ->setArgument(2, $references);
     }
 }

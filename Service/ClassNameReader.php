@@ -52,7 +52,7 @@ class ClassNameReader
 
         $classes = [];
         $tokens = token_get_all($content);
-        $count = count($tokens);
+        $count = \count($tokens);
         $namespace = '';
 
         for ($i = 0; $i < $count; ++$i) {

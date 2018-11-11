@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
-use TSantos\Serializer\HydratorLoader;
+use TSantos\Serializer\HydratorCompiler;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
@@ -36,7 +36,6 @@ class TSantosExtensionTest extends DependencyInjectionTest
     public function it_can_register_parameters_with_default_values_properly()
     {
         $container = $this->getContainer();
-        $this->assertDICHasParameter($container, 'tsantos_serializer.debug', true);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'json');
         $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', [
             '%kernel.project_dir%/src/{Entity,Document,Model,ValueObject}',
@@ -53,7 +52,6 @@ class TSantosExtensionTest extends DependencyInjectionTest
             'include_dir' => '/some/path',
             'exclude_dir' => '/some/excluded/path',
         ]);
-        $this->assertDICHasParameter($container, 'tsantos_serializer.debug', false);
         $this->assertDICHasParameter($container, 'tsantos_serializer.format', 'xml');
         $this->assertDICHasParameter($container, 'tsantos_serializer.include_dir', ['/some/path']);
         $this->assertDICHasParameter($container, 'tsantos_serializer.exclude_dir', ['/some/excluded/path']);
@@ -65,8 +63,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer();
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.hydrator_code_writer'),
-            0,
+            $container->getDefinition('tsantos_serializer.configuration'),
+            1,
             $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators'
         );
 
@@ -81,8 +79,8 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer(['hydrator_path' => '%kernel.cache_dir%/tsantos_serializer/hydrators_custom']);
 
         $this->assertDICDefinitionHasArgument(
-            $container->getDefinition('tsantos_serializer.hydrator_code_writer'),
-            0,
+            $container->getDefinition('tsantos_serializer.configuration'),
+            1,
             $dir = '%kernel.cache_dir%/tsantos_serializer/hydrators_custom'
         );
 
@@ -98,15 +96,15 @@ class TSantosExtensionTest extends DependencyInjectionTest
             'generation_strategy' => $name,
         ]);
 
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.hydrator_loader'), 3, $expected);
+        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.configuration'), 2, $expected);
     }
 
     public function getClassLoaderStrategy()
     {
         return [
-            ['never', HydratorLoader::AUTOGENERATE_NEVER],
-            ['always', HydratorLoader::AUTOGENERATE_ALWAYS],
-            ['file_not_exists', HydratorLoader::AUTOGENERATE_FILE_NOT_EXISTS],
+            ['never', HydratorCompiler::AUTOGENERATE_NEVER],
+            ['always', HydratorCompiler::AUTOGENERATE_ALWAYS],
+            ['file_not_exists', HydratorCompiler::AUTOGENERATE_FILE_NOT_EXISTS],
         ];
     }
 
@@ -149,13 +147,19 @@ class TSantosExtensionTest extends DependencyInjectionTest
     }
 
     /** @test */
-    public function it_should_configure_file_cache_with_default_values_properly()
+    public function it_should_configure_cache_with_default_values_properly()
     {
         $container = $this->getContainer();
-        $dir = '%kernel.cache_dir%/tsantos_serializer/metadata';
-        $this->assertDICDefinitionHasArgument($container->getDefinition('tsantos_serializer.metadata_file_cache'), 0, $dir);
-        $dir = $container->getParameterBag()->resolveValue($dir);
-        $this->assertDirectoryExists($dir);
+
+        $psr = $container->getDefinition('tsantos_serializer.metadata_psr_cache');
+        $this->assertSame('cache.serializer', (string) $psr->getArgument(1));
+
+        $factory = $container->getDefinition('tsantos_serializer.metadata_factory');
+        $calls = $factory->getMethodCalls();
+        $this->assertCount(1, $calls);
+        $this->assertSame('setCache', $calls[0][0]);
+        $this->assertCount(1, $calls[0][1]);
+        $this->assertSame('tsantos_serializer.metadata_psr_cache', (string) $calls[0][1][0]);
     }
 
     /** @test */
@@ -164,6 +168,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
         $container = $this->getContainer([
             'mapping' => [
                 'cache' => [
+                    'type' => 'file',
                     'path' => $dir = $this->cacheDir.'/custom_path',
                 ],
             ],
@@ -314,7 +319,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
 
         $this->assertSame(
             'tsantos_serializer.default_circular_reference_handler',
-            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2)
+            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(1)
         );
     }
 
@@ -327,7 +332,7 @@ class TSantosExtensionTest extends DependencyInjectionTest
 
         $this->assertSame(
             'my_handler',
-            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2)
+            (string) $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(1)
         );
     }
 
@@ -341,6 +346,24 @@ class TSantosExtensionTest extends DependencyInjectionTest
         ]);
 
         $container->getDefinition('tsantos_serializer.object_normalizer')->getArgument(2);
+    }
+
+    /** @test */
+    public function it_should_remove_exposed_keys_decorators_if_property_grouping_is_not_enabled()
+    {
+        $container = $this->getContainer([
+            'enable_property_grouping' => false,
+        ]);
+        $this->assertFalse($container->hasDefinition('tsantos_serializer.exposed_keys_decorator'));
+    }
+
+    /** @test */
+    public function it_should_not_remove_exposed_keys_decorators_if_property_grouping_is_enabled()
+    {
+        $container = $this->getContainer([
+            'enable_property_grouping' => true,
+        ]);
+        $this->assertTrue($container->hasDefinition('tsantos_serializer.exposed_keys_decorator'));
     }
 
     private function assertMetadataFactoryCache(ContainerBuilder $container, string $expectedService)

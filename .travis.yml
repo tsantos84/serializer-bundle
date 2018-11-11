@@ -16,11 +16,11 @@ matrix:
           # Minimum supported dependencies with the latest and oldest PHP version
         - php: 7.2
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
-        - php: 7.1
+        - php: 7.1.18
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
 
           # Test the latest stable release
-        - php: 7.1
+        - php: 7.1.18
         - php: 7.2
           env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
@@ -38,6 +38,7 @@ matrix:
         - env: STABILITY="dev"
 
 before_install:
+    - mkdir var
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
     - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
@@ -57,14 +58,14 @@ script:
 
     - |
       # Create symfony demo application
-      composer create-project symfony/symfony-demo --no-install --stability dev --prefer-source /tmp/symfony-demo && cd /tmp/symfony-demo
-      cp ${TRAVIS_BUILD_DIR}/.travis/PostSerializerCommand.php src/Command
+      composer create-project symfony/symfony-demo --no-install /tmp/symfony-demo && cd /tmp/symfony-demo
       composer config repositories.serializer-bundle path ${TRAVIS_BUILD_DIR}
       composer config minimum-stability dev
       if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
-      composer require tsantos/serializer-bundle *@dev --ignore-platform-reqs --no-update
+      composer require "tsantos/serializer-bundle:dev-${TRAVIS_BRANCH}" --no-update
       rm -rf composer.lock
-      composer install --ignore-platform-reqs --prefer-source
+      cp ${TRAVIS_BUILD_DIR}/.travis/PostSerializerCommand.php src/Command
+      composer update --prefer-dist --no-interaction --prefer-stable
 
     - |
       # Load data fixtures
@@ -72,5 +73,5 @@ script:
 
     - |
       # Run symfony application
-      bin/console serializer:generate_hydrators -v --no-interaction
+      bin/console serializer:generate-hydrators -v --no-interaction
       bin/console serializer:posts --no-interaction

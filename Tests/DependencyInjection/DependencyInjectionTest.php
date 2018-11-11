@@ -61,16 +61,16 @@ abstract class DependencyInjectionTest extends TestCase
 
     protected function assertDICHasParameter(ContainerBuilder $container, string $name, $value = null)
     {
-        if (2 === func_num_args()) {
+        if (2 === \func_num_args()) {
             $this->assertArrayHasKey($name, $container->getParameterBag()->all(), 'Expected container has parameter '.$name);
         } else {
-            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.is_scalar($value) ? $value : gettype($value));
+            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.is_scalar($value) ? $value : \gettype($value));
         }
     }
 
     protected function assertDICDefinitionHasArgument(Definition $definition, $argument, $value)
     {
-        $this->assertSame($value, $definition->getArgument($argument), sprintf('Expected the argument#%s of definition "%s" have the value "%s"', $argument, $definition->getClass(), is_scalar($value) ? $value : gettype($value)));
+        $this->assertSame($value, $definition->getArgument($argument), sprintf('Expected the argument#%s of definition "%s" have the value "%s"', $argument, $definition->getClass(), is_scalar($value) ? $value : \gettype($value)));
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class DependencyInjectionTest extends TestCase
     {
         $calls = $definition->getMethodCalls();
 
-        if (0 === count($calls)) {
+        if (0 === \count($calls)) {
             $this->fail('No method call registered for definition '.$definition->getClass());
         }
 

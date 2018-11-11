@@ -12,9 +12,8 @@
 namespace TSantos\SerializerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class AddNormalizerPass.
@@ -23,18 +22,25 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AddNormalizerPass implements CompilerPassInterface
 {
+    use PriorityTaggedServiceTrait;
+
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');
-        $this->addMethodCall($definition, array_merge($container->findTaggedServiceIds('tsantos_serializer.normalizer'), $container->findTaggedServiceIds('tsantos_serializer.denormalizer')));
-    }
+        $services = \array_merge(
+            $this->findAndSortTaggedServices('tsantos_serializer.normalizer', $container),
+            $this->findAndSortTaggedServices('tsantos_serializer.denormalizer', $container)
+        );
 
-    private function addMethodCall(Definition $definition, array $services): void
-    {
-        foreach ($services as $id => $tags) {
-            array_map(function () use ($id, $definition) {
-                $definition->addMethodCall('add', [new Reference($id)]);
-            }, $tags);
+        $definition = $container->getDefinition('tsantos_serializer.normalizer_registry');
+
+        $calls = [];
+
+        foreach ($services as $service) {
+            if (isset($calls[(string) $service])) {
+                continue;
+            }
+            $definition->addMethodCall('add', [$service]);
+            $calls[(string) $service] = true;
         }
     }
 }

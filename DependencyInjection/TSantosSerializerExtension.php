@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Yaml;
 use TSantos\Serializer\EventDispatcher\EventSubscriberInterface;
-use TSantos\Serializer\HydratorLoader;
+use TSantos\Serializer\HydratorCompiler;
 use TSantos\Serializer\Metadata\ConfiguratorInterface;
 use TSantos\Serializer\Normalizer\DenormalizerInterface;
 use TSantos\Serializer\Normalizer\NormalizerInterface;
@@ -44,26 +44,48 @@ class TSantosSerializerExtension extends ConfigurableExtension
     {
         $loader = new XmlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config/']));
         $loader->load('services.xml');
+        $loader->load('hydrator.xml');
+        $loader->load('metadata.xml');
 
-        $container->setParameter('tsantos_serializer.debug', $container->getParameterBag()->resolveValue($mergedConfig['debug']));
+        $debug = $container->getParameterBag()->resolveValue($mergedConfig['debug']);
+
         $container->setParameter('tsantos_serializer.format', $mergedConfig['format']);
 
-        $container->getDefinition('tsantos_serializer.hydrator_code_writer')->replaceArgument(0, $mergedConfig['hydrator_path']);
+        $container
+            ->getDefinition('tsantos_serializer.extraction_decorator')
+            ->setArgument(1, $mergedConfig['enable_property_grouping']);
+
+        $container
+            ->getDefinition('tsantos_serializer.hydration_decorator')
+            ->setArgument(1, $mergedConfig['enable_property_grouping']);
+
+        if (false === $mergedConfig['enable_property_grouping']) {
+            $container->removeDefinition('tsantos_serializer.exposed_keys_decorator');
+        }
 
         $strategyDictionary = [
-            'never' => HydratorLoader::AUTOGENERATE_NEVER,
-            'always' => HydratorLoader::AUTOGENERATE_ALWAYS,
-            'file_not_exists' => HydratorLoader::AUTOGENERATE_FILE_NOT_EXISTS,
+            'never' => HydratorCompiler::AUTOGENERATE_NEVER,
+            'always' => HydratorCompiler::AUTOGENERATE_ALWAYS,
+            'file_not_exists' => HydratorCompiler::AUTOGENERATE_FILE_NOT_EXISTS,
         ];
-        $container->getDefinition('tsantos_serializer.hydrator_loader')->replaceArgument(3, $strategyDictionary[$mergedConfig['generation_strategy']]);
+
+        $container
+            ->getDefinition('tsantos_serializer.configuration')
+            ->setArguments([
+                $mergedConfig['hydrator_namespace'],
+                $mergedConfig['hydrator_path'],
+                $strategyDictionary[$mergedConfig['generation_strategy']],
+                $mergedConfig['enable_max_depth_check'],
+            ]);
+
+        $container
+            ->getDefinition('tsantos_serializer.ensure_production_settings_command')
+            ->replaceArgument(0, $debug)
+            ->replaceArgument(1, $strategyDictionary[$mergedConfig['generation_strategy']]);
 
         $this->createDir($container->getParameterBag()->resolveValue($mergedConfig['hydrator_path']));
         $this->configMetadataPath($mergedConfig, $container);
         $this->configCache($container, $mergedConfig);
-
-        $container
-            ->getDefinition('tsantos_serializer.hydrator_template_metadata_configurator')
-            ->replaceArgument(0, $mergedConfig['hydrator_template']);
 
         $container->setParameter('tsantos_serializer.include_dir', $mergedConfig['include_dir']);
         $container->setParameter('tsantos_serializer.exclude_dir', $mergedConfig['exclude_dir']);
@@ -81,10 +103,10 @@ class TSantosSerializerExtension extends ConfigurableExtension
         }
 
         if (null !== $mergedConfig['circular_reference_handler']) {
-            $container->getDefinition('tsantos_serializer.object_normalizer')->setArgument(2, new Reference($mergedConfig['circular_reference_handler']));
+            $container->getDefinition('tsantos_serializer.object_normalizer')->setArgument(1, new Reference($mergedConfig['circular_reference_handler']));
         }
 
-        if ($container->getParameter('tsantos_serializer.debug')) {
+        if ($debug) {
             $loader->load('debug.xml');
         }
 
@@ -153,14 +175,14 @@ class TSantosSerializerExtension extends ConfigurableExtension
         $cacheDefinitionId = sprintf('tsantos_serializer.metadata_%s_cache', $cacheConfig['type']);
 
         if ('file' === $cacheConfig['type']) {
+            $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
             $container
                 ->getDefinition($cacheDefinitionId)
                 ->replaceArgument(0, $cacheConfig['path']);
-            $this->createDir($container->getParameterBag()->resolveValue($cacheConfig['path']));
         } elseif (isset($cacheConfig['id'])) {
-            $container->getDefinition($cacheDefinitionId)->replaceArgument(0, $cacheConfig['prefix']);
             $container
                 ->getDefinition($cacheDefinitionId)
+                ->replaceArgument(0, $cacheConfig['prefix'])
                 ->replaceArgument(1, new Reference($cacheConfig['id']));
         } else {
             throw new \InvalidArgumentException('You need to configure the node "mapping.cache.id"');

@@ -50,8 +50,8 @@ class StopwatchListener implements EventSubscriberInterface
         return [
             Events::PRE_SERIALIZATION => 'startSerialization',
             Events::POST_SERIALIZATION => 'stopSerialization',
-            Events::PRE_DESERIALIZATION => 'startSerialization',
-            Events::POST_DESERIALIZATION => 'stopSerialization',
+            Events::PRE_DESERIALIZATION => 'startDeserialization',
+            Events::POST_DESERIALIZATION => 'stopDeserialization',
         ];
     }
 
