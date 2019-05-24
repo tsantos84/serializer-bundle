@@ -44,6 +44,7 @@ matrix:
         - env: STABILITY="dev"
 
 before_install:
+    - git fetch --unshallow
     - composer global require symfony/flex
     - mkdir var
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
