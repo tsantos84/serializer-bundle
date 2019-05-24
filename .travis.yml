@@ -15,15 +15,16 @@ env:
     global:
         - PHPUNIT_FLAGS="-v"
         - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
+        - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
 
 matrix:
     fast_finish: true
     include:
           # Minimum supported dependencies with the latest and oldest PHP version
         - php: 7.2
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors" SYMFONY_PHPUNIT_VERSION=6.5.14
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_PHPUNIT_VERSION=6.5.14
         - php: 7.1.18
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors" SYMFONY_PHPUNIT_VERSION=6.5.14
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_PHPUNIT_VERSION=6.5.14
 
           # Test the latest stable release
         - php: 7.1.18
