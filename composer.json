@@ -49,5 +49,6 @@
             "type": "path",
             "url": "../serializer"
         }
-    ]
+    ],
+    "minimum-stability": "dev"
 }
