@@ -13,6 +13,7 @@ namespace TSantos\SerializerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Class Configuration.
@@ -23,10 +24,16 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('tsantos_serializer');
+        // BC to LTS Symfony projects. To be removed on Symfony v4.4
+        if (version_compare(Kernel::VERSION, '3.4.0', '<=')) {
+            $treeBuilder = new TreeBuilder();
+            $rootNode = $treeBuilder->root('tsantos_serializer', 'array');
+        } else {
+            $treeBuilder = new TreeBuilder('tsantos_serializer');
+            $rootNode = $treeBuilder->getRootNode();
+        }
 
-        $treeBuilder
-            ->getRootNode()
+        $rootNode
             ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('debug')
