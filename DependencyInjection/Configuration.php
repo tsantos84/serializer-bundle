@@ -23,10 +23,10 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('tsantos_serializer', 'array');
+        $treeBuilder = new TreeBuilder('tsantos_serializer');
 
-        $rootNode
+        $treeBuilder
+            ->getRootNode()
             ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('debug')
