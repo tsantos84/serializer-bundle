@@ -1,11 +1,11 @@
 TSantos Serializer Bundle
 =========================
-|build| |scrutinizer| |code_coverage| |docs|
+|build| |quality| |code_coverage| |docs|
 
 .. |build| image:: https://travis-ci.org/tsantos84/serializer-bundle.svg?branch=master
 .. |docs| image:: https://readthedocs.org/projects/tsantos-serializer-bundle/badge/?version=latest
-.. |scrutinizer| image:: https://scrutinizer-ci.com/g/tsantos84/serializer-bundle/badges/quality-score.png?b=master
-.. |code_coverage| image:: https://scrutinizer-ci.com/g/tsantos84/serializer-bundle/badges/coverage.png?b=master
+.. |quality_state| image:: https://sonarcloud.io/api/project_badges/measure?project=tsantos84_serializer-bundle&metric=alert_status
+.. |code_coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=tsantos84_serializer-bundle&metric=coverage
 
 This bundle integrates the library TSantos Serializer into a Symfony application.
 

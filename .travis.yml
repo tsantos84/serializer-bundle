@@ -1,5 +1,11 @@
 language: php
 sudo: false
+dist: trusty
+
+addons:
+  sonarcloud:
+    organization: "tsantos84-github"
+
 cache:
     directories:
         - $HOME/.composer/cache/files
@@ -22,7 +28,7 @@ matrix:
           # Test the latest stable release
         - php: 7.1.18
         - php: 7.2
-          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.report.xml"
 
           # Test LTS versions. This makes sure we do not use Symfony packages with version greater
           # than 2 or 3 respectively. Read more at https://github.com/symfony/lts
@@ -38,6 +44,7 @@ matrix:
         - env: STABILITY="dev"
 
 before_install:
+    - composer global require symfony/flex
     - mkdir var
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
     - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
@@ -55,6 +62,12 @@ script:
       # Code standard and unit test
       ./vendor/bin/php-cs-fixer fix --dry-run
       ./vendor/bin/simple-phpunit -c phpunit.xml.dist $PHPUNIT_FLAGS
+
+    - |
+      # Run Sonar scanner
+      if [[ $COVERAGE = true ]]; then
+        sonar-scanner
+      fi
 
     - |
       # Create symfony demo application
