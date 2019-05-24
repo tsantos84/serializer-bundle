@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         // BC to LTS Symfony projects. To be removed on Symfony v4.4
-        if (version_compare(Kernel::VERSION, '3.4.0', '<=')) {
+        if (version_compare(Kernel::VERSION, '3.4.27', '<=')) {
             $treeBuilder = new TreeBuilder();
             $rootNode = $treeBuilder->root('tsantos_serializer', 'array');
         } else {
