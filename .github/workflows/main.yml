@@ -1,0 +1,64 @@
+name: TSantos Serializer Bundle
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  unit-test:
+    name: Unit Test [${{ matrix.php }}]
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php: [ '7.2', '7.3', '7.4', '8.0' ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-scripts --prefer-dist
+      - name: Run tests
+        run: composer test
+        continue-on-error: ${{ matrix.php == '8.0' }}
+
+#  demo-application:
+#    name: Demo Symfony App [${{ matrix.php }}]
+#    runs-on: ${{ matrix.operating-system }}
+#    strategy:
+#      matrix:
+#        operating-system: [ ubuntu-latest ]
+#        php: [ '7.4' ]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Create demo application
+#        env:
+#          COMPOSER_MEMORY_LIMIT: -1
+#        run: |
+#          composer create-project symfony/symfony-demo --no-install /tmp/symfony-demo && cd /tmp/symfony-demo
+#          composer config repositories.serializer-bundle path ${GITHUB_WORKSPACE}
+#          composer config minimum-stability dev
+#          composer require "tsantos/serializer-bundle:dev-${GITHUB_REF##*/}" --no-update
+#          rm -rf composer.lock
+#          cp ${GITHUB_WORKSPACE}/.travis/PostSerializerCommand.php src/Command
+#          composer update --prefer-dist --no-interaction --prefer-stable
+#
+#      - name: Load data fixtures
+#        run: bin/console doctrine:fixtures:load --no-interaction
+#
+#      - name: Run demo application
+#        run: |
+#          bin/console serializer:generate-hydrators -v --no-interaction
+#          bin/console serializer:posts --no-interaction
+
+  code-style:
+    name: Code style check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --prefer-dist
+      - name: Check style
+        run: composer lint:check

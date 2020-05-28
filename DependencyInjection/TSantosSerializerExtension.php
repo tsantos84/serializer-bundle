@@ -35,9 +35,6 @@ use TSantos\Serializer\SerializerAwareInterface;
 class TSantosSerializerExtension extends ConfigurableExtension
 {
     /**
-     * @param array            $mergedConfig
-     * @param ContainerBuilder $container
-     *
      * @throws \Exception
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)

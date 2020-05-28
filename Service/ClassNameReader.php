@@ -41,10 +41,6 @@ class ClassNameReader
      * Read class names from given PHP file.
      *
      * Adapted from https://stackoverflow.com/a/14250011/2417395 answer.
-     *
-     * @param string $filename
-     *
-     * @return array
      */
     public function readFile(string $filename): array
     {

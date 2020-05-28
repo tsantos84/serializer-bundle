@@ -36,5 +36,5 @@ return PhpCsFixer\Config::create()
     ])
     ->setFinder($finder)
     ->setUsingCache(true)
-    ->setCacheFile('var/.php_cs.cache')
+    ->setCacheFile('.php_cs.cache')
     ;

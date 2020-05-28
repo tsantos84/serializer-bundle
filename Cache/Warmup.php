@@ -15,7 +15,6 @@ use Metadata\MetadataFactoryInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use TSantos\Serializer\HydratorCompilerInterface;
 use TSantos\Serializer\Metadata\ClassMetadata;
-use TSantos\SerializerBundle\Serializer\Compiler;
 use TSantos\SerializerBundle\Service\ClassNameReader;
 
 /**
@@ -51,12 +50,6 @@ class Warmup implements CacheWarmerInterface
 
     /**
      * GenerateHydratorCommand constructor.
-     *
-     * @param ClassNameReader           $classNameReader
-     * @param HydratorCompilerInterface $compiler
-     * @param MetadataFactoryInterface  $metadataFactory
-     * @param array                     $directories
-     * @param array                     $excluded
      */
     public function __construct(ClassNameReader $classNameReader, HydratorCompilerInterface $compiler, MetadataFactoryInterface $metadataFactory, array $directories, array $excluded = [])
     {

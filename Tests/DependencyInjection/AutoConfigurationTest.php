@@ -25,7 +25,7 @@ class AutoConfigurationTest extends DependencyInjectionTest
      */
     private $fs;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->fs = new Filesystem();

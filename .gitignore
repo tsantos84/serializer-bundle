@@ -2,3 +2,5 @@ vendor/
 test/cache/test
 composer.lock
 var/
+.php_cs.cache
+.phpunit.result.cache

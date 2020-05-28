@@ -45,11 +45,11 @@ class ConfigureEncoderPassTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The tag "tsantos_serializer.encoder" should have the attribute "format"
      */
     public function it_should_not_allow_tag_without_format_attribute()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The tag "tsantos_serializer.encoder" should have the attribute "format"');
         $container = new ContainerBuilder();
 
         $container->setParameter('tsantos_serializer.format', 'json');
@@ -65,11 +65,11 @@ class ConfigureEncoderPassTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage There is no encoder able to handle "csv" format
      */
     public function it_should_throw_exception_when_the_format_provided_is_not_supported_by_any_encoder()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('There is no encoder able to handle "csv" format');
         $container = new ContainerBuilder();
 
         $container->setParameter('tsantos_serializer.format', 'csv');

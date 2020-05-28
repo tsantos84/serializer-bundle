@@ -27,13 +27,13 @@ abstract class DependencyInjectionTest extends TestCase
     protected $projectDir;
     protected $cacheDir;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->projectDir = realpath(__DIR__.'/../../').'/project-tmp';
         $this->cacheDir = $this->projectDir.'/var/cache/test';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (is_dir($this->projectDir)) {
             $command = 'rm -rf '.$this->projectDir;
@@ -64,7 +64,7 @@ abstract class DependencyInjectionTest extends TestCase
         if (2 === \func_num_args()) {
             $this->assertArrayHasKey($name, $container->getParameterBag()->all(), 'Expected container has parameter '.$name);
         } else {
-            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.is_scalar($value) ? $value : \gettype($value));
+            $this->assertSame($value, $container->getParameter($name), 'Expected container has parameter '.$name.' with value '.(is_scalar($value) ? $value : \gettype($value)));
         }
     }
 

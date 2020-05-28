@@ -26,7 +26,7 @@ class StopwatchListenerTest extends TestCase
     private $stopwatch;
     private $listener;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->stopwatch = $this->createMock(Stopwatch::class);
         $this->listener = new StopwatchListener($this->stopwatch);

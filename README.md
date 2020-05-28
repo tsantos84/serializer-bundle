@@ -1,4 +1,7 @@
-Installation
+TSantos Serializer Bundle ![TSantos Serializer Bundle](https://github.com/tsantos84/serializer-bundle/workflows/TSantos%20Serializer%20Bundle/badge.svg)
+=========================
+
+Installation 
 ============
 
 Applications that use Symfony Flex
@@ -62,7 +65,7 @@ Tests
 =====
 
 ```console
-$ vendor/bin/simple-phpunit
+$ composer test
 ```
 
 License

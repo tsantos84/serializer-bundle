@@ -41,9 +41,6 @@ class EnsureProductionSettingsCommand extends Command
 
     /**
      * EnsureProductionSettingsCommand constructor.
-     *
-     * @param bool $debug
-     * @param int  $strategy
      */
     public function __construct(bool $debug, int $strategy)
     {
