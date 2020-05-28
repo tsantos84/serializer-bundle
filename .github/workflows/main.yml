@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ githubci ]
   pull_request:
-    branches: [ master ]
+    branches: [ githubci ]
 
 jobs:
   test:
