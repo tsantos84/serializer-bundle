@@ -31,13 +31,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create demo application
-        env:
-          BRANCH_NAME: ${{ GITHUB_REF }}
         run: |
           composer create-project symfony/symfony-demo --no-install /tmp/symfony-demo && cd /tmp/symfony-demo
           composer config repositories.serializer-bundle path ${GITHUB_WORKSPACE}
           composer config minimum-stability dev
-          composer require "tsantos/serializer-bundle:dev-${BRANCH_NAME}" --no-update
+          composer require "tsantos/serializer-bundle:dev-${{ github.ref }}" --no-update
           rm -rf composer.lock
           cp ${GITHUB_WORKSPACE}/.travis/PostSerializerCommand.php src/Command
           composer update --prefer-dist --no-interaction --prefer-stable
