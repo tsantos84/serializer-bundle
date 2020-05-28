@@ -7,27 +7,27 @@ on:
     branches: [ githubci ]
 
 jobs:
-  unit-test:
-    name: Unit Test [${{ matrix.php }}]
-    runs-on: ${{ matrix.operating-system }}
-    strategy:
-      matrix:
-        operating-system: [ ubuntu-latest ]
-        php: [ '7.2', '7.3', '7.4' ]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Run tests
-        run: composer test
+#  unit-test:
+#    name: Unit Test [${{ matrix.php }}]
+#    runs-on: ${{ matrix.operating-system }}
+#    strategy:
+#      matrix:
+#        operating-system: [ ubuntu-latest ]
+#        php: [ '7.2', '7.3', '7.4' ]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Install Dependencies
+#        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+#      - name: Run tests
+#        run: composer test
 
-  functional-test:
-    name: Functional Test [${{ matrix.php }}]
+  demo-application:
+    name: Demo Symfony App [${{ matrix.php }}]
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
         operating-system: [ ubuntu-latest ]
-        php: [ '7.2', '7.3', '7.4' ]
+        php: [ '7.4' ]
     steps:
       - uses: actions/checkout@v2
       - name: Create demo application
