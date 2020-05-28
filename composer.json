@@ -45,7 +45,7 @@
         "symfony/yaml": "Allow to use Yaml format to define class metadata"
     },
     "scripts": {
-        "test": "simple-phpunit -c phpunit.xml.dist simple-phpunit",
+        "test": "simple-phpunit -c phpunit.xml.dist",
         "lint:check": "php-cs-fixer fix --dry-run",
         "lint:fix": "php-cs-fixer fix"
     }
