@@ -28,13 +28,13 @@ class FunctionalTest extends TestCase
     /** @var Kernel */
     private $kernel;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->kernel = new Kernel('test', true);
         $this->kernel->boot();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->kernel->shutdown();
     }

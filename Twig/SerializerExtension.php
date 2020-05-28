@@ -12,13 +12,15 @@
 namespace TSantos\SerializerBundle\Twig;
 
 use TSantos\Serializer\SerializerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Class SerializerExtension.
  *
  * @author Tales Santos <tales.augusto.santos@gmail.com>
  */
-class SerializerExtension extends \Twig_Extension
+class SerializerExtension extends AbstractExtension
 {
     /**
      * @var SerializerInterface
@@ -36,7 +38,7 @@ class SerializerExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('serialize', [$this, 'serialize'], [
+            new TwigFilter('serialize', [$this, 'serialize'], [
                 'is_safe' => ['html'],
             ]),
         ];

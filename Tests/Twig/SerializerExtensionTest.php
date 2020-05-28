@@ -14,6 +14,8 @@ namespace TSantos\SerializerBundle\Tests\Twig;
 use PHPUnit\Framework\TestCase;
 use TSantos\Serializer\SerializerInterface;
 use TSantos\SerializerBundle\Twig\SerializerExtension;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class SerializerExtensionTest extends TestCase
 {
@@ -30,7 +32,7 @@ class SerializerExtensionTest extends TestCase
 
         $extension = new SerializerExtension($serializer);
 
-        $twig = new \Twig_Environment(new \Twig_Loader_Array(['page' => '{{ data|serialize }}']));
+        $twig = new Environment(new ArrayLoader(['page' => '{{ data|serialize }}']));
         $twig->addExtension($extension);
 
         $result = $twig->render('page', ['data' => $data]);

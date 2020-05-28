@@ -12,6 +12,7 @@
 namespace TSantos\SerializerBundle\Tests\DependencyInjection;
 
 use Metadata\Driver\DriverInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
@@ -132,11 +133,11 @@ class TSantosExtensionTest extends DependencyInjectionTest
 
     /**
      * @test
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "tsantos_serializer.mapping.paths.0.path": The path ""\/some\/invalid\/path"" does not exit
      */
     public function it_should_not_allow_configure_non_existing_metadata_path()
     {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "tsantos_serializer.mapping.paths.0.path": The path ""\/some\/invalid\/path"" does not exit');
         $this->getContainer([
             'mapping' => [
                 'paths' => [
@@ -228,11 +229,11 @@ class TSantosExtensionTest extends DependencyInjectionTest
     /**
      * @test
      * @dataProvider getCacheType
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage You need to configure the node "mapping.cache.id"
      */
     public function it_should_require_the_service_id_for_cache_type_psr_or_doctrine(string $cacheType)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('You need to configure the node "mapping.cache.id"');
         $this->getContainer([
             'mapping' => [
                 'cache' => [
