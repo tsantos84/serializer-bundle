@@ -43,5 +43,8 @@
     },
     "suggest": {
         "symfony/yaml": "Allow to use Yaml format to define class metadata"
+    },
+    "scripts": {
+      "lint:check": "php-cs-fix fix --dry-run"
     }
 }

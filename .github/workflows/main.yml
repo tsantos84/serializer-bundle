@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Test ${{ matrix.php }} test
+    name: Test on ${{ matrix.php }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -20,3 +20,12 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Run tests
         run: vendor/bin/simple-phpunit -c phpunit.xml.dist
+  code-style:
+    name: Code style check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run tests
+        run: composer lint:check
