@@ -26,7 +26,7 @@ class AddNormalizerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        $services = \array_merge(
+        $services = array_merge(
             $this->findAndSortTaggedServices('tsantos_serializer.normalizer', $container),
             $this->findAndSortTaggedServices('tsantos_serializer.denormalizer', $container)
         );

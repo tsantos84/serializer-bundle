@@ -95,9 +95,6 @@ class Dummy
 
     /**
      * Dummy constructor.
-     *
-     * @param int    $foo
-     * @param string $bar
      */
     public function __construct(int $foo, string $bar)
     {
@@ -105,17 +102,11 @@ class Dummy
         $this->bar = $bar;
     }
 
-    /**
-     * @return int
-     */
     public function getFoo(): int
     {
         return $this->foo;
     }
 
-    /**
-     * @param int $foo
-     */
     public function setFoo(int $foo): void
     {
         $this->foo = $foo;

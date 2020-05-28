@@ -46,6 +46,7 @@
     },
     "scripts": {
         "test": "simple-phpunit -c phpunit.xml.dist simple-phpunit",
-        "lint:check": "php-cs-fixer fix --dry-run"
+        "lint:check": "php-cs-fixer fix --dry-run",
+        "lint:fix": "php-cs-fixer fix"
     }
 }

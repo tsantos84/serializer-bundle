@@ -27,8 +27,6 @@ class SerializerExtension extends \Twig_Extension
 
     /**
      * SerializerExtension constructor.
-     *
-     * @param SerializerInterface $serializer
      */
     public function __construct(SerializerInterface $serializer)
     {

@@ -34,8 +34,6 @@ class StopwatchListener implements EventSubscriberInterface
 
     /**
      * StopwatchListener constructor.
-     *
-     * @param Stopwatch $stopwatch
      */
     public function __construct(Stopwatch $stopwatch)
     {
