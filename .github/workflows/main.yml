@@ -31,6 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create demo application
+        env:
+          COMPOSER_MEMORY_LIMIT: -1
         run: |
           composer create-project symfony/symfony-demo --no-install /tmp/symfony-demo && cd /tmp/symfony-demo
           composer config repositories.serializer-bundle path ${GITHUB_WORKSPACE}
