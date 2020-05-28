@@ -45,9 +45,10 @@ jobs:
           composer update --prefer-dist --no-interaction --prefer-stable
 
       - name: Load data fixtures
-          bin/console doctrine:fixtures:load --no-interaction
+        run: bin/console doctrine:fixtures:load --no-interaction
 
       - name: Run demo application
+        run: |
           bin/console serializer:generate-hydrators -v --no-interaction
           bin/console serializer:posts --no-interaction
 
