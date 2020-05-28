@@ -30,11 +30,9 @@ jobs:
         php: [ '7.2', '7.3', '7.4' ]
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Create demo application
         env:
-          BRANCH_NAME: ${{ github.base_ref }}
+          BRANCH_NAME: ${{ GITHUB_REF }}
         run: |
           composer create-project symfony/symfony-demo --no-install /tmp/symfony-demo && cd /tmp/symfony-demo
           composer config repositories.serializer-bundle path ${GITHUB_WORKSPACE}
