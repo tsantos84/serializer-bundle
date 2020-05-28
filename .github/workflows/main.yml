@@ -1,10 +1,9 @@
 name: TSantos Serializer Bundle
 
 on:
-  push:
-    branches: [ githubci ]
+  push: [*]
   pull_request:
-    branches: [ githubci ]
+    branches: [ master ]
 
 jobs:
   unit-test:
